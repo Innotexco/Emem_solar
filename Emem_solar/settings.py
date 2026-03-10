@@ -37,9 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 ]
 
-if DEBUG:
-    # Add django_browser_reload only in DEBUG mode
-    INSTALLED_APPS += ['django_browser_reload']
+
 
 TAILWIND_APP_NAME = 'theme'
 
@@ -85,18 +83,29 @@ WSGI_APPLICATION = 'Emem_solar.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'emem_solar_db',
+#         'USER': 'emem',
+#         'PASSWORD': '1375',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     },
+    
+# }
+from decouple import config
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'emem_solar_db',
-        'USER': 'emem',
-        'PASSWORD': '1375',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    },
-    
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT', default='5432'),
+    }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
