@@ -27,7 +27,7 @@ def about(request):
     return render(request, 'main/about.html')
 
 def products(request):
-    stock_date = StockAlert.objects.get() 
+    stock_date = StockAlert.objects.first()
     return render(request, 'main/products.html', {'stock_date': stock_date})
 
 def contact(request):
