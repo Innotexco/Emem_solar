@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    * {
+        font-family: 'Inter', -apple-system, sans-serif;
+        box-sizing: border-box;
+    }
+    
+    body {
+        background: #fafafa;
+        color: #171717;
+    }
+    
+    .container2 {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+    
+    .header {
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #171717;
+        margin: 0;
+    }
+    
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        background: #fef3c7;
+        color: #92400e;
+        border-radius: 999px;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+    
+    .message {
+        padding: 1rem 1.25rem;
+        border-radius: 10px;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .message-success {
+        background: #d1fae5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+    }
+    
+    .message-error {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+    }
+    
+    .message-warning {
+        background: #fef3c7;
+        color: #92400e;
+        border: 1px solid #fde68a;
+    }
+    
+    .empty-state {
+        background: white;
+        border: 1px solid #e5e5e5;
+        border-radius: 16px;
+        padding: 4rem 2rem;
+        text-align: center;
+    }
+    
+    .empty-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1.5rem;
+        background: #f5f5f5;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .profile-grid {
+        display: grid;
+        gap: 1.5rem;
+    }
+    
+    @media (min-width: 768px) {
+        .profile-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (min-width: 1024px) {
+        .profile-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    
+    .profile-card {
+        background: white;
+        border: 1px solid #e5e5e5;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.2s;
+    }
+    
+    .profile-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        border-color: #059669;
+    }
+    
+    .profile-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e5e5e5;
+    }
+    
+    .profile-name {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #171717;
+        margin-bottom: 0.5rem;
+    }
+    
+    .profile-meta {
+        font-size: 0.875rem;
+        color: #737373;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .category-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        background: #dbeafe;
+        color: #1e40af;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+    
+    .image-preview {
+        padding: 1rem;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+    }
+    
+    .preview-img {
+        aspect-ratio: 1;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 2px solid #e5e5e5;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .preview-img:hover {
+        border-color: #059669;
+        transform: scale(1.05);
+    }
+    
+    .preview-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .more-images {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f5f5f5;
+        color: #737373;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+    
+    .profile-footer {
+        padding: 1rem 1.5rem;
+        background: #fafafa;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    
+    .btn-primary {
+        background: #059669;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: #047857;
+        color: white;
+    }
+    
+    @media (max-width: 640px) {
+        .container2 {
+            padding: 1rem;
+        }
+        
+        .title {
+            font-size: 1.5rem;
+        }
+        
+        .profile-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="container2">
+    <!-- Header -->
+    <div class="header">
+        <div>
+            <h1 class="title">Pending Verifications</h1>
+        </div>
+        <span class="badge">
+            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+            </svg>
+            {{ pending_profiles.count }} Pending
+        </span>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+        {% for message in messages %}
+        <div class="message {% if message.tags == 'error' %}message-error{% elif message.tags == 'warning' %}message-warning{% else %}message-success{% endif %}">
+            <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                {% if message.tags == 'error' or message.tags == 'warning' %}
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                {% else %}
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                {% endif %}
+            </svg>
+            <span>{{ message }}</span>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Profiles Grid -->
+    {% if pending_profiles %}
+    <div class="profile-grid">
+        {% for profile in pending_profiles %}
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-name">{{ profile.user.get_full_name|default:profile.user.username }}</div>
+                <div class="profile-meta">
+                    <div>📧 {{ profile.user.email }}</div>
+                    <div>📱 {{ profile.phone }}</div>
+                    <div>📅 Submitted {{ profile.created_at|date:"M d, Y" }}</div>
+                </div>
+                <span class="category-badge">
+                    {% if profile.chosen_category == 'Retail' %}
+                        🔧 Installer
+                    {% elif profile.chosen_category == 'Whole Sale' %}
+                        🏢 Distributor
+                    {% else %}
+                        👤 {{ profile.get_chosen_category_display }}
+                    {% endif %}
+                </span>
+            </div>
+            
+            {% with images=profile.verification_images.all %}
+            {% if images %}
+            <div class="image-preview">
+                {% for image in images|slice:":5" %}
+                <div class="preview-img">
+                    <img src="{{ image.image.url }}" alt="{{ image.caption }}" title="{{ image.caption }}">
+                </div>
+                {% endfor %}
+                {% if images.count > 5 %}
+                <div class="preview-img more-images">
+                    +{{ images.count|add:"-5" }}
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endwith %}
+            
+            <div class="profile-footer">
+                <a href="{% url 'account:verify_profile' profile.id %}" class="btn btn-primary">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                    Review Application
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="empty-state">
+        <div class="empty-icon">
+            <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+        </div>
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; color: #171717;">All Caught Up!</h2>
+        <p style="color: #737373; font-size: 1rem;">There are no pending verifications at the moment.</p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

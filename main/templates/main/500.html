@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Server Error - Solar Battery Store{% endblock %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+    
+    * {
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    :root {
+        --forest-green: #059669;
+        --ocean-teal: #14b8a6;
+        --neutral-50: #fafafa;
+        --neutral-200: #e5e5e5;
+        --neutral-700: #404040;
+        --neutral-800: #262626;
+        --neutral-900: #171717;
+    }
+    
+    body {
+        background-color: var(--neutral-50);
+        color: var(--neutral-800);
+    }
+    
+    .error-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+    
+    .error-content {
+        text-align: center;
+        max-width: 600px;
+    }
+    
+    .error-code {
+        font-size: 8rem;
+        font-weight: 900;
+        line-height: 1;
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+    }
+    
+    .error-icon {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 2rem;
+        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .btn-primary {
+        background: var(--forest-green);
+        color: white;
+        font-weight: 600;
+        padding: 0.875rem 2rem;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        margin-top: 2rem;
+    }
+    
+    .btn-primary:hover {
+        background: #047857;
+        box-shadow: 0 8px 20px -4px rgba(5, 150, 105, 0.4);
+        transform: translateY(-1px);
+        color: white;
+    }
+    
+    .btn-secondary {
+        background: white;
+        color: var(--neutral-700);
+        border: 2px solid var(--neutral-200);
+        font-weight: 600;
+        padding: 0.875rem 2rem;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        margin-top: 1rem;
+        margin-left: 1rem;
+    }
+    
+    .btn-secondary:hover {
+        background: var(--neutral-50);
+        border-color: var(--forest-green);
+        color: var(--forest-green);
+    }
+
+    @keyframes shake {
+        0%, 100% {
+            transform: translateX(0);
+        }
+        10%, 30%, 50%, 70%, 90% {
+            transform: translateX(-5px);
+        }
+        20%, 40%, 60%, 80% {
+            transform: translateX(5px);
+        }
+    }
+
+    .error-icon {
+        animation: shake 0.5s ease-in-out;
+    }
+
+    .error-icon:hover {
+        animation: shake 0.5s ease-in-out infinite;
+    }
+</style>
+
+<div class="error-container">
+    <div class="error-content">
+        <div class="error-icon">
+            <svg class="w-16 h-16 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+        </div>
+        
+        <h1 class="error-code">500</h1>
+        
+        <h2 class="text-3xl font-bold text-neutral-900 mb-4">Internal Server Error</h2>
+        
+        <p class="text-lg text-neutral-600 mb-2">
+            {% if message %}
+                {{ message }}
+            {% else %}
+                Oops! Something went wrong on our end.
+            {% endif %}
+        </p>
+        
+        <p class="text-neutral-500">
+            We're experiencing technical difficulties. Our team has been notified and is working to fix the issue.
+        </p>
+        
+        <div class="flex flex-wrap justify-center gap-3 mt-8">
+            <a href="{% url 'main:home' %}" class="btn-primary">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+                Go to Homepage
+            </a>
+            
+            <button onclick="location.reload()" class="btn-secondary">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Try Again
+            </button>
+        </div>
+
+        <div class="mt-12 p-4 bg-neutral-100 rounded-lg border border-neutral-200">
+            <p class="text-sm text-neutral-600">
+                <strong>Need immediate assistance?</strong><br>
+                Contact our support team at <a href="mailto:support@solarbattery.com" class="text-forest-green hover:underline">support@solarbattery.com</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

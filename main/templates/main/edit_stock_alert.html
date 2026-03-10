@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if alert %}Edit{% else %}Add{% endif %} Stock Alert - Admin{% endblock %}
+
+{% block content %}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * { font-family: 'Inter', sans-serif; }
+
+  :root {
+    --forest-green: #059669;
+    --forest-green-dark: #047857;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-700: #374151;
+    --gray-900: #111827;
+  }
+
+  body { background-color: var(--gray-50); }
+
+  .form-input, .form-textarea, .form-select {
+    width: 100%;
+    border: 1px solid var(--gray-300);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    color: var(--gray-900);
+    transition: all 0.2s ease;
+    background: white;
+  }
+
+  .form-input:focus, .form-textarea:focus, .form-select:focus {
+    border-color: var(--forest-green);
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    outline: none;
+  }
+
+  .btn-primary {
+    background: var(--forest-green);
+    color: white;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .btn-primary:hover { 
+    background: var(--forest-green-dark);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+  }
+
+  .btn-secondary {
+    border: 2px solid var(--gray-300);
+    background: white;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .btn-secondary:hover { background: var(--gray-100); }
+
+  .form-label {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--gray-700);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .content-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+
+  .back-link {
+    color: var(--forest-green);
+    font-weight: 500;
+    transition: color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .back-link:hover { 
+    color: var(--forest-green-dark);
+    text-decoration: none;
+  }
+</style>
+
+<section class="py-12 min-h-screen">
+  <div class="container mx-auto px-6">
+    <div class="max-w-3xl mx-auto">
+      
+      <!-- Header -->
+      <div class="mb-8">
+        <a href="{% url 'main:manage_stock_alerts' %}" class="back-link mb-4">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Back to Stock Alerts
+        </a>
+        <h1 class="text-3xl font-bold text-gray-900 mt-4 mb-1">
+          {% if alert %}Edit Stock Alert{% else %}Add Stock Alert{% endif %}
+        </h1>
+        <p class="text-gray-600 text-sm">
+          {% if alert %}
+            Update alert information below
+          {% else %}
+            Fill in the details to create a new stock alert
+          {% endif %}
+        </p>
+      </div>
+
+      <!-- Form Card -->
+      <div class="content-card p-8">
+        <form method="POST">
+          {% csrf_token %}
+
+          <!-- Item Selection -->
+          <div class="mb-6">
+            <label for="item" class="form-label">
+              Item <span class="text-red-500">*</span>
+            </label>
+            <select 
+              id="item" 
+              name="item" 
+              required 
+              class="form-select"
+              {% if alert %}disabled{% endif %}
+            >
+              <option value="">Select an item</option>
+              {% for item in items %}
+                <option value="{{ item.id }}" {% if alert and alert.item.id == item.id %}selected{% endif %}>
+                  {{ item.item_name }} - {{ item.item_code }}
+                </option>
+              {% endfor %}
+            </select>
+            {% if alert %}
+              <input type="hidden" name="item" value="{{ alert.item.id }}">
+              <p class="text-xs text-gray-500 mt-1">Item cannot be changed after creation</p>
+            {% else %}
+              <p class="text-xs text-gray-500 mt-1">Choose the item that's out of stock</p>
+            {% endif %}
+          </div>
+
+          <!-- Expected Restock Date -->
+          <div class="mb-6">
+            <label for="expected_date" class="form-label">
+              Expected Restock Date <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="date" 
+              id="expected_date" 
+              name="expected_date" 
+              value="{{ alert.expected_date|date:'Y-m-d' }}" 
+              required 
+              class="form-input"
+            >
+            <p class="text-xs text-gray-500 mt-1">When do you expect the item to be back in stock?</p>
+          </div>
+
+          <!-- Expected Quantity -->
+          <div class="mb-6">
+            <label for="quantity" class="form-label">
+              Expected Quantity (Optional)
+            </label>
+            <input 
+              type="number" 
+              id="quantity" 
+              name="quantity" 
+              value="{{ alert.quantity }}" 
+              min="1" 
+              class="form-input" 
+              placeholder="e.g., 100"
+            >
+            <p class="text-xs text-gray-500 mt-1">How many units are expected?</p>
+          </div>
+
+          <!-- Notes -->
+          <div class="mb-6">
+            <label for="notes" class="form-label">
+              Notes (Optional)
+            </label>
+            <textarea 
+              id="notes" 
+              name="notes" 
+              rows="4" 
+              class="form-textarea" 
+              placeholder="Additional information about the restock"
+            >{{ alert.notes }}</textarea>
+            <p class="text-xs text-gray-500 mt-1">Any additional details customers should know</p>
+          </div>
+
+          <!-- Customer Message -->
+          <div class="mb-6">
+            <label for="customer_message" class="form-label">
+              Customer Message (Optional)
+            </label>
+            <textarea 
+              id="customer_message" 
+              name="customer_message" 
+              rows="3" 
+              class="form-textarea" 
+              placeholder="This item will be back in stock soon!"
+            >{{ alert.customer_message }}</textarea>
+            <p class="text-xs text-gray-500 mt-1">Custom message shown to customers</p>
+          </div>
+
+          <!-- Active Status -->
+          <div class="mb-8">
+            <div class="flex items-start gap-3">
+              <input 
+                type="checkbox" 
+                id="is_active" 
+                name="is_active" 
+                {% if alert.is_active or not alert %}checked{% endif %} 
+                class="mt-1 w-4 h-4 text-forest-green rounded focus:ring-forest-green border-gray-300"
+              >
+              <div>
+                <label for="is_active" class="form-label mb-0">Active Alert</label>
+                <p class="text-xs text-gray-500">Inactive alerts won't be shown to customers</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Email Notification Option -->
+          <div class="mb-8">
+            <div class="flex items-start gap-3">
+              <input 
+                type="checkbox" 
+                id="notify_customers" 
+                name="notify_customers" 
+                {% if alert.notify_customers %}checked{% endif %} 
+                class="mt-1 w-4 h-4 text-forest-green rounded focus:ring-forest-green border-gray-300"
+              >
+              <div>
+                <label for="notify_customers" class="form-label mb-0">Notify Interested Customers</label>
+                <p class="text-xs text-gray-500">Send email notifications when item is back in stock</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Info Box -->
+          <div class="mb-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div class="text-sm text-blue-800">
+                <p class="font-semibold mb-1">About Stock Alerts</p>
+                <p>Stock alerts inform customers when out-of-stock items are expected to be available again. Active alerts will be displayed on the product page.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+            <a href="{% url 'main:manage_stock_alerts' %}" class="flex-1 text-center btn-secondary">
+              Cancel
+            </a>
+            <button type="submit" class="flex-1 btn-primary text-center">
+              <svg class="w-5 h-5 inline-block mr-2 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              {% if alert %}Update Alert{% else %}Save Alert{% endif %}
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

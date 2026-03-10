@@ -1,0 +1,165 @@
+{% load static %}
+{% load tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affordable Residential Energy Storage Systems | Emem Energy Technology Ltd</title>
+    <meta name="description" content="Leading manufacturer of affordable residential and commercial energy storage systems in Nigeria. 5-year warranty, 24/7 support, competitive pricing on lithium battery solutions.">
+  
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    {% tailwind_css %}
+    {% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
+
+
+    {% csrf_token %}
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+  
+    <style>
+        .gradient-bg {
+        background: linear-gradient(135deg, #065F46 0%, #10B981 50%, #0EA5E9 100%);
+        }
+        .hero-pattern {
+        background-image: 
+            radial-gradient(circle at 25% 25%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 75% 75%, rgba(14, 165, 233, 0.1) 0%, transparent 50%);
+        }
+        .battery-glow {
+        box-shadow: 0 0 40px rgba(16, 185, 129, 0.3);
+        }
+        .scroll-smooth { scroll-behavior: smooth; }
+        
+        /* Mobile menu animations */
+        .mobile-menu {
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu.active {
+        transform: translateX(0);
+        }
+        
+        /* Backdrop */
+        .menu-backdrop {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        .menu-backdrop.active {
+        opacity: 1;
+        visibility: visible;
+        }
+        
+        /* Enhanced hover effects */
+        .card-hover {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Floating animation */
+        @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+        }
+        .float-animation {
+        animation: float 6s ease-in-out infinite;
+        }
+        
+        /* Pulse animation for badges */
+        @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.5); }
+        50% { box-shadow: 0 0 40px rgba(245, 158, 11, 0.8); }
+        }
+        .pulse-glow {
+        animation: pulse-glow 2s ease-in-out infinite;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+     {% comment %} <script src="{% static 'js/home.js' %}"></script> {% endcomment %}
+    {% comment %} <script src="{% static 'js/jquery.js' %}"></script> {% endcomment %} 
+    
+    {% comment %} <link rel="stylesheet" href="{% static 'css/main.css' %}">  {% endcomment %}
+</head>
+<body class=" scroll-smooth">
+ 
+
+
+     {% include "navbar.html" %}
+     
+   
+{% if messages %}
+    <div class="fixed top-5 right-5 z-[9999] space-y-4 max-w-sm">
+        {% for message in messages %}
+            <div class="bg-white border-l-4 p-4 shadow-md rounded-md w-full flex items-start 
+                {% if 'success' in message.tags %}border-green-500{% elif 'error' in message.tags %}border-red-500{% endif %}">
+                <div class="mr-2">
+                    {% if 'success' in message.tags %}
+                        <svg class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    {% elif 'error' in message.tags %}
+                        <svg class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    {% endif %}
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm text-gray-800">{{ message }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        setTimeout(function () {
+            const messages = document.querySelectorAll('.shadow-md');
+            messages.forEach(function (message) {
+                message.style.transition = 'opacity 0.5s ease-out';
+                message.style.opacity = '0';
+                setTimeout(function () {
+                    message.remove();
+                }, 500);
+            });
+        }, 5000);
+    </script>
+
+    
+{% endif %}
+
+    
+    
+    {% block content %}
+
+    {% endblock content%}
+    
+     {% include "footer.html" %}  
+
+
+    
+    
+</body>
+</html>

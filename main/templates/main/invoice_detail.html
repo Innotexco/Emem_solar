@@ -1,0 +1,614 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Invoice #{{ invoice.invoiceID }} - Solar Battery Store{% endblock %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    * {
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    :root {
+        --primary: #059669;
+        --primary-dark: #047857;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-400: #9ca3af;
+        --gray-500: #6b7280;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
+        --gray-800: #1f2937;
+        --gray-900: #111827;
+    }
+    
+    body {
+        background: var(--gray-50);
+        color: var(--gray-900);
+    }
+    
+    .invoice-wrapper {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    
+    .invoice-actions {
+        background: white;
+        border: 1px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .invoice-container {
+        background: white;
+        border: 1px solid var(--gray-200);
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    }
+    
+    .invoice-header {
+        padding: 3rem 3rem 2rem;
+        border-bottom: 3px solid var(--primary);
+    }
+    
+    .company-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 3rem;
+    }
+    
+    .company-logo {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--primary);
+        letter-spacing: -0.02em;
+    }
+    
+    .invoice-meta {
+        text-align: right;
+    }
+    
+    .invoice-number {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+    }
+    
+    .invoice-body {
+        padding: 2rem 3rem 3rem;
+    }
+    
+    .parties-info {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        margin-bottom: 2.5rem;
+    }
+    
+    .party-card {
+        background: var(--gray-50);
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid var(--gray-200);
+    }
+    
+    .party-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--gray-500);
+        margin-bottom: 0.75rem;
+    }
+    
+    .party-name {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+    }
+    
+    .party-detail {
+        font-size: 0.875rem;
+        color: var(--gray-600);
+        line-height: 1.5;
+    }
+    
+    .invoice-dates {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1.5rem;
+        padding: 1.5rem;
+        background: var(--gray-50);
+        border-radius: 8px;
+        margin-bottom: 2.5rem;
+    }
+    
+    .date-item {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .date-label {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--gray-500);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.25rem;
+    }
+    
+    .date-value {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--gray-900);
+    }
+    
+    .items-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+        border: 1px solid var(--gray-200);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .items-table thead {
+        background: var(--gray-100);
+    }
+    
+    .items-table th {
+        padding: 0.875rem 1rem;
+        text-align: left;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--gray-700);
+        border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .items-table th:last-child,
+    .items-table td:last-child {
+        text-align: right;
+    }
+    
+    .items-table tbody tr {
+        border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .items-table tbody tr:last-child {
+        border-bottom: none;
+    }
+    
+    .items-table td {
+        padding: 1rem;
+        font-size: 0.875rem;
+        color: var(--gray-700);
+    }
+    
+    .item-name {
+        font-weight: 600;
+        color: var(--gray-900);
+        margin-bottom: 0.25rem;
+    }
+    
+    .item-description {
+        font-size: 0.8125rem;
+        color: var(--gray-500);
+    }
+    
+    .totals-section {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 2rem;
+    }
+    
+    .totals-table {
+        width: 100%;
+        max-width: 350px;
+    }
+    
+    .totals-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        font-size: 0.9375rem;
+    }
+    
+    .totals-row.subtotal {
+        color: var(--gray-600);
+        border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .totals-row.total {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        padding-top: 1rem;
+        border-top: 2px solid var(--gray-300);
+    }
+    
+    .totals-row.paid {
+        color: var(--success);
+        font-weight: 600;
+    }
+    
+    .totals-row.balance {
+        color: var(--danger);
+        font-weight: 700;
+        font-size: 1.125rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--gray-200);
+    }
+    
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.375rem 0.875rem;
+        border-radius: 6px;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+    }
+    
+    .status-paid {
+        background: #d1fae5;
+        color: #065f46;
+    }
+    
+    .status-unpaid {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+    
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.625rem 1.25rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.15s ease;
+        cursor: pointer;
+        border: none;
+        text-decoration: none;
+    }
+    
+    .btn-primary {
+        background: var(--primary);
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-secondary {
+        background: white;
+        color: var(--gray-700);
+        border: 1px solid var(--gray-300);
+    }
+    
+    .btn-secondary:hover {
+        background: var(--gray-50);
+        border-color: var(--gray-400);
+    }
+    
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--gray-600);
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.15s ease;
+    }
+    
+    .back-link:hover {
+        color: var(--primary);
+    }
+    
+    .invoice-footer {
+        padding: 2rem 3rem;
+        background: var(--gray-50);
+        border-top: 1px solid var(--gray-200);
+        text-align: center;
+    }
+    
+    .footer-text {
+        font-size: 0.875rem;
+        color: var(--gray-600);
+        line-height: 1.6;
+    }
+    
+    .footer-contact {
+        margin-top: 0.5rem;
+        font-weight: 500;
+        color: var(--primary);
+    }
+    
+    @media print {
+        body {
+            background: white;
+        }
+        
+        .no-print {
+            display: none !important;
+        }
+        
+        .invoice-container {
+            border: none;
+            box-shadow: none;
+        }
+        
+        .invoice-wrapper {
+            max-width: 100%;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .invoice-header,
+        .invoice-body {
+            padding: 1.5rem;
+        }
+        
+        .parties-info {
+            grid-template-columns: 1fr;
+        }
+        
+        .company-details {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .invoice-meta {
+            text-align: left;
+        }
+        
+        .items-table {
+            font-size: 0.8125rem;
+        }
+        
+        .items-table th,
+        .items-table td {
+            padding: 0.75rem 0.5rem;
+        }
+    }
+</style>
+
+<section class="py-8 min-h-screen">
+    <div class="container mx-auto px-4 sm:px-6">
+        <div class="invoice-wrapper">
+            
+            <!-- Back Button -->
+            <div class="mb-6 no-print">
+                <a href="{% url 'main:my_orders' %}" class="back-link">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back to Orders
+                </a>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="invoice-actions no-print">
+                <div>
+                    {% if invoice.is_paid %}
+                        <span class="status-badge status-paid">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Paid in Full
+                        </span>
+                    {% else %}
+                        <span class="status-badge status-unpaid">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                            </svg>
+                            Payment Pending
+                        </span>
+                    {% endif %}
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button onclick="window.print()" class="btn btn-secondary">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                        </svg>
+                        Print
+                    </button>
+                    <a href="http://127.0.0.1:8000/api/invoices/{{ invoice.invoiceID }}/download/" 
+                       class="btn btn-primary"
+                       download="invoice_{{ invoice.invoiceID }}.pdf">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Download PDF
+                    </a>
+                </div>
+            </div>
+
+            <!-- Invoice Document -->
+            <div class="invoice-container">
+                
+                <!-- Header -->
+                <div class="invoice-header">
+                    <div class="company-details">
+                        <div>
+                            <div class="company-logo">EMEM ENERGY TECH.</div>
+                            <div style="margin-top: 0.5rem; color: var(--gray-600); font-size: 0.875rem;">
+                                <div>14 Dennis OSadebe Way</div>
+                                <div>Asaba, Delta State, Nigeria</div>
+                                <div style="margin-top: 0.5rem;">contact@solarbattery.com</div>
+                            </div>
+                        </div>
+                        <div class="invoice-meta">
+                            <div style="font-size: 2rem; font-weight: 800; color: var(--gray-900); margin-bottom: 0.5rem;">INVOICE</div>
+                            <div class="invoice-number">{{ invoice.invoiceID }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Body -->
+                <div class="invoice-body">
+                    
+                    <!-- Bill To / From -->
+                    <div class="parties-info">
+                        <div class="party-card">
+                            <div class="party-label">Bill To</div>
+                            <div class="party-name">{{ invoice.customer_name }}</div>
+                            <div class="party-detail">Customer ID: {{ invoice.cusID }}</div>
+                            <div class="party-detail">Order #{{ invoice.order_ID }}</div>
+                            {% if invoice.Gdescription %}
+                            <div class="party-detail" style="margin-top: 0.5rem;">{{ invoice.Gdescription }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="party-card">
+                            <div class="party-label">Payment Details</div>
+                            <div class="party-detail">
+                                <div style="margin-bottom: 0.5rem;">
+                                    <strong>Method:</strong>  Paystack
+                                </div>
+                                <div style="margin-bottom: 0.5rem;">
+                                    <strong>Status:</strong>
+                                    {% if invoice.status == '1' %}
+                                        Successful
+                                    {% else %}
+                                        Pending
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <strong>Outlet:</strong> {{ invoice.outlet }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dates -->
+                    <div class="invoice-dates">
+                        <div class="date-item">
+                            <div class="date-label">Invoice Date</div>
+                            <div class="date-value">{{ invoice.invoice_date|date:"M d, Y" }}</div>
+                        </div>
+                        <div class="date-item">
+                            <div class="date-label">Due Date</div>
+                            <div class="date-value">{{ invoice.due_date|date:"M d, Y" }}</div>
+                        </div>
+                        <div class="date-item">
+                            <div class="date-label">Invoice State</div>
+                            <div class="date-value">{{ invoice.invoice_state|title }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Items Table -->
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th style="text-align: center;">Quantity</th>
+                                <th style="text-align: right;">Unit Price</th>
+                                <th style="text-align: right;">Discount</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in invoice.items %}
+                            <tr>
+                                <td>
+                                    <div class="item-name">{{ item.item_name }}</div>
+                                    {% if item.item_description %}
+                                    <div class="item-description">{{ item.item_description }}</div>
+                                    {% endif %}
+                                    <div class="item-description">Code: {{ item.itemcode }}</div>
+                                </td>
+                                <td style="text-align: center;">{{ item.qty }}</td>
+                                <td style="text-align: right;">₦{{ item.unit_p|floatformat:2|intcomma }}</td>
+                                <td style="text-align: right;">
+                                    {% if item.discount != "0" and item.discount != "0.00" %}
+                                        ₦{{ item.discount|floatformat:2|intcomma }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td style="text-align: right; font-weight: 600;">₦{{ item.amount|floatformat:2|intcomma }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <!-- Totals -->
+                    <div class="totals-section">
+                        <div class="totals-table">
+                            <div class="totals-row subtotal">
+                                <span>Subtotal</span>
+                                <span>₦{{ invoice.sub_total|floatformat:2|intcomma }}</span>
+                            </div>
+                            
+                            {% if invoice.vat_amount != "0.00" and invoice.vat_amount != "0" %}
+                            <div class="totals-row subtotal">
+                                <span>VAT</span>
+                                <span>₦{{ invoice.vat_amount|floatformat:2|intcomma }}</span>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="totals-row total">
+                                <span>Total Amount</span>
+                                <span>₦{{ invoice.total_amount|floatformat:2|intcomma }}</span>
+                            </div>
+
+                            {% if invoice.amount_paid != "0" and invoice.amount_paid != "0.00" %}
+                            <div class="totals-row paid">
+                                <span>Amount Paid</span>
+                                <span>₦{{ invoice.amount_paid|floatformat:2|intcomma }}</span>
+                            </div>
+                            {% endif %}
+
+                            {% if invoice.balance != "0" and invoice.balance != "0.00" %}
+                            <div class="totals-row balance">
+                                <span>Balance Due</span>
+                                <span>₦{{ invoice.balance|floatformat:2|intcomma }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="invoice-footer">
+                    <p class="footer-text">
+                        Thank you for your business!<br>
+                        <span class="footer-contact">For inquiries, contact us at contact@solarbattery.com</span>
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

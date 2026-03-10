@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Stock Alerts - Admin{% endblock %}
+
+{% block content %}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  * { font-family: 'Inter', sans-serif; }
+  :root { --amber: #f59e0b; --forest-green: #059669; }
+  .btn-primary { background: var(--forest-green); color: white; }
+  .btn-primary:hover { background: #047857; }
+  .btn-warning { background: var(--amber); color: white; }
+  .btn-warning:hover { background: #d97706; }
+</style>
+
+<section class="py-12 bg-neutral-50 min-h-screen">
+  <div class="container mx-auto px-6">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
+      <h1 class="text-3xl font-bold text-neutral-900">Stock Alerts</h1>
+      <a href="{% url 'main:add_stock_alert' %}" 
+         class="btn-warning inline-flex items-center gap-2 px-5 py-3 rounded-lg font-medium shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+             viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        Add Stock Alert
+      </a>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white border border-neutral-200 rounded-2xl shadow-sm p-6 mb-10">
+      <form method="GET" class="grid md:grid-cols-4 gap-4">
+        <input type="text" name="search" placeholder="Search by product name..." 
+               value="{{ request.GET.search }}"
+               class="px-4 py-3 border border-neutral-300 rounded-lg w-full">
+
+        <select name="status" class="px-4 py-3 border border-neutral-300 rounded-lg w-full">
+          <option value="">All Status</option>
+          <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Active</option>
+          <option value="inactive" {% if request.GET.status == 'inactive' %}selected{% endif %}>Inactive</option>
+        </select>
+
+        <select name="sort" class="px-4 py-3 border border-neutral-300 rounded-lg w-full">
+          <option value="">Sort by...</option>
+          <option value="date_asc" {% if request.GET.sort == 'date_asc' %}selected{% endif %}>Restock Date (Earliest)</option>
+          <option value="date_desc" {% if request.GET.sort == 'date_desc' %}selected{% endif %}>Restock Date (Latest)</option>
+          <option value="created" {% if request.GET.sort == 'created' %}selected{% endif %}>Recently Added</option>
+        </select>
+
+        <div class="flex items-center gap-3">
+          <button type="submit" class="btn-primary px-5 py-3 rounded-lg w-full">Filter</button>
+          <a href="{% url 'main:manage_stock_alerts' %}" 
+             class="px-5 py-3 border border-neutral-300 rounded-lg w-full text-center font-medium hover:bg-neutral-100">
+            Reset
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Alerts Table -->
+    <div class="bg-white border border-neutral-200 rounded-2xl shadow-sm overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-neutral-200">
+          <thead class="bg-neutral-100">
+            <tr class="text-left text-sm font-semibold text-neutral-700">
+              <th class="px-6 py-3">Product</th>
+              <th class="px-6 py-3">Expected Restock Date</th>
+              <th class="px-6 py-3">Expected Quantity</th>
+              <th class="px-6 py-3">Notes</th>
+              <th class="px-6 py-3">Status</th>
+              <th class="px-6 py-3">Created</th>
+              <th class="px-6 py-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-neutral-200">
+            {% for alert in alerts %}
+            <tr class="hover:bg-neutral-50 transition {% if not alert.is_active %}opacity-70{% endif %}">
+              <td class="px-6 py-4">
+                <div class="font-medium text-neutral-900">{{ alert.product.name }}</div>
+                <div class="text-sm text-neutral-500">{{ alert.product.capacity }}</div>
+              </td>
+              <td class="px-6 py-4 text-neutral-700">
+                {{ alert.expected_restock_date|date:"M d, Y" }}
+                {% if alert.is_overdue %}
+                <span class="ml-2 px-2 py-1 text-xs bg-red-100 text-red-700 rounded-full font-medium">Overdue</span>
+                {% endif %}
+              </td>
+              <td class="px-6 py-4">{{ alert.expected_quantity|default:"—" }}</td>
+              <td class="px-6 py-4 text-neutral-700">{{ alert.notes|truncatewords:8|default:"—" }}</td>
+              <td class="px-6 py-4">
+                {% if alert.is_active %}
+                <span class="px-3 py-1 text-xs font-medium bg-amber-100 text-amber-700 rounded-full">Active</span>
+                {% else %}
+                <span class="px-3 py-1 text-xs font-medium bg-neutral-200 text-neutral-700 rounded-full">Inactive</span>
+                {% endif %}
+              </td>
+              <td class="px-6 py-4 text-sm text-neutral-600">{{ alert.created_at|date:"M d, Y" }}</td>
+              <td class="px-6 py-4 text-right">
+                <div class="flex justify-end gap-2">
+                  <a href="{% url 'main:edit_stock_alert' alert.id %}" 
+                     class="p-2 rounded-lg border border-neutral-300 hover:bg-neutral-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" stroke="currentColor"
+                         stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" 
+                            d="M15.232 5.232l3.536 3.536M9 11l6 6L4 20l1.5-7.5L9 11z" />
+                    </svg>
+                  </a>
+                  <a href="{% url 'main:delete_stock_alert' alert.id %}" 
+                     class="p-2 rounded-lg border border-red-300 text-red-600 hover:bg-red-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" stroke="currentColor"
+                         stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" 
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </a>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="7" class="px-6 py-10 text-center text-neutral-500">
+                No stock alerts found. 
+                <a href="{% url 'main:add_stock_alert' %}" 
+                   class="text-forest-green font-medium hover:underline">Add one now</a>.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      {% if alerts.has_other_pages %}
+      <div class="flex justify-center items-center py-6">
+        <nav class="flex gap-2">
+          {% if alerts.has_previous %}
+          <a href="?page={{ alerts.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
+             class="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-100">Previous</a>
+          {% endif %}
+
+          {% for num in alerts.paginator.page_range %}
+          <a href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
+             class="px-4 py-2 border border-neutral-300 rounded-lg {% if alerts.number == num %}bg-forest-green text-white{% else %}hover:bg-neutral-100{% endif %}">
+             {{ num }}
+          </a>
+          {% endfor %}
+
+          {% if alerts.has_next %}
+          <a href="?page={{ alerts.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
+             class="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-100">Next</a>
+          {% endif %}
+        </nav>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

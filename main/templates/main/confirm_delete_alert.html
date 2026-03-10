@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Delete Stock Alert - Admin{% endblock %}
+
+{% block content %}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * { font-family: 'Inter', sans-serif; }
+
+  :root {
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-700: #374151;
+    --gray-900: #111827;
+  }
+
+  body { background-color: var(--gray-50); }
+
+  .content-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+
+  .btn-danger {
+    background: #dc2626;
+    color: white;
+    font-weight: 600;
+    padding: 0.625rem 1.25rem;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+  }
+
+  .btn-danger:hover {
+    background: #b91c1c;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+  }
+
+  .btn-secondary {
+    border: 2px solid var(--gray-300);
+    background: white;
+    font-weight: 600;
+    padding: 0.625rem 1.25rem;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+  }
+
+  .btn-secondary:hover {
+    background: var(--gray-100);
+  }
+</style>
+
+<section class="py-12 min-h-screen">
+  <div class="container mx-auto px-6">
+    <div class="max-w-2xl mx-auto">
+      
+      <div class="content-card overflow-hidden">
+        <!-- Danger Header -->
+        <div class="flex items-center gap-3 px-6 py-4 bg-red-50 border-b border-red-100">
+          <svg class="w-6 h-6 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <h3 class="text-lg font-bold text-red-700">Confirm Deletion</h3>
+        </div>
+
+        <!-- Body -->
+        <div class="p-6 space-y-6">
+          <div>
+            <h5 class="text-base font-semibold text-gray-900 mb-2">
+              Are you sure you want to delete this stock alert?
+            </h5>
+            <p class="text-sm text-gray-600">
+              This action cannot be undone. All information about this alert will be permanently removed.
+            </p>
+          </div>
+
+          <!-- Alert Info -->
+          <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-2">
+            <div class="flex justify-between text-sm">
+              <span class="font-semibold text-gray-700">Item:</span>
+              <span class="text-gray-900">{{ alert.item.item_name }}</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="font-semibold text-gray-700">Expected Restock:</span>
+              <span class="text-gray-900">{{ alert.expected_date|date:"M d, Y" }}</span>
+            </div>
+            {% if alert.quantity %}
+            <div class="flex justify-between text-sm">
+              <span class="font-semibold text-gray-700">Expected Quantity:</span>
+              <span class="text-gray-900">{{ alert.quantity }}</span>
+            </div>
+            {% endif %}
+            {% if alert.notes %}
+            <div class="flex justify-between text-sm">
+              <span class="font-semibold text-gray-700">Notes:</span>
+              <span class="text-gray-900 text-right">{{ alert.notes|truncatewords:10 }}</span>
+            </div>
+            {% endif %}
+            <div class="flex justify-between text-sm pt-2 border-t border-gray-200">
+              <span class="font-semibold text-gray-700">Status:</span>
+              <span>
+                {% if alert.is_active %}
+                <span class="inline-block px-2 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded-full">Active</span>
+                {% else %}
+                <span class="inline-block px-2 py-1 text-xs font-semibold bg-gray-200 text-gray-700 rounded-full">Inactive</span>
+                {% endif %}
+              </span>
+            </div>
+          </div>
+
+          <!-- Info Notice -->
+          <div class="flex items-start gap-3 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div class="text-sm text-blue-800">
+              <p class="font-semibold mb-1">Note</p>
+              <p>Deleting this alert will remove it from the system. Customers will no longer see this out-of-stock notification.</p>
+            </div>
+          </div>
+
+          <!-- Critical Warning -->
+          <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+            <p class="text-sm text-red-700 font-semibold">
+              ⚠️ This action <span class="font-bold">cannot</span> be undone. The alert will be permanently deleted.
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <form method="POST" class="pt-4 border-t border-gray-200">
+            {% csrf_token %}
+            <div class="flex flex-col sm:flex-row justify-between gap-4">
+              <a href="{% url 'main:manage_stock_alerts' %}" class="btn-secondary inline-flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Cancel
+              </a>
+
+              <button type="submit" class="btn-danger inline-flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Yes, Delete Alert
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

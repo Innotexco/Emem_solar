@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if station %}Edit{% else %}Add{% endif %} Pickup Station - Admin{% endblock %}
+
+{% block content %}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * { font-family: 'Inter', sans-serif; }
+
+  :root {
+    --forest-green: #059669;
+    --forest-green-dark: #047857;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-700: #374151;
+    --gray-900: #111827;
+  }
+
+  body { background-color: var(--gray-50); }
+
+  .form-input, .form-textarea {
+    width: 100%;
+    border: 1px solid var(--gray-300);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    color: var(--gray-900);
+    transition: all 0.2s ease;
+    background: white;
+  }
+
+  .form-input:focus, .form-textarea:focus {
+    border-color: var(--forest-green);
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    outline: none;
+  }
+
+  .btn-primary {
+    background: var(--forest-green);
+    color: white;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .btn-primary:hover { 
+    background: var(--forest-green-dark);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+  }
+
+  .btn-secondary {
+    border: 2px solid var(--gray-300);
+    background: white;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .btn-secondary:hover { background: var(--gray-100); }
+
+  .form-label {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--gray-700);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .content-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+
+  .back-link {
+    color: var(--forest-green);
+    font-weight: 500;
+    transition: color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .back-link:hover { 
+    color: var(--forest-green-dark);
+    text-decoration: none;
+  }
+</style>
+
+<section class="py-12 min-h-screen">
+  <div class="container mx-auto px-6">
+    <div class="max-w-3xl mx-auto">
+      
+      <!-- Header -->
+      <div class="mb-8">
+        <a href="{% url 'main:manage_stations' %}" class="back-link mb-4">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Back to Stations
+        </a>
+        <h1 class="text-3xl font-bold text-gray-900 mt-4 mb-1">
+          {% if station %}Edit Pickup Station{% else %}Add Pickup Station{% endif %}
+        </h1>
+        <p class="text-gray-600 text-sm">
+          {% if station %}
+            Update station information below
+          {% else %}
+            Fill in the details to create a new pickup station
+          {% endif %}
+        </p>
+      </div>
+
+      <!-- Form Card -->
+      <div class="content-card p-8">
+        <form method="POST">
+          {% csrf_token %}
+
+          <!-- Station Name -->
+          <div class="mb-6">
+            <label for="name" class="form-label">
+              Station Name <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="name" 
+              name="name" 
+              value="{{ station.name }}" 
+              required 
+              class="form-input" 
+              placeholder="e.g., Lagos Central Hub"
+            >
+            <p class="text-xs text-gray-500 mt-1">Choose a clear, identifiable name</p>
+          </div>
+
+          <!-- Address -->
+          <div class="mb-6">
+            <label for="address" class="form-label">
+              Address <span class="text-red-500">*</span>
+            </label>
+            <textarea 
+              id="address" 
+              name="address" 
+              required 
+              rows="3" 
+              class="form-textarea" 
+              placeholder="Full station address"
+            >{{ station.address }}</textarea>
+          </div>
+
+          <!-- City and State -->
+          <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label for="city" class="form-label">
+                City <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="city" 
+                name="city" 
+                value="{{ station.city }}" 
+                required 
+                class="form-input" 
+                placeholder="e.g., Ikeja"
+              >
+            </div>
+            <div>
+              <label for="state" class="form-label">
+                State <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="state" 
+                name="state" 
+                value="{{ station.state }}" 
+                required 
+                class="form-input" 
+                placeholder="e.g., Lagos"
+              >
+            </div>
+          </div>
+
+          <!-- Phone and Email -->
+          <div class="grid md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label for="phone" class="form-label">
+                Phone Number <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="tel" 
+                id="phone" 
+                name="phone" 
+                value="{{ station.phone }}" 
+                required 
+                class="form-input" 
+                placeholder="+234 800 123 4567"
+              >
+            </div>
+            <div>
+              <label for="email" class="form-label">Email</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                value="{{ station.email }}" 
+                class="form-input" 
+                placeholder="pickup@store.com"
+              >
+            </div>
+          </div>
+
+          <!-- Opening Hours -->
+          <div class="mb-6">
+            <label for="opening_hours" class="form-label">Opening Hours</label>
+            <input 
+              type="text" 
+              id="opening_hours" 
+              name="opening_hours" 
+              value="{{ station.opening_hours|default:'Mon-Fri: 9AM–5PM' }}" 
+              class="form-input"
+              placeholder="Mon-Fri: 9AM–5PM"
+            >
+            <p class="text-xs text-gray-500 mt-1">When is the station open for pickups?</p>
+          </div>
+
+          <!-- Active Status -->
+          <div class="mb-8">
+            <div class="flex items-start gap-3">
+              <input 
+                type="checkbox" 
+                id="is_active" 
+                name="is_active" 
+                {% if station.is_active or not station %}checked{% endif %} 
+                class="mt-1 w-4 h-4 text-forest-green rounded focus:ring-forest-green border-gray-300"
+              >
+              <div>
+                <label for="is_active" class="form-label mb-0">Active Station</label>
+                <p class="text-xs text-gray-500">Inactive stations won't be available for customer selection</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+            <button type="submit" class="flex-1 btn-primary text-center">
+              <svg class="w-5 h-5 inline-block mr-2 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              {% if station %}Update Station{% else %}Save Station{% endif %}
+            </button>
+            <a href="{% url 'main:manage_stations' %}" class="flex-1 text-center btn-secondary">
+              Cancel
+            </a>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}
