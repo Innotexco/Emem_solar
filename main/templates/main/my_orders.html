@@ -1017,7 +1017,7 @@ async function loadOrderDetails() {
 
 async function loadOrderItems(orderId) {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/api/orders/${orderId}/items/`);
+        const response = await fetch(`https://console.afrikbook.com/api/orders/${orderId}/items/`);
         const data = await response.json();
         
         if (data.success && data.items && data.items.length > 0) {
@@ -1066,7 +1066,7 @@ async function loadOrderItems(orderId) {
 
 async function loadOrderInvoices(orderId) {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/api/orders/${orderId}/invoices/`);
+        const response = await fetch(`https://console.afrikbook.com/api/orders/${orderId}/invoices/`);
         const data = await response.json();
         
         const linksContainer = document.querySelector(`.invoice-links-${orderId}`);
@@ -1090,7 +1090,7 @@ async function loadOrderInvoices(orderId) {
             // Show first invoice link
             const firstInvoice = data.invoices[0];
             const invoiceLink = document.createElement('a');
-            invoiceLink.href = `http://127.0.0.1:8000/invoice/${firstInvoice.invoiceID}/`;
+            invoiceLink.href = `https://console.afrikbook.com/invoice/${firstInvoice.invoiceID}/`;
             invoiceLink.className = 'btn-link';
             invoiceLink.innerHTML = `
                 <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1102,7 +1102,7 @@ async function loadOrderInvoices(orderId) {
             
             // Add download button
             const downloadBtn = document.createElement('a');
-            downloadBtn.href = `http://127.0.0.1:8000/api/invoices/${firstInvoice.invoiceID}/download/`;
+            downloadBtn.href = `https://console.afrikbook.com/api/invoices/${firstInvoice.invoiceID}/download/`;
             downloadBtn.className = 'btn btn-secondary';
             downloadBtn.download = `invoice_${firstInvoice.invoiceID}.pdf`;
             downloadBtn.innerHTML = `
@@ -1116,7 +1116,7 @@ async function loadOrderInvoices(orderId) {
             // If multiple invoices, show "View All" link
             if (data.invoices.length > 1) {
                 const viewAllLink = document.createElement('a');
-                viewAllLink.href = `http://127.0.0.1:8000/orders/${orderId}/invoices/`;
+                viewAllLink.href = `https://console.afrikbook.com/orders/${orderId}/invoices/`;
                 viewAllLink.className = 'btn-link';
                 viewAllLink.style.color = 'var(--ocean-teal)';
                 viewAllLink.innerHTML = `
