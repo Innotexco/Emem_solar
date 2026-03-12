@@ -999,7 +999,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadOrderInvoices(orderId) {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/api/orders/${orderId}/invoices/`);
+        const response = await fetch(`https://console.afrikbook.com/api/orders/${orderId}/invoices/`);
         const data = await response.json();
 
         const badgeContainer = document.querySelector(`.invoice-count-badge-${orderId}`);
@@ -1024,7 +1024,7 @@ async function loadOrderInvoices(orderId) {
 
             // View Invoice link
             const viewLink = document.createElement('a');
-            viewLink.href = `http://127.0.0.1:8000/invoice/${firstInvoice.invoiceID}/`;
+            viewLink.href = `https://console.afrikbook.com/invoice/${firstInvoice.invoiceID}/`;
             viewLink.className = 'btn-link';
             viewLink.innerHTML = `
                 <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1036,7 +1036,7 @@ async function loadOrderInvoices(orderId) {
 
             // Download PDF button
             const downloadBtn = document.createElement('a');
-            downloadBtn.href = `http://127.0.0.1:8000/api/invoices/${firstInvoice.invoiceID}/download/`;
+            downloadBtn.href = `https://console.afrikbook.com/api/invoices/${firstInvoice.invoiceID}/download/`;
             downloadBtn.className = 'btn btn-secondary';
             downloadBtn.download = `invoice_${firstInvoice.invoiceID}.pdf`;
             downloadBtn.innerHTML = `
@@ -1050,7 +1050,7 @@ async function loadOrderInvoices(orderId) {
             // If multiple invoices, show "View All" link
             if (data.invoices.length > 1) {
                 const allLink = document.createElement('a');
-                allLink.href = `http://127.0.0.1:8000/orders/${orderId}/invoices/`;
+                allLink.href = `https://console.afrikbook.com/orders/${orderId}/invoices/`;
                 allLink.className = 'btn-link';
                 allLink.style.color = 'var(--ocean-teal)';
                 allLink.innerHTML = `
