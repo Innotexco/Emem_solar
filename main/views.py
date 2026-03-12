@@ -276,7 +276,7 @@ def cart_count(request):
 def order_now(request, item_id):
     """Direct purchase of a single item"""
     try:
-        api_url = 'http://127.0.0.1:8000/api/item_api/'
+        api_url = 'https://console.afrikbook.com/api/item_api/'
         response = requests.get(api_url)
         response.raise_for_status()  # Raise an error for bad responses
         items = response.json()
@@ -318,7 +318,7 @@ def checkout(request, item_id=None):
     if item_id:
         # Single item checkout (Order Now) - fetch from API
         try:
-            api_url = 'http://127.0.0.1:8000/api/item_api/'
+            api_url = 'https://console.afrikbook.com/api/item_api/'
             response = requests.get(api_url, timeout=10)
             all_items = response.json()
             
@@ -360,7 +360,7 @@ def checkout(request, item_id=None):
         
         try:
             # Fetch all items from API
-            api_url = 'http://127.0.0.1:8000/api/item_api/'
+            api_url = 'https://console.afrikbook.com/api/item_api/'
             response = requests.get(api_url, timeout=10)
             all_items_data = response.json()
             
@@ -649,7 +649,7 @@ def create_sales_invoice_from_order(request, order, customer):
         }
         
         # Call Sales Invoice API
-        api_url = 'http://127.0.0.1:8000/api/create/'
+        api_url = 'https://console.afrikbook.com/api/create/'
         
         response = requests.post(
             api_url,
@@ -722,7 +722,7 @@ def create_sales_invoice_from_order(request, order, customer):
         }
         
         # Call Sales Invoice API
-        api_url = 'http://127.0.0.1:8000/api/create/'
+        api_url = 'https://console.afrikbook.com/api/create/'
         
         response = requests.post(
             api_url,
@@ -1104,7 +1104,7 @@ def invoice_detail_view(request, invoice_id):
     try:
         # Fetch invoice from API
         response = requests.get(
-            f'http://127.0.0.1:8000/api/invoices/{invoice_id}/',
+            f'https://console.afrikbook.com/api/invoices/{invoice_id}/',
             timeout=10
         )
         
