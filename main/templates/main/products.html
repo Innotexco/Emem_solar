@@ -478,7 +478,7 @@
 
             try {
                 // ---- 1. Fetch items API (cached) ----
-                const itemsUrl = 'http://127.0.0.1:8000/api/item_api/';
+                const itemsUrl = 'http://console.afrikbook.com/api/item_api/';
                 const itemsData = await fetchWithCache(itemsUrl);
                 items = Array.isArray(itemsData) ? itemsData : [itemsData];
 
@@ -518,7 +518,7 @@
                         return;
                     }
 
-                    const stockUrl = `http://127.0.0.1:8000/api/check-item-qty?item_id=${encodeURIComponent(item.generated_code)}`;
+                    const stockUrl = `http://console.afrikbook.comn/api/check-item-qty?item_id=${encodeURIComponent(item.generated_code)}`;
 
                     try {
                         // ---- Use cached stock data ----
@@ -545,7 +545,7 @@
 
         function displayItems(items) {
             const container = document.getElementById('items-container');
-            const baseUrl   = 'http://127.0.0.1:8000';
+            const baseUrl   = 'http://console.afrikbook.com';
 
             items.forEach((item, index) => {
                 const wrapper = document.createElement('div');
