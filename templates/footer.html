@@ -1,67 +1,333 @@
 {% load static %}
-<footer class="bg-gray-800 text-gray-300  py-12 sm:py-16">
-    <div class="container mx-auto px-4 sm:px-6">
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 sm:mb-12">
-        <div class="sm:col-span-2">
-          <div class="flex items-center space-x-3 mb-4 sm:mb-6">
-            <a href="{% url 'main:home' %}" class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-lg flex items-center justify-center">
-                <!-- <span class="text-white font-bold text-lg">E</span>  -->
-                <img class="h-10" src="{% static 'images/Emem4.png' %}" alt="" srcset="">
-              </div> 
-              <div>
-                <h1 class="font-space font-bold text-xl text-white">Energy</h1>
-                <p class="text-xs text-gray-400">Innovation Ltd</p>
-              </div>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300&family=Outfit:wght@300;400;500;600&display=swap');
+
+    .site-footer {
+        background: #0c1a0f;
+        color: rgba(255,255,255,0.45);
+        font-family: 'Outfit', sans-serif;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .footer-grid-bg {
+        position: absolute; inset: 0;
+        background-image:
+            repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 80px),
+            repeating-linear-gradient(0deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 80px);
+        pointer-events: none;
+    }
+
+    .footer-orb {
+        position: absolute;
+        bottom: -160px; left: -80px;
+        width: 400px; height: 400px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(10,102,64,0.15) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .footer-inner {
+        position: relative;
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 80px 60px 0;
+    }
+
+    /* Top strip */
+    .footer-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 48px;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+        margin-bottom: 60px;
+    }
+
+    .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        text-decoration: none;
+    }
+
+    .footer-logo {
+        height: 40px;
+        width: auto;
+        opacity: 0.9;
+    }
+
+    .footer-brand-text {}
+
+    .footer-brand-name {
+        font-family: 'Fraunces', serif;
+        font-size: 20px;
+        font-weight: 400;
+        color: #fff;
+        line-height: 1;
+        letter-spacing: -0.02em;
+    }
+
+    .footer-brand-sub {
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.3);
+        margin-top: 3px;
+    }
+
+    .footer-tagline {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(13px, 1.5vw, 16px);
+        font-weight: 300;
+        font-style: italic;
+        color: rgba(255,255,255,0.25);
+        letter-spacing: -0.01em;
+    }
+
+    /* Main grid */
+    .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 60px;
+        margin-bottom: 60px;
+    }
+
+    .footer-about {}
+
+    .footer-about-desc {
+        font-size: 14px;
+        font-weight: 300;
+        color: rgba(255,255,255,0.38);
+        line-height: 1.85;
+        margin-bottom: 28px;
+        max-width: 340px;
+    }
+
+    /* Social icons */
+    .footer-socials {
+        display: flex;
+        gap: 10px;
+    }
+
+    .social-btn {
+        width: 36px; height: 36px;
+        border: 1px solid rgba(255,255,255,0.1);
+        display: flex; align-items: center; justify-content: center;
+        color: rgba(255,255,255,0.4);
+        text-decoration: none;
+        transition: all 0.25s ease;
+    }
+
+    .social-btn:hover {
+        border-color: #c8752e;
+        color: #c8752e;
+        background: rgba(200,117,46,0.08);
+    }
+
+    /* Nav columns */
+    .footer-col-title {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.6);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .footer-col-title::before {
+        content: '';
+        display: block;
+        width: 16px; height: 1px;
+        background: #0a6640;
+        flex-shrink: 0;
+    }
+
+    .footer-nav {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .footer-nav a {
+        font-size: 14px;
+        font-weight: 300;
+        color: rgba(255,255,255,0.38);
+        text-decoration: none;
+        transition: color 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .footer-nav a::before {
+        content: '→';
+        font-size: 10px;
+        color: #0a6640;
+        opacity: 0;
+        transform: translateX(-6px);
+        transition: all 0.2s ease;
+    }
+
+    .footer-nav a:hover {
+        color: rgba(255,255,255,0.8);
+    }
+
+    .footer-nav a:hover::before {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    /* Bottom bar */
+    .footer-bottom {
+        border-top: 1px solid rgba(255,255,255,0.06);
+        padding: 24px 0 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .footer-copy {
+        font-size: 12px;
+        font-weight: 300;
+        color: rgba(255,255,255,0.22);
+        letter-spacing: 0.02em;
+    }
+
+    .footer-copy span {
+        color: rgba(255,255,255,0.35);
+    }
+
+    .footer-made {
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.15);
+    }
+
+    .footer-made span { color: #0a6640; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .footer-inner { padding: 60px 32px 0; }
+        .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+        .footer-about { grid-column: 1 / -1; }
+        .footer-about-desc { max-width: 100%; }
+    }
+
+    @media (max-width: 640px) {
+        .footer-top { flex-direction: column; align-items: flex-start; gap: 16px; }
+        .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+        .footer-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+</style>
+
+<footer class="site-footer">
+    <div class="footer-grid-bg"></div>
+    <div class="footer-orb"></div>
+
+    <div class="footer-inner">
+
+        <!-- Top strip -->
+        <div class="footer-top">
+            <a href="{% url 'main:home' %}" class="footer-brand">
+                <img src="{% static 'images/Emem4.png' %}" alt="Emem Energy" class="footer-logo">
+                <div class="footer-brand-text">
+                    <div class="footer-brand-name">Emem Energy</div>
+                    <div class="footer-brand-sub">Innovation Ltd</div>
+                </div>
             </a>
-          </div>
-          <p class=" mb-4 sm:mb-6 max-w-md text-sm sm:text-base">
-            Leading manufacturer of affordable residential and commercial energy storage systems. 
-            Locally manufactured with international quality standards.
-          </p>
-          <div class="flex space-x-4">
-            <a href="#" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-energy-green hover:text-white transition-colors">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
-              </svg>
-            </a>
-            <a href="#" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-energy-green hover:text-white transition-colors">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
-              </svg>
-            </a>
-            <a href="#" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-energy-green hover:text-white transition-colors">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"></path>
-              </svg>
-            </a>
-          </div>
+            <div class="footer-tagline">Powering Nigeria's sustainable future</div>
         </div>
-        
-       <div>
-          <h4 class="font-bold text-lg text-white mb-6">Company</h4>
-          <ul class="space-y-3">
-            <li><a href="{% url 'main:about' %}" class="hover:text-white transition-colors">About Us</a></li>
-            <li><a href="{% url 'main:products'%}" class="hover:text-white transition-colors">Products</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
-            <li><a href="{% url 'main:contact' %}" class="hover:text-white transition-colors">Contact</a></li>
-          </ul>
+
+        <!-- Main grid -->
+        <div class="footer-grid">
+
+            <!-- About column -->
+            <div class="footer-about">
+                <p class="footer-about-desc">
+                    Leading manufacturer of affordable residential and commercial energy storage systems.
+                    Locally made to international quality standards — built for Nigeria's reality.
+                </p>
+                <div class="footer-socials">
+                    <a href="#" class="social-btn" aria-label="Facebook">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-btn" aria-label="Twitter / X">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-btn" aria-label="LinkedIn">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+                            <circle cx="4" cy="4" r="2"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-btn" aria-label="Instagram">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                            <circle cx="12" cy="12" r="4"/>
+                            <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Company -->
+            <div>
+                <div class="footer-col-title">Company</div>
+                <ul class="footer-nav">
+                    <li><a href="{% url 'main:about' %}">About Us</a></li>
+                    <li><a href="{% url 'main:products' %}">Products</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="{% url 'main:contact' %}">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Resources -->
+            <div>
+                <div class="footer-col-title">Resources</div>
+                <ul class="footer-nav">
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Support</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Warranty</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div>
+                <div class="footer-col-title">Get in Touch</div>
+                <ul class="footer-nav">
+                    <li><a href="{% url 'main:contact' %}">Request a Quote</a></li>
+                    <li><a href="{% url 'main:contact' %}">Technical Support</a></li>
+                    <li><a href="#">Find a Dealer</a></li>
+                    <li><a href="#">Become a Partner</a></li>
+                </ul>
+            </div>
+
         </div>
-        
-        <div>
-          <h4 class="font-bold text-lg text-white mb-6">Resources</h4>
-          <ul class="space-y-3">
-            <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Support</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">FAQs</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Warranty</a></li>
-          </ul>
+
+        <!-- Bottom bar -->
+        <div class="footer-bottom">
+            <p class="footer-copy">
+                &copy; 2025 <span>Emem Energy Innovation Ltd.</span> All rights reserved.
+            </p>
+            <div class="footer-made">
+                Made in <span>Nigeria</span>
+            </div>
         </div>
-      </div>
-      
-      <div class="mt-12 pt-8 border-t border-gray-700 text-center text-sm">
-        <p>&copy; 2025 Emem Energy Technology Ltd. All rights reserved.</p>
-        
-      </div>
+
     </div>
-  </footer>
+</footer>
