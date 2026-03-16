@@ -3,459 +3,489 @@
 {% block content %}
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-    
-    * {
-        font-family: 'Inter', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;0,700;1,300;1,600&family=Outfit:wght@300;400;500;600&display=swap');
+
     :root {
-        --forest-green: #059669;
-        --ocean-teal: #14b8a6;
-        --solar-amber: #fbbf24;
-        --neutral-50: #fafafa;
-        --neutral-100: #f5f5f5;
-        --neutral-200: #e5e5e5;
-        --neutral-700: #404040;
-        --neutral-800: #262626;
-        --neutral-900: #171717;
+        --ink:       #0c1a0f;
+        --ink-mid:   #1e3324;
+        --green:     #0a6640;
+        --green-sat: #0d8c55;
+        --amber:     #c8752e;
+        --rule:      #d6dfd9;
+        --surface:   #f4f7f5;
+        --white:     #ffffff;
+        --muted:     #607568;
+        --card-shadow: 0 2px 20px rgba(12,26,15,0.07);
     }
-    
-    .hero-section {
-        background: linear-gradient(180deg, var(--neutral-900) 0%, #1a1a1a 100%);
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: 'Outfit', sans-serif;
+        color: var(--ink);
+        background: var(--white);
+        -webkit-font-smoothing: antialiased;
     }
-    
-    .stat-card {
-        background: white;
-        border: 1px solid var(--neutral-200);
-        transition: all 0.3s ease;
+
+    .eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .eyebrow-line { width: 28px; height: 1px; background: var(--green); }
+    .eyebrow span { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); }
+    .eyebrow.amber .eyebrow-line { background: var(--amber); }
+    .eyebrow.amber span { color: var(--amber); }
+    .eyebrow.light .eyebrow-line { background: var(--amber); }
+    .eyebrow.light span { color: var(--amber); }
+
+    .section-title { font-family: 'Fraunces', serif; font-size: clamp(28px, 3.5vw, 48px); font-weight: 400; color: var(--ink); line-height: 1.08; letter-spacing: -0.025em; }
+    .section-title.light { color: var(--white); }
+
+    .section-body { font-size: 15px; font-weight: 300; color: var(--muted); line-height: 1.85; }
+    .section-body.light { color: rgba(255,255,255,0.45); }
+
+    .full-rule { height: 1px; background: var(--rule); margin: 0 60px; }
+
+    /* ── HERO ─────────────────────────────────── */
+    .about-hero { background: var(--ink); position: relative; overflow: hidden; min-height: 86vh; display: flex; align-items: center; }
+
+    .hero-grid-bg {
+        position: absolute; inset: 0;
+        background-image:
+            repeating-linear-gradient(90deg, rgba(255,255,255,0.022) 0px, rgba(255,255,255,0.022) 1px, transparent 1px, transparent 80px),
+            repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 80px);
+        pointer-events: none;
     }
-    
-    .stat-card:hover {
-        border-color: var(--solar-amber);
-        transform: translateY(-4px);
+
+    .hero-accent-bar { position: absolute; top: 0; left: 0; width: 2px; height: 100%; background: linear-gradient(180deg, transparent 0%, var(--amber) 40%, transparent 100%); }
+    .hero-orb { position: absolute; top: 10%; right: -8%; width: 640px; height: 640px; border-radius: 50%; background: radial-gradient(circle, rgba(10,102,64,0.22) 0%, transparent 68%); pointer-events: none; }
+    .hero-ghost-num { position: absolute; bottom: -40px; right: -10px; font-family: 'Fraunces', serif; font-size: clamp(160px, 22vw, 260px); font-weight: 700; color: rgba(255,255,255,0.025); line-height: 1; pointer-events: none; user-select: none; }
+
+    .hero-inner { position: relative; width: 100%; max-width: 1320px; margin: 0 auto; padding: 120px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+
+    .hero-tag { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+    .hero-tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+    .hero-tag span { font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--amber); }
+
+    .hero-title { font-family: 'Fraunces', serif; font-size: clamp(40px, 5.5vw, 76px); font-weight: 300; color: var(--white); line-height: 1.0; letter-spacing: -0.03em; margin-bottom: 24px; }
+    .hero-title em { font-style: italic; color: rgba(255,255,255,0.35); }
+
+    .hero-sub { font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.48); line-height: 1.8; margin-bottom: 40px; max-width: 480px; }
+
+    .hero-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--amber); color: var(--white); padding: 16px 32px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border: none; cursor: pointer; transition: background 0.25s ease; }
+    .hero-cta:hover { background: #b5661f; }
+    .hero-cta svg { transition: transform 0.25s ease; }
+    .hero-cta:hover svg { transform: translateX(4px); }
+
+    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.06); }
+    .hero-stat { background: rgba(255,255,255,0.03); padding: 36px 30px; transition: background 0.25s ease; }
+    .hero-stat:hover { background: rgba(255,255,255,0.06); }
+    .hero-stat-num { font-family: 'Fraunces', serif; font-size: 52px; font-weight: 600; color: var(--white); line-height: 1; margin-bottom: 8px; }
+    .hero-stat-num sup { font-size: 28px; font-weight: 400; color: var(--amber); }
+    .hero-stat-label { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+
+    /* ── STORY ────────────────────────────────── */
+    .story-section { padding: 120px 60px; max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; }
+    .story-body { display: flex; flex-direction: column; gap: 20px; }
+    .story-body p { font-size: 15px; font-weight: 300; color: var(--muted); line-height: 1.9; }
+    .story-image-wrap { position: relative; }
+    .story-image-wrap::before { content: ''; position: absolute; top: -18px; left: -18px; right: 18px; bottom: 18px; border: 1px solid var(--rule); z-index: 0; }
+    .story-image-wrap img { position: relative; z-index: 1; width: 100%; height: 560px; object-fit: cover; display: block; }
+    .story-badge { position: absolute; z-index: 2; bottom: -22px; right: -22px; background: var(--green); color: var(--white); padding: 22px 28px; text-align: center; }
+    .story-badge-num { font-family: 'Fraunces', serif; font-size: 38px; font-weight: 700; line-height: 1; }
+    .story-badge-txt { font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.75; margin-top: 4px; }
+
+    /* ── PRINCIPLES ───────────────────────────── */
+    .principles-section { background: var(--ink); padding: 120px 60px; position: relative; overflow: hidden; }
+    .principles-bg-word { position: absolute; bottom: -60px; right: -20px; font-family: 'Fraunces', serif; font-size: 220px; font-weight: 700; color: rgba(255,255,255,0.02); line-height: 1; pointer-events: none; user-select: none; }
+    .principles-inner { max-width: 1320px; margin: 0 auto; position: relative; }
+    .principles-header { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end; margin-bottom: 60px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .principles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.06); }
+    .principle-card { background: var(--ink); padding: 46px 38px; position: relative; transition: background 0.3s ease; overflow: hidden; }
+    .principle-card:hover { background: #111d14; }
+    .p-rule { position: absolute; top: 0; left: 38px; width: 34px; height: 2px; background: var(--amber); transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease; }
+    .principle-card:hover .p-rule { transform: scaleX(1); }
+    .p-num { font-family: 'Fraunces', serif; font-size: 56px; font-weight: 700; color: rgba(255,255,255,0.04); line-height: 1; margin-bottom: 24px; }
+    .p-icon { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; transition: all 0.3s ease; }
+    .principle-card:hover .p-icon { border-color: var(--amber); background: rgba(200,117,46,0.08); }
+    .p-icon svg { color: rgba(255,255,255,0.45); transition: color 0.3s; }
+    .principle-card:hover .p-icon svg { color: var(--amber); }
+    .p-title { font-size: 16px; font-weight: 600; color: var(--white); margin-bottom: 10px; }
+    .p-body  { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.38); line-height: 1.85; }
+
+    /* ── FEATURES ─────────────────────────────── */
+    .features-section { padding: 120px 60px; }
+    .features-inner   { max-width: 1320px; margin: 0 auto; }
+    .features-header  { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end; margin-bottom: 60px; padding-bottom: 48px; border-bottom: 1px solid var(--rule); }
+    .features-grid    { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--rule); }
+    .feature-item { padding: 38px 34px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); position: relative; overflow: hidden; transition: background 0.3s ease; }
+    .feature-item:nth-child(3n)        { border-right: none; }
+    .feature-item:nth-last-child(-n+3) { border-bottom: none; }
+    .feature-item::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: var(--green); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
+    .feature-item:hover { background: var(--surface); }
+    .feature-item:hover::after { transform: scaleX(1); }
+    .feat-num   { font-family: 'Fraunces', serif; font-size: 12px; font-weight: 500; color: var(--rule); letter-spacing: 0.1em; margin-bottom: 18px; }
+    .feat-title { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+    .feat-body  { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.8; }
+
+    /* ── QUALITY ──────────────────────────────── */
+    .quality-section { background: var(--surface); padding: 120px 60px; }
+    .quality-inner   { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; }
+    .quality-image   { position: relative; }
+    .quality-image img { width: 100%; height: 580px; object-fit: cover; display: block; }
+    .quality-image-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(12,26,15,0.8)); padding: 60px 28px 28px; font-size: 12px; font-weight: 300; letter-spacing: 0.06em; color: rgba(255,255,255,0.65); }
+    .quality-checklist { list-style: none; border-top: 1px solid var(--rule); margin-top: 40px; }
+    .quality-check { display: flex; gap: 22px; padding: 26px 0; border-bottom: 1px solid var(--rule); align-items: flex-start; }
+    .check-mark { width: 22px; height: 22px; border: 1.5px solid var(--green); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+    .check-mark svg { color: var(--green); }
+    .check-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+    .check-body  { font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.75; }
+
+    /* ── STATS ────────────────────────────────── */
+    .stats-section { background: var(--ink); padding: 120px 60px; position: relative; overflow: hidden; }
+    .stats-orb { position: absolute; top: -100px; right: -100px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(10,102,64,0.18) 0%, transparent 70%); pointer-events: none; }
+    .stats-inner { max-width: 1320px; margin: 0 auto; position: relative; }
+    .stats-header { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end; margin-bottom: 60px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.06); }
+    .stat-card { background: var(--ink); padding: 44px 36px; text-align: center; transition: background 0.3s ease; }
+    .stat-card:hover { background: #111d14; }
+    .stat-num { font-family: 'Fraunces', serif; font-size: 56px; font-weight: 600; color: var(--white); line-height: 1; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .stat-num span { color: var(--amber); }
+    .stat-label { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.32); }
+
+    /* ── CTA ──────────────────────────────────── */
+    .cta-section { padding: 120px 60px; max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 60px; align-items: center; }
+    .cta-title { font-family: 'Fraunces', serif; font-size: clamp(32px, 4vw, 58px); font-weight: 400; color: var(--ink); line-height: 1.08; letter-spacing: -0.025em; }
+    .cta-title em { font-style: italic; color: var(--green); }
+    .cta-buttons { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
+    .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--green); color: var(--white); padding: 16px 36px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border: 2px solid var(--green); cursor: pointer; transition: all 0.25s ease; white-space: nowrap; }
+    .btn-primary:hover { background: var(--green-sat); border-color: var(--green-sat); }
+    .btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: transparent; color: var(--ink); padding: 16px 36px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border: 2px solid var(--rule); cursor: pointer; transition: all 0.25s ease; white-space: nowrap; }
+    .btn-secondary:hover { border-color: var(--ink); }
+
+    /* ── ANIMATIONS ───────────────────────────── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-up { opacity: 0; animation: fadeUp 0.75s cubic-bezier(0.16,1,0.3,1) forwards; }
+    .d1 { animation-delay: 0.1s; }
+    .d2 { animation-delay: 0.25s; }
+    .d3 { animation-delay: 0.4s; }
+    .d4 { animation-delay: 0.55s; }
+
+    /* ── RESPONSIVE ───────────────────────────── */
+    @media (max-width: 1100px) {
+        .hero-inner, .story-section, .quality-inner { grid-template-columns: 1fr; gap: 60px; padding: 80px 32px; }
+        .principles-header, .features-header, .stats-header { grid-template-columns: 1fr; gap: 28px; }
+        .cta-section { grid-template-columns: 1fr; padding: 80px 32px; }
+        .principles-grid, .features-grid { grid-template-columns: 1fr; }
+        .feature-item { border-right: none; }
+        .feature-item:nth-last-child(-n+3) { border-bottom: 1px solid var(--rule); }
+        .feature-item:last-child { border-bottom: none; }
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        .principles-section, .features-section, .quality-section, .stats-section { padding: 80px 32px; }
+        .full-rule { margin: 0 32px; }
+        .story-badge { right: 0; bottom: -18px; }
     }
-    
-    .feature-icon {
-        background: var(--neutral-50);
-        border: 1px solid var(--neutral-200);
-        transition: all 0.3s ease;
-    }
-    
-    .feature-card:hover .feature-icon {
-        background: var(--forest-green);
-        border-color: var(--forest-green);
-    }
-    
-    .feature-card:hover .feature-icon svg {
-        color: white;
-    }
-    
-    .principle-card {
-        background: white;
-        border: 1px solid var(--neutral-200);
-        transition: all 0.3s ease;
-    }
-    
-    .principle-card:hover {
-        border-color: var(--ocean-teal);
-        box-shadow: 0 20px 40px -12px rgba(20, 184, 166, 0.1);
-    }
-    
-    .img-container {
-        overflow: hidden;
-        border-radius: 16px;
-    }
-    
-    .img-container img {
-        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .img-container:hover img {
-        transform: scale(1.05);
-    }
-    
-    .section-tag {
-        color: var(--ocean-teal);
-        font-weight: 600;
-        font-size: 0.875rem;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-    }
-    
-    .divider-line {
-        height: 1px;
-        background: var(--neutral-200);
-    }
-    
-    .check-icon {
-        width: 32px;
-        height: 32px;
-        background: var(--forest-green);
-        border-radius: 50%;
-        flex-shrink: 0;
+
+    @media (max-width: 640px) {
+        .stats-grid { grid-template-columns: 1fr 1fr; }
+        .hero-stats  { grid-template-columns: 1fr 1fr; }
     }
 </style>
 
-<!-- Hero Section -->
-<section class="hero-section py-24">
-    <div class="container mx-auto px-6">
-        <div class="max-w-4xl mx-auto text-center">
-            <div class="mb-6">
-                <span class="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-sm font-medium">
-                    About Emem Energy
-                </span>
+<!-- ── HERO ──────────────────────────────────────────── -->
+<section class="about-hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-accent-bar"></div>
+    <div class="hero-orb"></div>
+    <div class="hero-ghost-num">2019</div>
+
+    <div class="hero-inner">
+        <div>
+            <div class="hero-tag fade-up">
+                <div class="hero-tag-dot"></div>
+                <span>About Emem Energy</span>
             </div>
-            <h1 class="text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight tracking-tight">
-                Empowering Nigeria with <span class="text-solar-amber">Sustainable Energy</span>
+            <h1 class="hero-title fade-up d1">
+                Empowering Nigeria<br>with <em>Sustainable</em><br>Energy
             </h1>
-            <p class="text-xl text-neutral-300 mb-10 leading-relaxed max-w-3xl mx-auto font-light">
-                Emem Energy Innovation Ltd is Nigeria's leading manufacturer of high-quality lithium battery energy storage systems, crafted locally to deliver reliability, affordability, and sustainability.
+            <p class="hero-sub fade-up d2">
+                Nigeria's leading manufacturer of high-quality lithium battery energy storage systems — crafted locally to deliver reliability, affordability, and a cleaner future.
             </p>
-            <a href="#our-story">
-                <button class="bg-solar-amber text-neutral-900 px-8 py-4 rounded-lg font-semibold hover:bg-amber-400 transition-all">
-                    Learn Our Story
-                </button>
+            <a href="#our-story" class="hero-cta fade-up d3">
+                Our Story
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
             </a>
         </div>
+
+        <div class="hero-stats fade-up d2">
+            <div class="hero-stat">
+                <div class="hero-stat-num">500<sup>+</sup></div>
+                <div class="hero-stat-label">Systems Installed</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">7<sup>yr</sup></div>
+                <div class="hero-stat-label">Warranty Coverage</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">24<sup>/7</sup></div>
+                <div class="hero-stat-label">Expert Support</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">99<sup>%</sup></div>
+                <div class="hero-stat-label">Satisfaction Rate</div>
+            </div>
+        </div>
     </div>
 </section>
 
-<!-- Our Story -->
-<section id="our-story" class="py-24 bg-white">
-    <div class="container mx-auto px-6">
-        <div class="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
+<!-- ── STORY ─────────────────────────────────────────── -->
+<section id="our-story">
+    <div class="story-section">
+        <div>
+            <div class="eyebrow">
+                <div class="eyebrow-line"></div>
+                <span>Our Journey</span>
+            </div>
+            <h2 class="section-title" style="margin-bottom:28px;">Building Nigeria's<br>Energy Future</h2>
+            <div class="story-body">
+                <p>Founded in Nigeria, Emem Energy Innovation Ltd emerged from a vision to bridge the gap in reliable energy access. We saw the challenges faced by homes and businesses due to inconsistent power supply and the high cost of imported solutions.</p>
+                <p>By establishing state-of-the-art local manufacturing, we've created energy storage systems that meet global standards while being tailored to Nigeria's unique needs. Our commitment to innovation and quality has made us a trusted name nationwide.</p>
+                <p>With hundreds of systems powering Nigerian homes and businesses, we're not just a manufacturer — we are a long-term partner in building a sustainable energy future.</p>
+            </div>
+        </div>
+        <div class="story-image-wrap">
+            <img src="{% static 'images/our_journey.jpg' %}" alt="Emem Energy Manufacturing Facility"/>
+            <div class="story-badge">
+                <div class="story-badge-num">500+</div>
+                <div class="story-badge-txt">Systems Deployed</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="full-rule"></div>
+
+<!-- ── PRINCIPLES ────────────────────────────────────── -->
+<section class="principles-section">
+    <div class="principles-bg-word">Values</div>
+    <div class="principles-inner">
+        <div class="principles-header">
             <div>
-                <span class="section-tag mb-6 inline-block">Our Journey</span>
-                <h2 class="text-4xl lg:text-5xl font-bold text-neutral-900 mb-8 tracking-tight">
-                    Building Nigeria's Energy Future
-                </h2>
-                <div class="space-y-6 text-lg text-neutral-600 font-light leading-relaxed">
-                    <p>
-                        Founded in Nigeria, Emem Energy Innovation Ltd emerged from a vision to bridge the gap in reliable energy access. We saw the challenges faced by homes and businesses due to inconsistent power supply and high costs of imported solutions.
-                    </p>
-                    <p>
-                        By establishing state-of-the-art local manufacturing, we've created energy storage systems that meet global standards while being tailored to Nigeria's unique needs. Our commitment to innovation and quality has made us a trusted name nationwide.
-                    </p>
-                    <p>
-                        With thousands of systems powering Nigeria, we're not just a manufacturer—we're a partner in building a sustainable energy future.
-                    </p>
+                <div class="eyebrow amber" style="margin-bottom:18px;">
+                    <div class="eyebrow-line"></div>
+                    <span>Core Principles</span>
                 </div>
+                <h2 class="section-title light">Guided<br>by Purpose</h2>
             </div>
-            <div class="img-container">
-                <img src="{% static 'images/our_journey.jpg' %}"
-                     alt="Emem Energy Manufacturing Facility"
-                     class="w-full h-[500px] object-cover"/>
+            <p class="section-body light">The values that shape every decision we make — from manufacturing to the moment your lights stay on.</p>
+        </div>
+
+        <div class="principles-grid">
+            <div class="principle-card">
+                <div class="p-rule"></div>
+                <div class="p-num">01</div>
+                <div class="p-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
+                <div class="p-title">Our Mission</div>
+                <p class="p-body">To provide Nigerian homes and businesses with cutting-edge, locally manufactured energy storage solutions that ensure reliability, affordability, and sustainability.</p>
+            </div>
+            <div class="principle-card">
+                <div class="p-rule"></div>
+                <div class="p-num">02</div>
+                <div class="p-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                </div>
+                <div class="p-title">Our Vision</div>
+                <p class="p-body">To lead West Africa in sustainable energy storage, driving innovation and accessibility for a greener, more resilient tomorrow.</p>
+            </div>
+            <div class="principle-card">
+                <div class="p-rule"></div>
+                <div class="p-num">03</div>
+                <div class="p-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                    </svg>
+                </div>
+                <div class="p-title">Our Values</div>
+                <p class="p-body">Integrity, innovation, customer focus, quality excellence, and an unwavering commitment to Nigeria's sustainable energy future.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Mission, Vision, Values -->
-<section class="py-24 bg-neutral-50">
-    <div class="container mx-auto px-6">
-        <div class="max-w-3xl mx-auto text-center mb-16">
-            <span class="section-tag mb-4 inline-block">Our Core Principles</span>
-            <h2 class="text-4xl lg:text-5xl font-bold text-neutral-900 mb-6 tracking-tight">
-                Guided by Purpose
-            </h2>
-            <p class="text-lg text-neutral-600 font-light leading-relaxed">
-                The values that shape our mission and vision for a sustainable future
-            </p>
+<!-- ── FEATURES GRID ──────────────────────────────────── -->
+<section class="features-section">
+    <div class="features-inner">
+        <div class="features-header">
+            <div>
+                <div class="eyebrow" style="margin-bottom:18px;">
+                    <div class="eyebrow-line"></div>
+                    <span>Competitive Advantages</span>
+                </div>
+                <h2 class="section-title">Why Emem Energy<br>Stands Apart</h2>
+            </div>
+            <p class="section-body" style="max-width:420px;">Discover what makes us Nigeria's most trusted choice — from manufacturing standards to the care we show after every sale.</p>
         </div>
 
-        <div class="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            <!-- Mission -->
-            <div class="principle-card rounded-2xl p-10">
-                <div class="w-14 h-14 bg-emerald-50 rounded-xl flex items-center justify-center mb-6">
-                    <svg class="w-7 h-7 text-forest-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-neutral-900 mb-4">Our Mission</h3>
-                <p class="text-neutral-600 leading-relaxed font-light">
-                    To provide Nigerian homes and businesses with cutting-edge, locally manufactured energy storage solutions that ensure reliability, affordability, and sustainability.
-                </p>
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feat-num">01</div>
+                <div class="feat-title">Superior Quality</div>
+                <p class="feat-body">Built with premium lithium cells and advanced BMS for unmatched performance and safety standards.</p>
             </div>
-
-            <!-- Vision -->
-            <div class="principle-card rounded-2xl p-10">
-                <div class="w-14 h-14 bg-teal-50 rounded-xl flex items-center justify-center mb-6">
-                    <svg class="w-7 h-7 text-ocean-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-neutral-900 mb-4">Our Vision</h3>
-                <p class="text-neutral-600 leading-relaxed font-light">
-                    To lead West Africa in sustainable energy storage, driving innovation and accessibility for a greener tomorrow.
-                </p>
+            <div class="feature-item">
+                <div class="feat-num">02</div>
+                <div class="feat-title">Affordable Pricing</div>
+                <p class="feat-body">Local production eliminates import costs, delivering better value without compromising on quality.</p>
             </div>
-
-            <!-- Values -->
-            <div class="principle-card rounded-2xl p-10">
-                <div class="w-14 h-14 bg-amber-50 rounded-xl flex items-center justify-center mb-6">
-                    <svg class="w-7 h-7 text-solar-amber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-neutral-900 mb-4">Our Values</h3>
-                <p class="text-neutral-600 leading-relaxed font-light">
-                    Integrity, innovation, customer focus, quality excellence, and a commitment to Nigeria's sustainable energy future.
-                </p>
+            <div class="feature-item">
+                <div class="feat-num">03</div>
+                <div class="feat-title">7-Year Warranty</div>
+                <p class="feat-body">Comprehensive coverage gives you complete confidence and peace of mind in your investment.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feat-num">04</div>
+                <div class="feat-title">24/7 Support</div>
+                <p class="feat-body">Expert local technicians available around the clock for rapid-response assistance anywhere in Nigeria.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feat-num">05</div>
+                <div class="feat-title">Nationwide Reach</div>
+                <p class="feat-body">A robust distribution network ensures faster delivery and installation across all 36 states.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feat-num">06</div>
+                <div class="feat-title">Proven Reliability</div>
+                <p class="feat-body">Hundreds of satisfied customers and years of field-proven performance across Nigeria.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Why Choose Us -->
-<section class="py-24 bg-white">
-    <div class="container mx-auto px-6">
-        <div class="max-w-3xl mx-auto text-center mb-16">
-            <span class="section-tag mb-4 inline-block">Competitive Advantages</span>
-            <h2 class="text-4xl lg:text-5xl font-bold text-neutral-900 mb-6 tracking-tight">
-                Why Emem Energy Stands Out
-            </h2>
-            <p class="text-lg text-neutral-600 font-light leading-relaxed">
-                Discover what makes us Nigeria's trusted choice for energy storage solutions
-            </p>
+<!-- ── QUALITY PROMISE ────────────────────────────────── -->
+<section class="quality-section">
+    <div class="quality-inner">
+        <div class="quality-image">
+            <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Battery quality testing"/>
+            <div class="quality-image-caption">Advanced quality testing at our manufacturing facility</div>
         </div>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            <!-- Feature 1 -->
-            <div class="feature-card flex gap-6">
-                <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-forest-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-bold text-lg text-neutral-900 mb-2">Superior Quality</h3>
-                    <p class="text-neutral-600 font-light leading-relaxed">
-                        Built with premium lithium cells and advanced BMS for unmatched performance and safety.
-                    </p>
-                </div>
+        <div>
+            <div class="eyebrow" style="margin-bottom:18px;">
+                <div class="eyebrow-line"></div>
+                <span>Quality Commitment</span>
             </div>
+            <h2 class="section-title" style="margin-bottom:20px;">Excellence in<br>Every Detail</h2>
+            <p class="section-body">At Emem Energy, quality is the cornerstone of every decision we make — from component sourcing to final delivery and beyond.</p>
 
-            <!-- Feature 2 -->
-            <div class="feature-card flex gap-6">
-                <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-forest-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-bold text-lg text-neutral-900 mb-2">Affordable Pricing</h3>
-                    <p class="text-neutral-600 font-light leading-relaxed">
-                        Local production reduces costs, offering better value than imported alternatives.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Feature 3 -->
-            <div class="feature-card flex gap-6">
-                <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-forest-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-bold text-lg text-neutral-900 mb-2">5-Year Warranty</h3>
-                    <p class="text-neutral-600 font-light leading-relaxed">
-                        Comprehensive warranty coverage ensures peace of mind for your investment.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Feature 4 -->
-            <div class="feature-card flex gap-6">
-                <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-forest-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.944a11.955 11.955 0 010 8.112m0 0a11.955 11.955 0 010 8.112m8.112-4.056a11.955 11.955 0 01-8.112 0m0 0a11.955 11.955 0 01-8.112 0"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-bold text-lg text-neutral-900 mb-2">24/7 Support</h3>
-                    <p class="text-neutral-600 font-light leading-relaxed">
-                        Expert local support available round-the-clock for seamless assistance.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Feature 5 -->
-            <div class="feature-card flex gap-6">
-                <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-forest-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-bold text-lg text-neutral-900 mb-2">Nationwide Reach</h3>
-                    <p class="text-neutral-600 font-light leading-relaxed">
-                        Locally manufactured with a robust distribution network for faster delivery.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Feature 6 -->
-            <div class="feature-card flex gap-6">
-                <div class="feature-icon w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-forest-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-bold text-lg text-neutral-900 mb-2">Trusted Reliability</h3>
-                    <p class="text-neutral-600 font-light leading-relaxed">
-                        Proven performance with thousands of satisfied customers across Nigeria.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Quality Promise -->
-<section class="py-24 bg-neutral-50">
-    <div class="container mx-auto px-6">
-        <div class="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
-            <div class="img-container order-2 lg:order-1">
-                <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                     alt="Battery quality testing"
-                     class="w-full h-[500px] object-cover"/>
-            </div>
-            <div class="order-1 lg:order-2">
-                <span class="section-tag mb-6 inline-block">Quality Commitment</span>
-                <h2 class="text-4xl lg:text-5xl font-bold text-neutral-900 mb-8 tracking-tight">
-                    Excellence in Every Detail
-                </h2>
-                <p class="text-lg text-neutral-600 mb-10 font-light leading-relaxed">
-                    At Emem Energy, quality is the cornerstone of our operations. From design to delivery, we ensure every system meets the highest standards.
-                </p>
-
-                <div class="space-y-6">
-                    <div class="flex items-start gap-4">
-                        <div class="check-icon flex items-center justify-center">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg text-neutral-900 mb-2">Stringent Testing</h4>
-                            <p class="text-neutral-600 font-light leading-relaxed">
-                                Every system undergoes rigorous testing to ensure peak performance and safety.
-                            </p>
-                        </div>
+            <ul class="quality-checklist">
+                <li class="quality-check">
+                    <div class="check-mark">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                        </svg>
                     </div>
-
-                    <div class="flex items-start gap-4">
-                        <div class="check-icon flex items-center justify-center">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg text-neutral-900 mb-2">Top-Grade Components</h4>
-                            <p class="text-neutral-600 font-light leading-relaxed">
-                                We source certified lithium cells and components for lasting durability.
-                            </p>
-                        </div>
+                    <div>
+                        <div class="check-title">Stringent Testing Protocols</div>
+                        <p class="check-body">Every system undergoes rigorous multi-stage testing before delivery to ensure peak performance.</p>
                     </div>
-
-                    <div class="flex items-start gap-4">
-                        <div class="check-icon flex items-center justify-center">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg text-neutral-900 mb-2">Innovative Design</h4>
-                            <p class="text-neutral-600 font-light leading-relaxed">
-                                Continuous R&D keeps our systems at the forefront of technology.
-                            </p>
-                        </div>
+                </li>
+                <li class="quality-check">
+                    <div class="check-mark">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                        </svg>
                     </div>
-
-                    <div class="flex items-start gap-4">
-                        <div class="check-icon flex items-center justify-center">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg text-neutral-900 mb-2">Customer-Centric</h4>
-                            <p class="text-neutral-600 font-light leading-relaxed">
-                                We integrate feedback to enhance our products and services.
-                            </p>
-                        </div>
+                    <div>
+                        <div class="check-title">Top-Grade Components</div>
+                        <p class="check-body">Only certified lithium cells and precision-engineered components are used in every build.</p>
                     </div>
+                </li>
+                <li class="quality-check">
+                    <div class="check-mark">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="check-title">Continuous R&D</div>
+                        <p class="check-body">Our engineering team continuously innovates to keep our systems at the forefront of energy technology.</p>
+                    </div>
+                </li>
+                <li class="quality-check">
+                    <div class="check-mark">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="check-title">Customer-Driven Improvement</div>
+                        <p class="check-body">Real-world feedback directly shapes every product iteration and service improvement we make.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ── STATS ──────────────────────────────────────────── -->
+<section class="stats-section">
+    <div class="stats-orb"></div>
+    <div class="stats-inner">
+        <div class="stats-header">
+            <div>
+                <div class="eyebrow light" style="margin-bottom:18px;">
+                    <div class="eyebrow-line"></div>
+                    <span>Our Impact</span>
                 </div>
+                <h2 class="section-title light">By the<br>Numbers</h2>
+            </div>
+            <p class="section-body light" style="max-width:380px;">Real metrics from real deployments — powering Nigerian homes and businesses with energy they can count on.</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-num">500<span>+</span></div>
+                <div class="stat-label">Systems Installed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">7<span>yr</span></div>
+                <div class="stat-label">Warranty Coverage</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">24<span>/7</span></div>
+                <div class="stat-label">Support Available</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">99<span>%</span></div>
+                <div class="stat-label">Customer Satisfaction</div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Statistics -->
-<section class="py-24 bg-neutral-900">
-    <div class="container mx-auto px-6">
-        <div class="max-w-3xl mx-auto text-center mb-16">
-            <span class="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-sm font-medium mb-6">
-                Our Impact
-            </span>
-            <h2 class="text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
-                By the Numbers
-            </h2>
-            <p class="text-xl text-neutral-300 font-light">
-                Powering Nigeria with trusted energy solutions
-            </p>
-        </div>
+<div class="full-rule"></div>
 
-        <div class="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            <div class="stat-card rounded-2xl p-8 text-center">
-                <div class="text-5xl font-bold text-solar-amber mb-3">500+</div>
-                <div class="text-base text-neutral-600 font-medium">Systems Installed</div>
-            </div>
-            <div class="stat-card rounded-2xl p-8 text-center">
-                <div class="text-5xl font-bold text-solar-amber mb-3">7+</div>
-                <div class="text-base text-neutral-600 font-medium">Year Warranty</div>
-            </div>
-            <div class="stat-card rounded-2xl p-8 text-center">
-                <div class="text-5xl font-bold text-solar-amber mb-3">24/7</div>
-                <div class="text-base text-neutral-600 font-medium">Support Available</div>
-            </div>
-            <div class="stat-card rounded-2xl p-8 text-center">
-                <div class="text-5xl font-bold text-solar-amber mb-3">99%</div>
-                <div class="text-base text-neutral-600 font-medium">Customer Satisfaction</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Call to Action -->
-<section class="py-24 bg-white">
-    <div class="container mx-auto px-6">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-4xl lg:text-5xl font-bold text-neutral-900 mb-6 tracking-tight">
-                Power Your Future with Emem Energy
-            </h2>
-            <p class="text-xl text-neutral-600 mb-12 font-light leading-relaxed max-w-2xl mx-auto">
-                Join thousands of Nigerians trusting Emem Energy for reliable, sustainable energy storage solutions.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="{% url 'main:contact' %}">
-                    <button class="bg-forest-green text-white px-10 py-4 rounded-lg font-semibold hover:bg-emerald-700 transition-all">
-                        Request a Quote
-                    </button>
-                </a>
-                <a href="{% url 'main:products' %}">
-                    <button class="bg-white text-forest-green border-2 border-forest-green px-10 py-4 rounded-lg font-semibold hover:bg-forest-green hover:text-white transition-all">
-                        Explore Our Products
-                    </button>
-                </a>
-            </div>
+<!-- ── CTA ───────────────────────────────────────────── -->
+<section>
+    <div class="cta-section">
+        <h2 class="cta-title">
+            Power Your Future<br>with <em>Emem Energy</em>
+        </h2>
+        <div class="cta-buttons">
+            <a href="{% url 'main:contact' %}" class="btn-primary">
+                Request a Quote
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+            <a href="{% url 'main:products' %}" class="btn-secondary">
+                Explore Products
+            </a>
         </div>
     </div>
 </section>
