@@ -2,308 +2,545 @@
 {% load static %}
 {% block content %}
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        
-        * {
-            font-family: 'Inter', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        
-        :root {
-            --forest-green: #059669;
-            --ocean-teal: #14b8a6;
-            --solar-amber: #fbbf24;
-            --neutral-50: #fafafa;
-            --neutral-100: #f5f5f5;
-            --neutral-200: #e5e5e5;
-            --neutral-300: #d4d4d4;
-            --neutral-700: #404040;
-            --neutral-800: #262626;
-            --neutral-900: #171717;
-        }
-        
-        body {
-            color: var(--neutral-800);
-            letter-spacing: -0.01em;
-        }
-        
-        .hero-section {
-            background: linear-gradient(180deg, var(--neutral-900) 0%, #1a1a1a 100%);
-        }
-        
-        .card-premium {
-            background: white;
-            border: 1px solid var(--neutral-200);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .card-premium:hover {
-            border-color: var(--ocean-teal);
-            box-shadow: 0 20px 40px -12px rgba(5, 150, 105, 0.1);
-            transform: translateY(-4px);
-        }
-        
-        .btn-primary {
-            background: var(--forest-green);
-            color: white;
-            transition: all 0.2s ease;
-        }
-        
-        .btn-primary:hover {
-            background: #047857;
-            box-shadow: 0 8px 20px -4px rgba(5, 150, 105, 0.4);
-        }
-        
-        .btn-secondary {
-            background: white;
-            color: var(--forest-green);
-            border: 2px solid var(--forest-green);
-            transition: all 0.2s ease;
-        }
-        
-        .btn-secondary:hover {
-            background: var(--forest-green);
-            color: white;
-        }
-        
-        .btn-accent {
-            background: var(--solar-amber);
-            color: var(--neutral-900);
-            transition: all 0.2s ease;
-        }
-        
-        .btn-accent:hover {
-            background: #f59e0b;
-            box-shadow: 0 8px 20px -4px rgba(251, 191, 36, 0.4);
-        }
-        
-        .badge-premium {
-            background: var(--forest-green);
-            color: white;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-        }
-        
-        .feature-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--forest-green);
-            border-radius: 50%;
-        }
-        
-        .stat-card {
-            background: var(--neutral-50);
-            border: 1px solid var(--neutral-200);
-            transition: all 0.3s ease;
-        }
-        
-        .stat-card:hover {
-            border-color: var(--ocean-teal);
-            background: white;
-        }
-        
-        .divider-line {
-            height: 1px;
-            background: var(--neutral-200);
-        }
-        
-        .section-tag {
-            color: var(--ocean-teal);
-            font-weight: 600;
-            font-size: 0.875rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-        
-        .loader-ring {
-            border: 3px solid var(--neutral-200);
-            border-top: 3px solid var(--forest-green);
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .img-zoom {
-            overflow: hidden;
-        }
-        
-        .img-zoom img {
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .img-zoom:hover img {
-            transform: scale(1.05);
-        }
-    </style>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Sans:wght@300;400;500;600&display=swap');
 
+    :root {
+        --ink: #0b1612;
+        --green: #0a6640;
+        --green-bright: #12a05e;
+        --amber: #c87941;
+        --surface: #f4f7f5;
+        --rule: #dce6e1;
+        --muted: #6b7c72;
+        --white: #ffffff;
+    }
 
-<!-- Hero Section -->
-<section class="hero-section py-24">
-    <div class="container mx-auto px-6">
-        <div class="max-w-4xl mx-auto text-center">
-            <div class="mb-6">
-                <span class="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-sm font-medium">
-                    Premium Energy Storage
-                </span>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: 'Instrument Sans', sans-serif;
+        color: var(--ink);
+        background: var(--white);
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HERO ───────────────────────────────── */
+    .prod-hero {
+        position: relative;
+        background: var(--ink);
+        overflow: hidden;
+        padding: 120px 64px 100px;
+    }
+
+    .prod-hero-lines::before, .prod-hero-lines::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,0.04);
+        pointer-events: none;
+    }
+    .prod-hero-lines::before { width: 800px; height: 800px; top: -300px; right: -200px; }
+    .prod-hero-lines::after  { width: 500px; height: 500px; bottom: -200px; left: 10%; }
+
+    .prod-hero-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 80px;
+        align-items: end;
+    }
+
+    .prod-hero-label {
+        display: flex; align-items: center; gap: 12px;
+        margin-bottom: 24px;
+    }
+    .prod-hero-label-line { width: 32px; height: 1px; background: var(--amber); }
+    .prod-hero-label span {
+        font-size: 11px; font-weight: 600; letter-spacing: 0.25em;
+        text-transform: uppercase; color: var(--amber); font-family: 'Syne', sans-serif;
+    }
+
+    .prod-hero-title {
+        font-family: 'Syne', sans-serif;
+        font-size: clamp(44px, 6vw, 80px);
+        font-weight: 800; color: var(--white);
+        line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 28px;
+    }
+    .prod-hero-title span { display: block; color: rgba(255,255,255,0.2); }
+
+    .prod-hero-body {
+        font-size: 16px; font-weight: 300;
+        color: rgba(255,255,255,0.55); line-height: 1.8; max-width: 500px;
+    }
+
+    .prod-hero-right {
+        display: flex; flex-direction: column;
+        align-items: flex-end; gap: 20px; flex-shrink: 0;
+    }
+
+    .hero-cta-main {
+        display: inline-flex; align-items: center; gap: 12px;
+        background: var(--amber); color: var(--white);
+        padding: 16px 36px; font-family: 'Syne', sans-serif;
+        font-size: 13px; font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; text-decoration: none;
+        border: none; cursor: pointer; transition: all 0.3s ease; white-space: nowrap;
+    }
+    .hero-cta-main:hover { background: #b8693a; gap: 18px; }
+
+    .prod-hero-scroll {
+        display: flex; align-items: center; gap: 8px;
+        color: rgba(255,255,255,0.3); font-size: 11px;
+        letter-spacing: 0.15em; text-transform: uppercase; font-family: 'Syne', sans-serif;
+    }
+    .prod-hero-scroll-dot {
+        width: 6px; height: 6px; border-radius: 50%; background: var(--amber);
+        animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    /* ── CATALOG HEADER ─────────────────────── */
+    .catalog-header {
+        padding: 60px 64px 32px;
+        max-width: 1280px; margin: 0 auto;
+        display: flex; align-items: center;
+        justify-content: space-between; gap: 40px;
+        border-bottom: 1px solid var(--rule);
+    }
+    .catalog-title {
+        font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+        letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+    }
+    .catalog-refresh {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: transparent; border: 1.5px solid var(--rule);
+        color: var(--muted); padding: 10px 20px;
+        font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+        text-transform: uppercase; font-family: 'Syne', sans-serif;
+        cursor: pointer; transition: all 0.3s ease;
+    }
+    .catalog-refresh:hover { border-color: var(--green); color: var(--green); }
+    .catalog-refresh svg { transition: transform 0.5s ease; }
+    .catalog-refresh:hover svg { transform: rotate(180deg); }
+
+    /* ── STATES ─────────────────────────────── */
+    .state-wrap {
+        padding: 120px 64px;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+    }
+    .loader {
+        width: 36px; height: 36px;
+        border: 2px solid var(--rule); border-top-color: var(--green);
+        border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .state-label {
+        font-size: 12px; font-weight: 600; letter-spacing: 0.15em;
+        text-transform: uppercase; color: var(--muted); font-family: 'Syne', sans-serif;
+    }
+    .error-box {
+        max-width: 440px; border: 1px solid #fcd4d4;
+        background: #fff8f8; padding: 48px; text-align: center;
+    }
+    .error-icon {
+        width: 44px; height: 44px; border: 1.5px solid #ef4444;
+        border-radius: 50%; display: flex; align-items: center;
+        justify-content: center; margin: 0 auto 16px;
+    }
+    .error-title {
+        font-family: 'Syne', sans-serif; font-size: 18px;
+        font-weight: 700; color: var(--ink); margin-bottom: 8px;
+    }
+    .error-msg {
+        font-size: 13px; font-weight: 300; color: var(--muted);
+        margin-bottom: 24px; line-height: 1.7;
+    }
+    .retry-btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: var(--green); color: white;
+        padding: 12px 28px; font-size: 11px; font-weight: 600;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        font-family: 'Syne', sans-serif; border: none; cursor: pointer;
+        transition: background 0.3s ease;
+    }
+    .retry-btn:hover { background: var(--green-bright); }
+
+    /* ── PRODUCTS LIST ──────────────────────── */
+    .products-list { max-width: 1280px; margin: 0 auto; padding: 0 64px 120px; }
+
+    .product-item {
+        display: grid; grid-template-columns: 1fr 1fr;
+        border-bottom: 1px solid var(--rule);
+        opacity: 0; transform: translateY(24px);
+        animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+    .product-image-side {
+        position: relative; overflow: hidden;
+        background: var(--surface); min-height: 560px;
+    }
+    .product-image-side img {
+        width: 100%; height: 100%; object-fit: cover; display: block;
+        transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .product-item:hover .product-image-side img { transform: scale(1.04); }
+
+    .product-no-image {
+        width: 100%; height: 100%; min-height: 560px;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .product-no-image svg { color: var(--rule); }
+
+    .stock-badge {
+        position: absolute; top: 20px; left: 20px;
+        padding: 7px 14px; font-size: 10px; font-weight: 700;
+        letter-spacing: 0.15em; text-transform: uppercase;
+        font-family: 'Syne', sans-serif;
+        background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
+        color: var(--muted); border: 1px solid var(--rule);
+    }
+    .stock-badge.in-stock { background: var(--green); color: white; border-color: var(--green); }
+
+    .product-index {
+        position: absolute; bottom: 20px; right: 24px;
+        font-family: 'Syne', sans-serif; font-size: 80px;
+        font-weight: 800; color: rgba(0,0,0,0.05);
+        line-height: 1; pointer-events: none; user-select: none;
+    }
+
+    .product-content-side {
+        padding: 52px 48px; display: flex;
+        flex-direction: column; justify-content: space-between;
+        border-left: 1px solid var(--rule);
+    }
+    .product-top { flex: 1; }
+
+    .product-category {
+        display: flex; align-items: center; gap: 8px; margin-bottom: 18px;
+    }
+    .product-category-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+    .product-category span {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+        text-transform: uppercase; color: var(--green); font-family: 'Syne', sans-serif;
+    }
+
+    .product-name {
+        font-family: 'Syne', sans-serif;
+        font-size: clamp(26px, 3vw, 42px); font-weight: 800;
+        color: var(--ink); line-height: 1.0;
+        letter-spacing: -0.025em; margin-bottom: 20px;
+    }
+
+    .product-rule { height: 1px; background: var(--rule); margin-bottom: 22px; }
+
+    .product-desc {
+        font-size: 15px; font-weight: 300; color: var(--muted);
+        line-height: 1.8; margin-bottom: 32px;
+    }
+
+    /* Attributes */
+    .attrs-grid {
+        display: grid; grid-template-columns: 1fr 1fr;
+        gap: 1px; background: var(--rule);
+        border: 1px solid var(--rule); margin-bottom: 32px;
+    }
+    .attr-cell {
+        background: var(--surface); padding: 14px 18px;
+        transition: background 0.2s ease;
+    }
+    .attr-cell:hover { background: var(--white); }
+    .attr-name {
+        font-size: 9px; font-weight: 700; letter-spacing: 0.15em;
+        text-transform: uppercase; color: var(--muted);
+        font-family: 'Syne', sans-serif; margin-bottom: 4px;
+    }
+    .attr-value {
+        font-size: 13px; font-weight: 600; color: var(--ink);
+        font-family: 'Syne', sans-serif;
+    }
+
+    /* Features */
+    .features-block { border-top: 1px solid var(--rule); padding-top: 24px; margin-bottom: 32px; }
+    .features-label {
+        font-size: 9px; font-weight: 700; letter-spacing: 0.2em;
+        text-transform: uppercase; color: var(--muted);
+        font-family: 'Syne', sans-serif; margin-bottom: 12px;
+    }
+    .feature-row {
+        display: flex; align-items: center; gap: 10px;
+        padding: 7px 0; border-bottom: 1px solid var(--rule);
+        font-size: 13px; color: var(--ink);
+    }
+    .feature-row:last-child { border-bottom: none; }
+    .feature-check {
+        width: 16px; height: 16px; border-radius: 50%;
+        background: var(--green); display: flex;
+        align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .feature-check svg { color: white; }
+
+    /* Price & actions */
+    .price-row {
+        display: flex; align-items: baseline;
+        justify-content: space-between;
+        padding: 18px 0; border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule); margin-bottom: 20px;
+    }
+    .price-label {
+        font-size: 9px; font-weight: 700; letter-spacing: 0.2em;
+        text-transform: uppercase; color: var(--muted); font-family: 'Syne', sans-serif;
+    }
+    .price-special {
+        font-size: 10px; font-weight: 600; color: var(--green);
+        letter-spacing: 0.05em; margin-top: 3px; font-family: 'Syne', sans-serif;
+    }
+    .price-value {
+        font-family: 'Syne', sans-serif; font-size: 30px;
+        font-weight: 800; color: var(--ink); letter-spacing: -0.02em;
+    }
+
+    .action-row { display: flex; gap: 10px; }
+
+    .btn-order {
+        flex: 1; display: inline-flex; align-items: center;
+        justify-content: center; gap: 8px;
+        background: var(--amber); color: var(--white);
+        padding: 15px 20px; font-family: 'Syne', sans-serif;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+        text-transform: uppercase; text-decoration: none;
+        border: none; cursor: pointer; transition: all 0.3s ease;
+    }
+    .btn-order:hover { background: #b8693a; }
+
+    .btn-cart {
+        flex: 1; display: inline-flex; align-items: center;
+        justify-content: center; gap: 8px;
+        background: transparent; color: var(--ink);
+        padding: 15px 20px; font-family: 'Syne', sans-serif;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+        text-transform: uppercase; border: 2px solid var(--ink);
+        cursor: pointer; transition: all 0.3s ease;
+    }
+    .btn-cart:hover { background: var(--ink); color: var(--white); }
+
+    /* ── WHY SECTION ────────────────────────── */
+    .why-section { background: var(--ink); padding: 100px 64px; }
+    .why-inner { max-width: 1280px; margin: 0 auto; }
+    .why-header {
+        display: flex; align-items: flex-end;
+        justify-content: space-between; gap: 60px;
+        margin-bottom: 60px; padding-bottom: 48px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .why-title {
+        font-family: 'Syne', sans-serif; font-size: clamp(32px, 4vw, 52px);
+        font-weight: 800; color: var(--white);
+        line-height: 1; letter-spacing: -0.03em;
+    }
+    .why-subtitle {
+        font-size: 15px; font-weight: 300;
+        color: rgba(255,255,255,0.45); line-height: 1.7;
+        max-width: 360px; flex-shrink: 0;
+    }
+    .why-grid {
+        display: grid; grid-template-columns: repeat(3, 1fr);
+        gap: 1px; background: rgba(255,255,255,0.06);
+    }
+    .why-card {
+        background: var(--ink); padding: 44px 36px;
+        position: relative; transition: background 0.3s ease; overflow: hidden;
+    }
+    .why-card:hover { background: #121f18; }
+    .why-card-num {
+        font-family: 'Syne', sans-serif; font-size: 56px; font-weight: 800;
+        color: rgba(255,255,255,0.04); line-height: 1; margin-bottom: 20px;
+    }
+    .why-card-icon {
+        width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.1);
+        display: flex; align-items: center; justify-content: center;
+        margin-bottom: 20px; transition: all 0.3s ease;
+    }
+    .why-card:hover .why-card-icon { border-color: var(--amber); }
+    .why-card-icon svg { color: rgba(255,255,255,0.5); transition: color 0.3s; }
+    .why-card:hover .why-card-icon svg { color: var(--amber); }
+    .why-card-title {
+        font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
+        color: var(--white); margin-bottom: 10px; letter-spacing: -0.01em;
+    }
+    .why-card-body {
+        font-size: 13px; font-weight: 300;
+        color: rgba(255,255,255,0.4); line-height: 1.8;
+    }
+    .why-card-bar {
+        position: absolute; top: 0; left: 0;
+        width: 0; height: 2px; background: var(--amber);
+        transition: width 0.4s ease;
+    }
+    .why-card:hover .why-card-bar { width: 100%; }
+
+    /* ── NOTIFICATION ───────────────────────── */
+    .notif {
+        position: fixed; top: 24px; right: 24px; z-index: 9999;
+        padding: 14px 22px; display: flex; align-items: center; gap: 10px;
+        font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600;
+        letter-spacing: 0.08em; transform: translateY(-80px); opacity: 0;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none;
+    }
+    .notif.show { transform: translateY(0); opacity: 1; }
+    .notif.success { background: var(--green); color: white; }
+    .notif.error   { background: #c0392b; color: white; }
+
+    /* ── RESPONSIVE ─────────────────────────── */
+    @media (max-width: 1024px) {
+        .prod-hero { padding: 80px 32px; }
+        .prod-hero-inner { grid-template-columns: 1fr; gap: 40px; }
+        .prod-hero-right { align-items: flex-start; flex-direction: row; }
+        .catalog-header { padding: 48px 32px 28px; flex-direction: column; align-items: flex-start; }
+        .products-list { padding: 0 32px 80px; }
+        .product-item { grid-template-columns: 1fr; }
+        .product-image-side { min-height: 300px; }
+        .product-content-side { border-left: none; border-top: 1px solid var(--rule); padding: 36px 28px; }
+        .why-section { padding: 80px 32px; }
+        .why-grid { grid-template-columns: 1fr; }
+        .why-header { flex-direction: column; align-items: flex-start; }
+    }
+</style>
+
+<!-- ── HERO ──────────────────────────────────────── -->
+<section class="prod-hero">
+    <div class="prod-hero-lines"></div>
+    <div class="prod-hero-inner">
+        <div>
+            <div class="prod-hero-label">
+                <div class="prod-hero-label-line"></div>
+                <span>Emem Energy</span>
             </div>
-            <h1 class="text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight tracking-tight">
-                Energy Storage Solutions
+            <h1 class="prod-hero-title">
+                Energy<br>
+                <span>Storage</span>
+                Solutions
             </h1>
-            <p class="text-xl text-neutral-300 mb-10 leading-relaxed max-w-2xl mx-auto font-light">
-                Complete range of lithium battery systems designed for reliability, efficiency, and longevity. 
-                From residential backup power to commercial energy solutions.
+            <p class="prod-hero-body">
+                Complete range of locally manufactured lithium battery systems — built for Nigeria's homes and businesses. Reliable, affordable, and engineered to last.
             </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="{% url 'main:contact' %}">
-                    <button class="btn-accent px-16 py-4 rounded-lg font-semibold text-base">
-                        Request Quote
-                    </button>
-                </a>
-                {% comment %} <button class="px-8 py-4 rounded-lg font-semibold text-base text-white border-2 border-white/30 hover:bg-white/10 transition-all">
-                    Download Catalog
-                </button> {% endcomment %}
-            </div>
         </div>
-    </div>
-</section>
-
-<!-- Products Section -->
-<section class="py-20 bg-neutral-50">
-    <div class="container mx-auto px-6">
-        <!-- Section Header -->
-        <div class="max-w-3xl mx-auto text-center mb-16">
-            <span class="section-tag mb-4 inline-block">Our Products</span>
-            <h2 class="text-4xl lg:text-5xl font-bold text-neutral-900 mb-6 tracking-tight">
-                Product Catalog
-            </h2>
-            <p class="text-lg text-neutral-600 leading-relaxed font-light">
-                Browse our complete range of energy storage solutions engineered for excellence
-            </p>
-            <button onclick="fetchItems()" class="mt-8 inline-flex items-center px-6 py-3 bg-white border border-neutral-300 rounded-lg font-medium text-neutral-700 hover:border-ocean-teal hover:text-ocean-teal transition-all">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+        <div class="prod-hero-right">
+            <a href="{% url 'main:contact' %}" class="hero-cta-main">
+                Request Quote
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
-                Refresh Products
-            </button>
-        </div>
-
-        <!-- Loading State -->
-        <div id="loading" class="flex flex-col items-center justify-center py-32">
-            <div class="loader-ring mb-6"></div>
-            <p class="text-neutral-600 font-medium">Loading products...</p>
-        </div>
-
-        <!-- Error State -->
-        <div id="error" class="hidden">
-            <div class="max-w-md mx-auto bg-white rounded-2xl border border-neutral-200 p-10 text-center">
-                <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-neutral-900 mb-3">Unable to Load Products</h3>
-                <p id="error-message" class="text-neutral-600 mb-8 font-light"></p>
-                <button onclick="fetchItems()" class="btn-primary px-8 py-3 rounded-lg font-semibold">
-                    Try Again
-                </button>
-            </div>
-        </div>
-
-        <!-- Empty State -->
-        <div id="empty" class="hidden">
-            <div class="max-w-xl mx-auto bg-white rounded-2xl border border-neutral-200 p-16 text-center">
-                <div class="w-20 h-20 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-10 h-10 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                    </svg>
-                </div>
-                <h3 class="text-2xl font-bold text-neutral-900 mb-3">No Products Available</h3>
-                <p class="text-neutral-600 font-light">Check back soon for new energy solutions.</p>
-            </div>
-        </div>
-
-        <!-- Products Container -->
-        <div id="items-container" class="space-y-16"></div>
-    </div>
-</section>
-
-<!-- Why Choose Section -->
-<section class="py-24 bg-white">
-    <div class="container mx-auto px-6">
-        <div class="max-w-3xl mx-auto text-center mb-16">
-            <span class="section-tag mb-4 inline-block">Why Choose Us</span>
-            <h2 class="text-4xl lg:text-5xl font-bold text-neutral-900 mb-6 tracking-tight">
-                Built for Excellence
-            </h2>
-            <p class="text-lg text-neutral-600 leading-relaxed font-light">
-                Every system is engineered with premium components and backed by comprehensive support
-            </p>
-        </div>
-        
-        <div class="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <div class="bg-white border border-neutral-200 rounded-2xl p-10 hover:border-forest-green transition-all">
-                <div class="w-14 h-14 bg-emerald-50 rounded-xl flex items-center justify-center mb-6">
-                    <svg class="w-7 h-7 text-forest-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-neutral-900 mb-4">Quality Guarantee</h3>
-                <p class="text-neutral-600 leading-relaxed font-light">
-                    Premium lithium battery cells with advanced BMS technology. Every system undergoes rigorous quality testing before delivery.
-                </p>
-            </div>
-            
-            <div class="bg-white border border-neutral-200 rounded-2xl p-10 hover:border-ocean-teal transition-all">
-                <div class="w-14 h-14 bg-teal-50 rounded-xl flex items-center justify-center mb-6">
-                    <svg class="w-7 h-7 text-ocean-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.944a11.955 11.955 0 010 8.112m0 0a11.955 11.955 0 010 8.112m8.112-4.056a11.955 11.955 0 01-8.112 0m0 0a11.955 11.955 0 01-8.112 0"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-neutral-900 mb-4">24/7 Support</h3>
-                <p class="text-neutral-600 leading-relaxed font-light">
-                    Round-the-clock technical support with local service teams. Expert assistance whenever you need it, guaranteed response time.
-                </p>
-            </div>
-            
-            <div class="bg-white border border-neutral-200 rounded-2xl p-10 hover:border-solar-amber transition-all">
-                <div class="w-14 h-14 bg-amber-50 rounded-xl flex items-center justify-center mb-6">
-                    <svg class="w-7 h-7 text-solar-amber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-neutral-900 mb-4">Best Value</h3>
-                <p class="text-neutral-600 leading-relaxed font-light">
-                    Locally manufactured for better pricing than imported alternatives. Superior quality at competitive rates with comprehensive warranty.
-                </p>
+            </a>
+            <div class="prod-hero-scroll">
+                <div class="prod-hero-scroll-dot"></div>
+                Scroll to browse
             </div>
         </div>
     </div>
 </section>
 
+<!-- ── CATALOG HEADER ────────────────────────────── -->
+<div style="max-width:1280px; margin:0 auto;">
+    <div class="catalog-header">
+        <span class="catalog-title">Product Catalog — All Systems</span>
+        <button onclick="fetchItems()" class="catalog-refresh">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+            Refresh
+        </button>
+    </div>
+</div>
 
+<!-- ── STATES ────────────────────────────────────── -->
+<div id="loading" class="state-wrap">
+    <div class="loader"></div>
+    <span class="state-label">Loading products…</span>
+</div>
+
+<div id="error" class="state-wrap hidden">
+    <div class="error-box">
+        <div class="error-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+            </svg>
+        </div>
+        <div class="error-title">Unable to Load Products</div>
+        <p id="error-message" class="error-msg"></p>
+        <button onclick="fetchItems()" class="retry-btn">Try Again</button>
+    </div>
+</div>
+
+<div id="empty" class="state-wrap hidden">
+    <div class="error-box" style="border-color:var(--rule); background:var(--surface);">
+        <div class="error-icon" style="border-color:var(--rule);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+            </svg>
+        </div>
+        <div class="error-title">No Products Available</div>
+        <p class="error-msg">Check back soon for new energy solutions.</p>
+    </div>
+</div>
+
+<!-- ── PRODUCTS LIST ─────────────────────────────── -->
+<div class="products-list">
+    <div id="items-container"></div>
+</div>
+
+<!-- ── WHY CHOOSE ────────────────────────────────── -->
+<section class="why-section">
+    <div class="why-inner">
+        <div class="why-header">
+            <h2 class="why-title">Built for<br>Excellence</h2>
+            <p class="why-subtitle">Every system is engineered with premium components and backed by comprehensive local support.</p>
+        </div>
+        <div class="why-grid">
+            <div class="why-card">
+                <div class="why-card-bar"></div>
+                <div class="why-card-num">01</div>
+                <div class="why-card-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                </div>
+                <div class="why-card-title">Quality Guarantee</div>
+                <p class="why-card-body">Premium lithium cells with advanced BMS. Every unit passes rigorous multi-stage testing before delivery.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-card-bar"></div>
+                <div class="why-card-num">02</div>
+                <div class="why-card-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.944a11.955 11.955 0 010 8.112m8.112-4.056a11.955 11.955 0 01-8.112 0m0 0a11.955 11.955 0 01-8.112 0"/>
+                    </svg>
+                </div>
+                <div class="why-card-title">24/7 Support</div>
+                <p class="why-card-body">Round-the-clock local technical teams for rapid-response assistance anywhere in Nigeria.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-card-bar"></div>
+                <div class="why-card-num">03</div>
+                <div class="why-card-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                    </svg>
+                </div>
+                <div class="why-card-title">Best Value</div>
+                <p class="why-card-body">Local manufacturing cuts import costs — superior quality at better pricing with comprehensive warranty.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── USER CONTEXT ──────────────────────────────── -->
 <script>
     {% if user.is_authenticated %}
         {% if user.profile %}
@@ -317,548 +554,221 @@
 </script>
 
 <script>
-        // ---- Cache for API results ----
-        const apiCache = new Map();  // { url: { data, timestamp } }
+    const apiCache = new Map();
+    const CACHE_TTL = 5 * 60 * 1000;
 
-        // ---- Cache TTL (5 minutes) ----
-        const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in ms
+    async function fetchWithCache(url) {
+        const now = Date.now();
+        const cached = apiCache.get(url);
+        if (cached && (now - cached.timestamp) < CACHE_TTL) return cached.data;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        apiCache.set(url, { data, timestamp: now });
+        return data;
+    }
 
-        // ---- Helper: Get cached data or fetch fresh ----
-        async function fetchWithCache(url) {
-            const now = Date.now();
-            const cached = apiCache.get(url);
-            
-            // Return cached if fresh
-            if (cached && (now - cached.timestamp) < CACHE_TTL) {
-                return cached.data;
-            }
-
-            // Fetch fresh
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            
-            const data = await response.json();
-            apiCache.set(url, { data, timestamp: now });
-            return data;
+    function getCookie(name) {
+        let v = null;
+        if (document.cookie) {
+            document.cookie.split(';').forEach(c => {
+                c = c.trim();
+                if (c.startsWith(name + '=')) v = decodeURIComponent(c.substring(name.length + 1));
+            });
         }
+        return v;
+    }
 
-        // ---- Get CSRF Token ----
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        // ---- Add to Cart Function ----
-        async function addToCart(itemId, itemName, itemImage, retailPrice, wholesalePrice, sellingPrice) {
-            try {
-                const response = await fetch('/cart/add/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
-                    body: JSON.stringify({
-                        item_id: itemId,
-                        quantity: 1,
-                        name: itemName,
-                        image: itemImage,
-                        retailer_price: retailPrice || sellingPrice,
-                        wholesale_price: wholesalePrice || sellingPrice,
-                        selling_price: sellingPrice
-                    })
-                });
-
-                const data = await response.json();
-                
-                if (data.success) {
-                    // Show success message
-                    showNotification('✓ Item added to cart!', 'success');
-                    
-                    // Update cart count in navbar
-                    updateCartCount(data.cart_count);
-                } else {
-                    showNotification('Failed to add item to cart', 'error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showNotification('Failed to add item to cart', 'error');
-            }
-        }
-
-        // ---- Show Notification ----
-        function showNotification(message, type = 'success') {
-            // Remove existing notification
-            const existing = document.getElementById('cart-notification');
-            if (existing) existing.remove();
-
-            // Create notification
-            const notification = document.createElement('div');
-            notification.id = 'cart-notification';
-            notification.className = `fixed top-6 right-6 z-50 px-6 py-4 rounded-xl shadow-2xl transform transition-all duration-300 ${
-                type === 'success' 
-                    ? 'bg-emerald-600 text-white' 
-                    : 'bg-red-600 text-white'
-            }`;
-            notification.innerHTML = `
-                <div class="flex items-center gap-3">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        ${type === 'success' 
-                            ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>'
-                            : '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>'
-                        }
-                    </svg>
-                    <span class="font-semibold">${message}</span>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Animate in
-            setTimeout(() => {
-                notification.style.transform = 'translateY(0)';
-            }, 10);
-            
-            // Remove after 3 seconds
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                notification.style.transform = 'translateY(-20px)';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
-
-        // ---- Update Cart Count in Navbar ----
-        function updateCartCount(count) {
-            const cartCountEl = document.getElementById('cart-count');
-            const mobileCartCountEl = document.getElementById('mobile-cart-count');
-            
-            if (cartCountEl) {
-                cartCountEl.textContent = count;
-                cartCountEl.style.display = count > 0 ? 'flex' : 'none';
-                
-                // Add bounce animation
-                cartCountEl.style.animation = 'none';
-                setTimeout(() => {
-                    cartCountEl.style.animation = 'bounce 0.5s ease';
-                }, 10);
-            }
-            
-            if (mobileCartCountEl) {
-                mobileCartCountEl.textContent = count;
-                mobileCartCountEl.style.display = count > 0 ? 'flex' : 'none';
-            }
-        }
-
-        let isFetching = false;
-
-        async function fetchItems() {
-            if (isFetching) return;
-            isFetching = true;
-
-            const loading = document.getElementById('loading');
-            const error   = document.getElementById('error');
-            const empty   = document.getElementById('empty');
-            const container = document.getElementById('items-container');
-
-            loading.classList.remove('hidden');
-            error.classList.add('hidden');
-            empty.classList.add('hidden');
-            container.innerHTML = '';
-
-            let items = [];
-
-            try {
-                // ---- 1. Fetch items API (cached) ----
-                const itemsUrl = 'https://console.afrikbook.com/api/item_api/';
-                const itemsData = await fetchWithCache(itemsUrl);
-                items = Array.isArray(itemsData) ? itemsData : [itemsData];
-
-                loading.classList.add('hidden');
-                if (items.length === 0) {
-                    empty.classList.remove('hidden');
-                    return;
-                }
-
-                // ---- 2. Render cards ----
-                displayItems(items);
-
-                // ---- 3. Update stock badges (cached) ----
-                await updateStockBadges(items);
-
-            } catch (err) {
-                loading.classList.add('hidden');
-                error.classList.remove('hidden');
-                document.getElementById('error-message').textContent = err.message;
-                console.error('Fetch error:', err);
-            } finally {
-                isFetching = false;
-            }
-        }
-
-        async function updateStockBadges(items) {
-            await Promise.all(
-                items.map(async (item, index) => {
-                    const badgeEl = document.getElementById(`stock-badge-${index}`);
-                    const orderBtn = document.getElementById(`order-now-${index}`);
-                    
-                    if (!badgeEl || !orderBtn) return;
-
-                    if (!item.generated_code) {
-                        badgeEl.textContent = 'No ID';
-                        badgeEl.className = 'px-4 py-2 rounded-lg text-xs uppercase bg-gray-400 text-white';
-                        return;
-                    }
-
-                    const stockUrl = `https://console.afrikbook.com/api/check-item-qty?item_id=${encodeURIComponent(item.generated_code)}`;
-
-                    try {
-                        // ---- Use cached stock data ----
-                        const qtyData = await fetchWithCache(stockUrl);
-                        const inStock = qtyData.quantity > 0;
-                        badgeEl.textContent = inStock ? 'In Stock' : 'You can pre-order this product, and it will be delivered to you in {{stock_date.expected_date}}  time';
-                        badgeEl.className = inStock
-                            ? 'px-4 py-2 rounded-lg text-xs uppercase bg-green-600 text-white'
-                            : 'px-4 py-2 rounded-lg text-[14px] font-bold border-neutral-200 bg-neutral-50 text-neutral-700';
-
-                        // Update button text
-                        const buttonText = orderBtn.querySelector('button') || orderBtn;
-                        buttonText.textContent = inStock ? 'Order Now' : 'Pre-Order';
-
-                    } catch (e) {
-                        badgeEl.textContent = 'Error';
-                        badgeEl.className = 'px-4 py-2 rounded-lg text-xs uppercase bg-gray-500 text-white';
-                        const buttonText = orderBtn.querySelector('button') || orderBtn;
-                        buttonText.textContent = 'Order Now';
-                    }           
+    async function addToCart(itemId, itemName, itemImage, retailPrice, wholesalePrice, sellingPrice) {
+        try {
+            const response = await fetch('/cart/add/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+                body: JSON.stringify({
+                    item_id: itemId, quantity: 1, name: itemName, image: itemImage,
+                    retailer_price: retailPrice || sellingPrice,
+                    wholesale_price: wholesalePrice || sellingPrice,
+                    selling_price: sellingPrice
                 })
-            );
-        }
+            });
+            const data = await response.json();
+            if (data.success) {
+                showNotification('Item added to cart', 'success');
+                updateCartCount(data.cart_count);
+            } else {
+                showNotification('Failed to add item', 'error');
+            }
+        } catch { showNotification('Failed to add item', 'error'); }
+    }
 
-        function displayItems(items) {
-            const container = document.getElementById('items-container');
-            const baseUrl   = 'https://console.afrikbook.com';
+    function showNotification(message, type = 'success') {
+        const existing = document.getElementById('notif');
+        if (existing) existing.remove();
+        const n = document.createElement('div');
+        n.id = 'notif';
+        n.className = `notif ${type}`;
+        n.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                ${type === 'success'
+                    ? '<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>'
+                    : '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>'}
+            </svg>
+            <span>${message}</span>`;
+        document.body.appendChild(n);
+        setTimeout(() => n.classList.add('show'), 10);
+        setTimeout(() => { n.classList.remove('show'); setTimeout(() => n.remove(), 400); }, 3000);
+    }
 
-            items.forEach((item, index) => {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'max-w-6xl mx-auto fade-in';
-                wrapper.style.animationDelay = `${index * 0.1}s`;
+    function updateCartCount(count) {
+        ['cart-count', 'mobile-cart-count'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) { el.textContent = count; el.style.display = count > 0 ? 'flex' : 'none'; }
+        });
+    }
 
-                const card = document.createElement('div');
-                card.className = 'card-premium rounded-2xl overflow-hidden';
+    let isFetching = false;
 
-                // ---- Get prices from API ----
-                const retailPrice = item.retailer_price || item.selling_price;
-                const wholesalePrice = item.wholesale_price || item.selling_price;
-                const sellingPrice = item.selling_price;
-                
-                // ---- Get user category from window (set by Django template) ----
-                const userCategory = window.userCategory || 'End User';
-                
-                // Determine which price to display based on user category
-                let displayPrice = sellingPrice;
-                let priceLabel = 'Price';
-                
-                if (userCategory === 'Retail') {
-                    displayPrice = retailPrice;
-                    priceLabel = 'Your Price (Installer)';
-                } else if (userCategory === 'Whole Sale') {
-                    displayPrice = wholesalePrice;
-                    priceLabel = 'Your Price (Distributor)';
-                }
+    async function fetchItems() {
+        if (isFetching) return;
+        isFetching = true;
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+        const empty = document.getElementById('empty');
+        const container = document.getElementById('items-container');
+        loading.classList.remove('hidden');
+        error.classList.add('hidden');
+        empty.classList.add('hidden');
+        container.innerHTML = '';
+        try {
+            const itemsData = await fetchWithCache('https://console.afrikbook.com/api/item_api/');
+            const items = Array.isArray(itemsData) ? itemsData : [itemsData];
+            loading.classList.add('hidden');
+            if (items.length === 0) { empty.classList.remove('hidden'); return; }
+            displayItems(items);
+            await updateStockBadges(items);
+        } catch (err) {
+            loading.classList.add('hidden');
+            error.classList.remove('hidden');
+            document.getElementById('error-message').textContent = err.message;
+        } finally { isFetching = false; }
+    }
 
-                // ---- Attributes ----
-                let attributesHtml = '';
-                const attrs = Array.isArray(item.attribute) ? item.attribute : [];
-                if (attrs.length) {
-                    attributesHtml = '<div class="grid grid-cols-2 lg:grid-cols-2 gap-4 mb-10">';
-                    attrs.forEach(a => {
-                        const name  = a.name  || 'Unknown';
-                        const value = a.value || 'N/A';
-                        attributesHtml += `
-                            <div class="stat-card p-6 rounded-xl">
-                                <p class="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-2">${name}</p>
-                                <p class="text-sm font-bold text-neutral-900">${value}</p>
-                            </div>`;
-                    });
-                    attributesHtml += '</div>';
-                }
+    async function updateStockBadges(items) {
+        await Promise.all(items.map(async (item, index) => {
+            const badgeEl = document.getElementById(`stock-badge-${index}`);
+            const orderBtn = document.getElementById(`order-btn-${index}`);
+            if (!badgeEl || !item.generated_code) return;
+            const stockUrl = `https://console.afrikbook.com/api/check-item-qty?item_id=${encodeURIComponent(item.generated_code)}`;
+            try {
+                const qtyData = await fetchWithCache(stockUrl);
+                const inStock = qtyData.quantity > 0;
+                badgeEl.textContent = inStock ? 'In Stock' : 'Pre-Order';
+                badgeEl.className = `stock-badge${inStock ? ' in-stock' : ''}`;
+                if (orderBtn) orderBtn.textContent = inStock ? 'Order Now' : 'Pre-Order';
+            } catch {
+                badgeEl.textContent = 'Check Availability';
+                badgeEl.className = 'stock-badge';
+            }
+        }));
+    }
 
-                // ---- Stock badge placeholder ----
-                const badgeId = `stock-badge-${index}`;
-                const imagePath = item.image || '';
-                
-                card.innerHTML = `
-                    <div class="grid lg:grid-cols-2">
-                        ${item.image ? `
-                            <div class="relative img-zoom bg-neutral-100">
-                                <img src="${baseUrl}${item.image}"
-                                    alt="${item.item_name}"
-                                    class="w-full h-full object-cover"
-                                    onerror="this.parentElement.innerHTML='<div class=\\'w-full h-96 bg-neutral-100 flex items-center justify-center\\'><svg class=\\'w-16 h-16 text-neutral-300\\' fill=\\'none\\' stroke=\\'currentColor\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'1.5\\' d=\\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\\'></path></svg></div>'">
-                                <div class="absolute top-6 left-6">
-                                    <span id="${badgeId}" class="px-4 py-2 rounded-lg text-xs uppercase bg-gray-300 text-gray-700">
-                                        Loading…
-                                    </span>
-                                </div>
-                            </div>
-                        ` : ''}
+    function displayItems(items) {
+        const container = document.getElementById('items-container');
+        const baseUrl = 'https://console.afrikbook.com';
+        const userCat = window.userCategory || 'End User';
 
-                        <div class="p-10 lg:p-12">
-                            <div class="mb-8">
-                                <h3 class="text-3xl lg:text-4xl font-bold text-neutral-900 mb-4 tracking-tight leading-tight">
-                                    ${item.item_name}
-                                </h3>
-                                <div class="divider-line mb-6"></div>
-                                ${item.description ? `<p class="text-lg text-neutral-600 leading-relaxed font-light">${item.description}</p>` : ''}
-                            </div>
+        items.forEach((item, index) => {
+            const retailPrice    = item.retailer_price  || item.selling_price;
+            const wholesalePrice = item.wholesale_price || item.selling_price;
+            const sellingPrice   = item.selling_price;
+            let displayPrice = sellingPrice, priceLabel = 'Price', priceSpecial = '';
 
-                            ${attributesHtml}
+            if (userCat === 'Retail') {
+                displayPrice = retailPrice; priceLabel = 'Installer Price';
+                priceSpecial = 'Special pricing for Installers';
+            } else if (userCat === 'Whole Sale') {
+                displayPrice = wholesalePrice; priceLabel = 'Distributor Price';
+                priceSpecial = 'Special pricing for Distributors';
+            }
 
-                            <div class="bg-neutral-50 rounded-xl p-8 mb-8 border border-neutral-200">
-                                <h4 class="font-bold text-neutral-900 mb-6 text-base uppercase tracking-wider flex items-center">
-                                    <div class="feature-dot mr-3"></div>Key Features
-                                </h4>
-                                <ul class="space-y-4">
-                                    <li class="flex items-start text-neutral-700">
-                                        <svg class="w-5 h-5 text-forest-green mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        <span class="font-light">Scalable modular design for flexible deployment</span>
-                                    </li>
-                                    <li class="flex items-start text-neutral-700">
-                                        <svg class="w-5 h-5 text-forest-green mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        <span class="font-light">Advanced battery management system with AI optimization</span>
-                                    </li>
-                                    <li class="flex items-start text-neutral-700">
-                                        <svg class="w-5 h-5 text-forest-green mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        <span class="font-light">Real-time monitoring with instant alerts and notifications</span>
-                                    </li>
-                                    <li class="flex items-start text-neutral-700">
-                                        <svg class="w-5 h-5 text-forest-green mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        <span class="font-light">24/7 dedicated technical support team</span>
-                                    </li>
-                                </ul>
-                            </div>
+            let attrsHtml = '';
+            const attrs = Array.isArray(item.attribute) ? item.attribute : [];
+            if (attrs.length) {
+                attrsHtml = '<div class="attrs-grid">';
+                attrs.forEach(a => {
+                    attrsHtml += `<div class="attr-cell"><div class="attr-name">${a.name || 'Unknown'}</div><div class="attr-value">${a.value || 'N/A'}</div></div>`;
+                });
+                attrsHtml += '</div>';
+            }
 
-                            <div class="flex flex-col sm:flex-row gap-4">
-                                <!-- Order Now Button -->
-                                <a id="order-now-${index}" href="/order/${item.generated_code}/" class="flex-1">
-                                    <button class="btn-accent w-full px-6 py-4 rounded-lg font-semibold flex items-center justify-center">
-                                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
-                                        </svg>
-                                        Order Now
-                                    </button>
-                                </a>
-                                
-                                <!-- Add to Cart Button -->
-                                <button 
-                                    onclick="addToCart('${item.generated_code}', '${item.item_name.replace(/'/g, "\\'")}', '${imagePath}', '${retailPrice}', '${wholesalePrice}', '${sellingPrice}')"
-                                    class="btn-secondary flex-1 w-full px-6 py-4 rounded-lg font-semibold flex items-center justify-center"
-                                >
-                                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    Add to Cart
-                                </button>
-                            </div>
+            const imagePath = item.image || '';
+            const safeItemName = (item.item_name || '').replace(/'/g, "\\'");
+            const noImgSvg = `<div class="product-no-image"><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>`;
 
-                            ${displayPrice ? `
-                                <div class="mt-8 pt-8 border-t border-neutral-200">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-sm font-medium text-neutral-500 uppercase tracking-wider">${priceLabel}</span>
-                                        <span class="text-3xl font-bold text-neutral-900">
-                                            ₦${parseFloat(displayPrice).toLocaleString()}
-                                        </span>
-                                    </div>
-                                    ${userCategory !== 'End User' ? `
-                                        <p class="text-xs text-emerald-600 mt-2 font-medium">
-                                            🎉 Special pricing for ${userCategory === 'Retail' ? 'Installers' : 'Distributors'}
-                                        </p>
-                                    ` : ''}
-                                </div>
-                            ` : ''}
+            const el = document.createElement('div');
+            el.className = 'product-item';
+            el.style.animationDelay = `${index * 0.12}s`;
+
+            el.innerHTML = `
+                <div class="product-image-side">
+                    ${item.image
+                        ? `<img src="${baseUrl}${item.image}" alt="${item.item_name || ''}" onerror="this.parentElement.innerHTML='${noImgSvg.replace(/'/g, "\\'")}'">` 
+                        : noImgSvg}
+                    <span id="stock-badge-${index}" class="stock-badge">Loading…</span>
+                    <div class="product-index">${String(index + 1).padStart(2, '0')}</div>
+                </div>
+                <div class="product-content-side">
+                    <div class="product-top">
+                        <div class="product-category">
+                            <div class="product-category-dot"></div>
+                            <span>Lithium Battery System</span>
+                        </div>
+                        <h3 class="product-name">${item.item_name || 'Product'}</h3>
+                        <div class="product-rule"></div>
+                        ${item.description ? `<p class="product-desc">${item.description}</p>` : ''}
+                        ${attrsHtml}
+                        <div class="features-block">
+                            <div class="features-label">Key Features</div>
+                            <div class="feature-row"><div class="feature-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>Scalable modular design for flexible deployment</div>
+                            <div class="feature-row"><div class="feature-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>Advanced BMS with intelligent battery management</div>
+                            <div class="feature-row"><div class="feature-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>Real-time monitoring and instant alert system</div>
+                            <div class="feature-row"><div class="feature-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>24/7 dedicated local technical support</div>
                         </div>
                     </div>
-                `;
+                    <div class="product-bottom">
+                        ${displayPrice ? `
+                            <div class="price-row">
+                                <div>
+                                    <div class="price-label">${priceLabel}</div>
+                                    ${priceSpecial ? `<div class="price-special">↳ ${priceSpecial}</div>` : ''}
+                                </div>
+                                <div class="price-value">₦${parseFloat(displayPrice).toLocaleString()}</div>
+                            </div>` : ''}
+                        <div class="action-row">
+                            <a id="order-now-${index}" href="/order/${item.generated_code}/" class="btn-order">
+                                <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3z"/>
+                                </svg>
+                                <span id="order-btn-${index}">Order Now</span>
+                            </a>
+                            <button onclick="addToCart('${item.generated_code}','${safeItemName}','${imagePath}','${retailPrice}','${wholesalePrice}','${sellingPrice}')" class="btn-cart">
+                                <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4z" clip-rule="evenodd"/>
+                                </svg>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
 
-                wrapper.appendChild(card);
-                container.appendChild(wrapper);
-            });
-        }
-
-        // ---- Load once ----
-        let hasLoaded = false;
-        document.addEventListener('DOMContentLoaded', () => {
-            if (!hasLoaded) {
-                hasLoaded = true;
-                fetchItems();
-            }
+            container.appendChild(el);
         });
+    }
 
-        // ---- Add CSS for bounce animation ----
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes bounce {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.2); }
-            }
-        `;
-        document.head.appendChild(style);
+    let hasLoaded = false;
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!hasLoaded) { hasLoaded = true; fetchItems(); }
+    });
 </script>
-
-
-{% comment %} <script>
-    // ---- Load API key from environment (via Django template or inline) ----
-    const API_KEY = "{{ settings.API_KEY|escapejs }}";  // Or use a data attribute
-
-    // ---- Cache customer data (optional) ----
-    let customerCache = null;
-
-    // ---- Open Checkout Popup ----
-    function openCheckoutPopup(item) {
-        const modalHtml = `
-            <div id="checkout-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 animate-fade-in">
-                    <h3 class="text-2xl font-bold text-neutral-900 mb-6">Complete Your Order</h3>
-                    
-                    <form id="customer-form" class="space-y-5">
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-1">Full Name</label>
-                            <input type="text" name="name" required 
-                                   class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-1">Phone Number</label>
-                            <input type="tel" name="phone" required 
-                                   class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-1">Email Address</label>
-                            <input type="email" name="email" required 
-                                   class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
-                        
-                        <div>
-                            <label class="block text-sm font-medium text-neutral-700 mb-1">Customer Category</label>
-                            <select name="category" required 
-                                    class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                <option value="">Select category...</option>
-                                <option value="Retail">Installer</option>
-                                <option value="Whole Sale">Distributor</option>
-                                <option value="End User">End user</option>
-                            </select>
-                        </div>
-
-                        <div class="flex gap-3 pt-4">
-                            <button type="submit" 
-                                    class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
-                                Continue to Checkout
-                            </button>
-                            <button type="button" onclick="closeCheckoutPopup()" 
-                                    class="flex-1 bg-neutral-200 text-neutral-700 py-3 rounded-lg font-semibold hover:bg-neutral-300 transition">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        `;
-
-        document.body.insertAdjacentHTML('beforeend', modalHtml);
-        document.getElementById('customer-form').onsubmit = (e) => submitCustomerForm(e, item);
-    }
-
-    // ---- Close Popup ----
-    function closeCheckoutPopup() {
-        const modal = document.getElementById('checkout-modal');
-        if (modal) modal.remove();
-    }
-
-    // ---- Submit Form → Create Customer → Go to Checkout ----
-    async function submitCustomerForm(e, item) {
-        e.preventDefault();
-        const form = e.target;
-        const submitBtn = form.querySelector('button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Creating...';
-
-        const formData = new FormData(form);
-        const payload = {
-            name: formData.get('name').trim(),
-            phone: formData.get('phone').trim(),
-            email: formData.get('email').trim().toLowerCase(),
-            category: formData.get('category')
-        };
-
-        try {
-            const response = await fetch('/api/proxy/create-customer/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')  // REQUIRED
-                },
-                body: JSON.stringify(payload)
-            });
-
-            // DEBUG: Log raw response
-            const text = await response.text();
-            console.log('Raw response:', text);
-
-            let result;
-            try {
-                result = JSON.parse(text);
-            } catch (e) {
-                throw new Error('Invalid JSON response from server');
-            }
-
-            if (!response.ok) {
-                throw new Error(result.error || 'Failed to create customer');
-            }
-
-            // Success
-            closeCheckoutPopup();
-            const params = new URLSearchParams({
-                item_id: item.generated_code,
-                item_name: encodeURIComponent(item.item_name),
-                price: item.retailer_price,
-                customer_id: result.customer_id,
-                name: encodeURIComponent(payload.name),
-                email: encodeURIComponent(payload.email),
-                phone: payload.phone
-            });
-            window.location.href = `/checkout/?${params.toString()}`;
-
-        } catch (err) {
-            alert('Error: ' + err.message);
-            console.error(err);
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Continue to Checkout';
-        }
-    }
-
-
-</script> {% endcomment %}
-
-
-
 
 {% endblock %}
