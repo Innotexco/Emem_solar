@@ -3,388 +3,957 @@
 {% block content %}
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;0,700;1,300;1,600&family=Outfit:wght@300;400;500;600&display=swap');
 
-/* All scoped under #pp to avoid any conflict with base.html / Tailwind */
-#pp, #pp * { box-sizing: border-box; }
-#pp { font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
-#pp .xhide { display: none !important; }
+    :root {
+        --ink:       #0c1a0f;
+        --ink-mid:   #1e3324;
+        --green:     #0a6640;
+        --green-sat: #0d8c55;
+        --amber:     #c8752e;
+        --rule:      #d6dfd9;
+        --surface:   #f4f7f5;
+        --white:     #ffffff;
+        --muted:     #607568;
+        --card-shadow: 0 2px 20px rgba(12,26,15,0.07);
+    }
 
-/* ── HERO ── */
-#pp-hero { background: #0b1612; padding: 96px 48px 80px; position: relative; overflow: hidden; }
-#pp-hero::before { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.04); top: -240px; right: -140px; pointer-events: none; }
-#pp-hero-in { max-width: 1200px; margin: 0 auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 48px; }
-#pp-hero-in .hl { flex: 1; }
-#pp-hero-in .hr { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
-#pp .eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
-#pp .eyebrow-bar { width: 26px; height: 1px; background: #c87941; flex-shrink: 0; }
-#pp .eyebrow-txt { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: #c87941; }
-#pp .h1 { font-family: 'Syne', sans-serif; font-size: clamp(38px, 5.5vw, 68px); font-weight: 800; color: #fff; line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 20px; }
-#pp .h1 .dim { color: rgba(255,255,255,0.16); display: block; }
-#pp .hero-p { font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.5); line-height: 1.75; max-width: 400px; }
-#pp .hero-cta { display: inline-flex; align-items: center; gap: 9px; background: #c87941; color: #fff; text-decoration: none; padding: 14px 30px; font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; border: none; cursor: pointer; white-space: nowrap; transition: background .25s; }
-#pp .hero-cta:hover { background: #a96330; color: #fff; }
-#pp .scroll-hint { display: flex; align-items: center; gap: 7px; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.22); }
-#pp .scroll-dot { width: 5px; height: 5px; border-radius: 50%; background: #c87941; animation: xdot 2s ease infinite; }
-@keyframes xdot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.6)} }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── CATALOG BAR ── */
-#pp-cbar { max-width: 1200px; margin: 0 auto; padding: 36px 48px 24px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid #dce6e1; }
-#pp .cb-lbl { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #6b7c72; }
-#pp .cb-btn { display: inline-flex; align-items: center; gap: 7px; background: transparent; border: 1.5px solid #dce6e1; color: #6b7c72; padding: 8px 16px; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: border-color .22s, color .22s; }
-#pp .cb-btn:hover { border-color: #0a6640; color: #0a6640; }
-#pp .cb-btn svg { transition: transform .5s; }
-#pp .cb-btn:hover svg { transform: rotate(180deg); }
+    body {
+        font-family: 'Outfit', sans-serif;
+        color: var(--ink);
+        background: var(--white);
+        -webkit-font-smoothing: antialiased;
+    }
 
-/* ── STATES ── */
-#pp .sbox { max-width: 1200px; margin: 0 auto; padding: 88px 48px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-#pp .xspin { width: 30px; height: 30px; border: 2px solid #dce6e1; border-top-color: #0a6640; border-radius: 50%; animation: xspin .75s linear infinite; margin-bottom: 14px; }
-@keyframes xspin { to { transform: rotate(360deg); } }
-#pp .sbox-lbl { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #6b7c72; }
-#pp .sc { border: 1px solid #dce6e1; background: #f4f7f5; padding: 44px 36px; max-width: 380px; width: 100%; }
-#pp .sc.e { border-color: #fcd4d4; background: #fff8f8; }
-#pp .sc-ico { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid #dce6e1; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
-#pp .sc.e .sc-ico { border-color: #ef4444; }
-#pp .sc-ttl { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: #0b1612; margin-bottom: 7px; }
-#pp .sc-msg { font-size: 13px; font-weight: 300; color: #6b7c72; line-height: 1.7; margin-bottom: 22px; }
-#pp .sc-btn { display: inline-flex; align-items: center; gap: 6px; background: #0a6640; color: #fff; border: none; padding: 11px 24px; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background .22s; }
-#pp .sc-btn:hover { background: #12a05e; }
+    /* ── HERO ─────────────────────────────────── */
+    .p-hero {
+        background: var(--ink);
+        position: relative;
+        overflow: hidden;
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+    }
 
-/* ── PRODUCT ROWS ── */
-#pp-list { max-width: 1200px; margin: 0 auto; padding: 0 48px 96px; }
-#pp .prow { display: grid; grid-template-columns: 460px 1fr; border-bottom: 1px solid #dce6e1; opacity: 0; transform: translateY(16px); animation: xup .55s cubic-bezier(.16,1,.3,1) forwards; }
-#pp .prow.alt { grid-template-columns: 1fr 460px; }
-#pp .prow.alt .ximg { order: 2; }
-#pp .prow.alt .xinfo { order: 1; border-left: none; border-right: 1px solid #dce6e1; }
-@keyframes xup { to { opacity:1; transform:translateY(0); } }
+    .p-hero-noise {
+        position: absolute; inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+        pointer-events: none;
+    }
 
-/* Image col */
-#pp .ximg { position: relative; overflow: hidden; background: #f4f7f5; min-height: 500px; }
-#pp .ximg img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .7s cubic-bezier(.16,1,.3,1); }
-#pp .prow:hover .ximg img { transform: scale(1.04); }
-#pp .xnoimg { width: 100%; height: 100%; min-height: 500px; display: flex; align-items: center; justify-content: center; background: #f4f7f5; }
-#pp .xbadge { position: absolute; top: 18px; left: 18px; padding: 6px 13px; font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; background: rgba(255,255,255,0.92); backdrop-filter: blur(6px); color: #6b7c72; border: 1px solid #dce6e1; }
-#pp .xbadge.ok { background: #0a6640; color: #fff; border-color: #0a6640; }
-#pp .xnum { position: absolute; bottom: 14px; right: 18px; font-family: 'Syne', sans-serif; font-size: 80px; font-weight: 800; color: rgba(0,0,0,0.05); line-height: 1; pointer-events: none; user-select: none; }
+    .p-hero-lines {
+        position: absolute; inset: 0;
+        background-image: repeating-linear-gradient(
+            90deg,
+            rgba(255,255,255,0.025) 0px,
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px,
+            transparent 80px
+        );
+        pointer-events: none;
+    }
 
-/* Info col */
-#pp .xinfo { padding: 44px 40px; display: flex; flex-direction: column; border-left: 1px solid #dce6e1; }
-#pp .xtag { display: flex; align-items: center; gap: 7px; margin-bottom: 12px; }
-#pp .xtag-dot { width: 5px; height: 5px; border-radius: 50%; background: #0a6640; flex-shrink: 0; }
-#pp .xtag-txt { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #0a6640; }
-#pp .xname { font-family: 'Syne', sans-serif; font-size: clamp(22px, 2.4vw, 34px); font-weight: 800; color: #0b1612; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 14px; }
-#pp .xhr { height: 1px; background: #dce6e1; margin-bottom: 16px; }
-#pp .xdesc { font-size: 14px; font-weight: 300; color: #6b7c72; line-height: 1.8; margin-bottom: 24px; }
+    .p-hero-orb {
+        position: absolute;
+        bottom: -200px; right: -100px;
+        width: 700px; height: 700px;
+        border-radius: 50%;
+        background: radial-gradient(circle at center, rgba(10,102,64,0.3) 0%, transparent 65%);
+        pointer-events: none;
+    }
 
-/* Specs table */
-#pp .xspecs { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid #dce6e1; margin-bottom: 24px; }
-#pp .xsc { padding: 12px 15px; border-right: 1px solid #dce6e1; border-bottom: 1px solid #dce6e1; background: #f4f7f5; transition: background .18s; }
-#pp .xsc:nth-child(2n) { border-right: none; }
-#pp .xsc:nth-last-child(-n+2) { border-bottom: none; }
-#pp .xsc:hover { background: #fff; }
-#pp .xsc-n { font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #6b7c72; margin-bottom: 3px; }
-#pp .xsc-v { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; color: #0b1612; }
+    .p-hero-inner {
+        position: relative;
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 120px 60px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 80px;
+        align-items: end;
+        width: 100%;
+    }
 
-/* Features */
-#pp .xfeats { border-top: 1px solid #dce6e1; padding-top: 18px; margin-bottom: 24px; }
-#pp .xfeats-lbl { font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #6b7c72; margin-bottom: 10px; }
-#pp .xfeat { display: flex; align-items: center; gap: 9px; padding: 5px 0; border-bottom: 1px solid #f4f7f5; font-size: 13px; color: #0b1612; font-weight: 400; }
-#pp .xfeat:last-child { border-bottom: none; }
-#pp .xtick { width: 15px; height: 15px; border-radius: 50%; background: #0a6640; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .p-hero-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 28px;
+    }
 
-/* Price bar */
-#pp .xprice { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-top: 1px solid #dce6e1; border-bottom: 1px solid #dce6e1; margin-top: auto; margin-bottom: 16px; }
-#pp .xprice-lbl { font-family: 'Syne', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #6b7c72; }
-#pp .xprice-note { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 600; color: #0a6640; margin-top: 2px; }
-#pp .xprice-amt { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: #0b1612; letter-spacing: -0.02em; }
+    .p-hero-tag-dot {
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: var(--amber);
+    }
 
-/* Action buttons */
-#pp .xacts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-#pp .xbtn-o { display: flex; align-items: center; justify-content: center; gap: 7px; background: #c87941; color: #fff; text-decoration: none; padding: 13px 14px; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border: none; cursor: pointer; transition: background .22s; }
-#pp .xbtn-o:hover { background: #a96330; color: #fff; }
-#pp .xbtn-c { display: flex; align-items: center; justify-content: center; gap: 7px; background: transparent; color: #0b1612; padding: 13px 14px; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border: 2px solid #0b1612; cursor: pointer; transition: background .22s, color .22s; }
-#pp .xbtn-c:hover { background: #0b1612; color: #fff; }
+    .p-hero-tag span {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--amber);
+    }
 
-/* ── WHY ── */
-#pp-why { background: #0b1612; padding: 88px 48px; }
-#pp-why-in { max-width: 1200px; margin: 0 auto; }
-#pp .why-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 48px; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.07); margin-bottom: 0; }
-#pp .why-h { font-family: 'Syne', sans-serif; font-size: clamp(26px, 3.2vw, 44px); font-weight: 800; color: #fff; line-height: 1; letter-spacing: -0.025em; }
-#pp .why-sub { font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.38); line-height: 1.75; max-width: 300px; flex-shrink: 0; }
-#pp .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
-#pp .wc { padding: 36px 28px; border-right: 1px solid rgba(255,255,255,0.06); border-top: 1px solid rgba(255,255,255,0.06); position: relative; overflow: hidden; transition: background .22s; }
-#pp .wc:last-child { border-right: none; }
-#pp .wc:hover { background: rgba(255,255,255,0.03); }
-#pp .wc-bar { position: absolute; top: 0; left: 0; width: 0; height: 2px; background: #c87941; transition: width .35s ease; }
-#pp .wc:hover .wc-bar { width: 100%; }
-#pp .wc-n { font-family: 'Syne', sans-serif; font-size: 44px; font-weight: 800; color: rgba(255,255,255,0.04); line-height: 1; margin-bottom: 14px; }
-#pp .wc-ico { width: 34px; height: 34px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; transition: border-color .22s; }
-#pp .wc:hover .wc-ico { border-color: #c87941; }
-#pp .wc-ico svg { color: rgba(255,255,255,0.4); transition: color .22s; }
-#pp .wc:hover .wc-ico svg { color: #c87941; }
-#pp .wc-ttl { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 7px; }
-#pp .wc-txt { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.36); line-height: 1.75; }
+    .p-hero-title {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(44px, 6vw, 80px);
+        font-weight: 300;
+        color: var(--white);
+        line-height: 1.0;
+        letter-spacing: -0.03em;
+        margin-bottom: 24px;
+    }
 
-/* ── TOAST ── */
-#pp .xt { position: fixed; top: 18px; right: 18px; z-index: 9999; display: flex; align-items: center; gap: 9px; padding: 12px 18px; font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .07em; opacity: 0; transform: translateY(-56px); transition: all .32s cubic-bezier(.16,1,.3,1); pointer-events: none; }
-#pp .xt.show { opacity: 1; transform: translateY(0); }
-#pp .xt.ok  { background: #0a6640; color: #fff; }
-#pp .xt.err { background: #c0392b; color: #fff; }
+    .p-hero-title em {
+        font-style: italic;
+        color: rgba(255,255,255,0.35);
+    }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 1100px) {
-    #pp .prow, #pp .prow.alt { grid-template-columns: 1fr !important; }
-    #pp .prow.alt .ximg { order: 1 !important; }
-    #pp .prow.alt .xinfo { order: 2 !important; border-right: none !important; }
-    #pp .ximg { min-height: 280px !important; }
-    #pp .xinfo { border-left: none !important; border-top: 1px solid #dce6e1 !important; padding: 32px 24px !important; }
-}
-@media (max-width: 768px) {
-    #pp-hero { padding: 68px 24px 56px !important; }
-    #pp-hero-in { flex-direction: column !important; align-items: flex-start !important; gap: 28px !important; }
-    #pp-hero-in .hr { align-items: flex-start !important; flex-direction: row !important; flex-wrap: wrap !important; }
-    #pp-cbar { padding: 28px 24px 20px !important; flex-direction: column !important; align-items: flex-start !important; gap: 14px !important; }
-    #pp-list { padding: 0 24px 72px !important; }
-    #pp-why { padding: 60px 24px !important; }
-    #pp .why-top { flex-direction: column !important; align-items: flex-start !important; }
-    #pp .why-grid { grid-template-columns: 1fr !important; }
-    #pp .wc { border-right: none !important; }
-    #pp .xacts { grid-template-columns: 1fr !important; }
-}
+    .p-hero-sub {
+        font-size: 17px;
+        font-weight: 300;
+        color: rgba(255,255,255,0.5);
+        line-height: 1.75;
+        max-width: 520px;
+    }
+
+    .p-hero-cta {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-self: center;
+    }
+
+    .btn-hero-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--amber);
+        color: var(--white);
+        padding: 16px 32px;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: background 0.25s ease;
+        white-space: nowrap;
+    }
+    .btn-hero-primary:hover { background: #b5661f; }
+
+    .btn-hero-ghost {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background: transparent;
+        color: rgba(255,255,255,0.6);
+        padding: 16px 32px;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-decoration: none;
+        border: 1px solid rgba(255,255,255,0.15);
+        cursor: pointer;
+        transition: all 0.25s ease;
+        white-space: nowrap;
+    }
+    .btn-hero-ghost:hover { border-color: rgba(255,255,255,0.4); color: var(--white); }
+
+    /* ── CATALOG ──────────────────────────────── */
+    .p-catalog {
+        background: var(--surface);
+        padding: 100px 60px;
+    }
+
+    .p-catalog-inner { max-width: 1320px; margin: 0 auto; }
+
+    .p-catalog-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        margin-bottom: 60px;
+        padding-bottom: 40px;
+        border-bottom: 1px solid var(--rule);
+    }
+
+    .p-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .p-eyebrow-line { width: 28px; height: 1px; background: var(--green); }
+
+    .p-eyebrow span {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--green);
+    }
+
+    .p-section-title {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(28px, 3.5vw, 44px);
+        font-weight: 400;
+        color: var(--ink);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+    }
+
+    .btn-refresh {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--white);
+        color: var(--muted);
+        padding: 12px 20px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        border: 1px solid var(--rule);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+    }
+    .btn-refresh:hover { border-color: var(--green); color: var(--green); }
+    .btn-refresh svg { transition: transform 0.4s ease; }
+    .btn-refresh:hover svg { transform: rotate(180deg); }
+
+    /* States */
+    .state-loading {
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        padding: 120px 0; gap: 20px;
+    }
+
+    .loader-track {
+        width: 36px; height: 36px;
+        border: 2px solid var(--rule);
+        border-top-color: var(--green);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .state-loading p {
+        font-size: 11px; font-weight: 600;
+        letter-spacing: 0.18em; text-transform: uppercase;
+        color: var(--muted);
+    }
+
+    .state-error, .state-empty {
+        display: none; max-width: 440px;
+        margin: 80px auto; background: var(--white);
+        border: 1px solid var(--rule);
+        padding: 56px 44px; text-align: center;
+    }
+
+    .state-icon {
+        width: 52px; height: 52px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 22px;
+    }
+    .state-icon.err { background: #fef2f2; }
+    .state-icon.empty-i { background: var(--surface); }
+
+    .state-title {
+        font-family: 'Fraunces', serif;
+        font-size: 22px; font-weight: 400;
+        color: var(--ink); margin-bottom: 10px;
+    }
+
+    .state-body {
+        font-size: 14px; font-weight: 300;
+        color: var(--muted); line-height: 1.7; margin-bottom: 28px;
+    }
+
+    .btn-retry {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: var(--green); color: var(--white);
+        padding: 12px 28px; font-size: 11px; font-weight: 600;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        border: none; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-retry:hover { background: var(--green-sat); }
+
+    /* ── PRODUCT CARDS ────────────────────────── */
+    #items-container { display: flex; flex-direction: column; gap: 2px; }
+
+    .product-card {
+        background: var(--white);
+        display: grid;
+        grid-template-columns: 460px 1fr;
+        opacity: 0;
+        transform: translateY(24px);
+        animation: cardIn 0.65s cubic-bezier(0.16,1,0.3,1) forwards;
+        border: 1px solid var(--rule);
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .product-card:hover {
+        border-color: rgba(10,102,64,0.25);
+        box-shadow: var(--card-shadow);
+        z-index: 1;
+    }
+
+    @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
+
+    .product-image-panel {
+        position: relative;
+        background: var(--ink-mid);
+        overflow: hidden;
+        min-height: 520px;
+    }
+
+    .product-image-panel img {
+        width: 100%; height: 100%;
+        object-fit: cover; display: block;
+        transition: transform 0.8s cubic-bezier(0.4,0,0.2,1);
+        opacity: 0.88;
+    }
+
+    .product-card:hover .product-image-panel img { transform: scale(1.04); }
+
+    .product-img-overlay {
+        position: absolute; inset: 0;
+        background: linear-gradient(135deg, rgba(12,26,15,0.45) 0%, transparent 55%);
+        pointer-events: none;
+    }
+
+    .stock-badge {
+        position: absolute; top: 22px; left: 22px;
+        padding: 8px 16px;
+        font-size: 10px; font-weight: 700;
+        letter-spacing: 0.16em; text-transform: uppercase;
+        backdrop-filter: blur(8px);
+    }
+    .badge-loading  { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.65); border: 1px solid rgba(255,255,255,0.18); }
+    .badge-instock  { background: rgba(10,102,64,0.88); color: #fff; }
+    .badge-preorder { background: rgba(200,117,46,0.88); color: #fff; }
+    .badge-err      { background: rgba(0,0,0,0.45); color: rgba(255,255,255,0.55); }
+
+    .product-num {
+        position: absolute; bottom: 20px; right: 24px;
+        font-family: 'Fraunces', serif;
+        font-size: 88px; font-weight: 700;
+        color: rgba(255,255,255,0.05);
+        line-height: 1; pointer-events: none; user-select: none;
+    }
+
+    .product-no-image {
+        width: 100%; min-height: 520px;
+        display: flex; align-items: center; justify-content: center;
+        background: var(--surface);
+    }
+
+    /* Content */
+    .product-content {
+        padding: 52px 56px;
+        display: flex; flex-direction: column;
+        justify-content: space-between; gap: 28px;
+    }
+
+    .product-cat {
+        font-size: 10px; font-weight: 700;
+        letter-spacing: 0.2em; text-transform: uppercase;
+        color: var(--green);
+        display: flex; align-items: center; gap: 8px;
+        margin-bottom: 12px;
+    }
+    .product-cat::before { content: ''; display: block; width: 18px; height: 1px; background: var(--green); }
+
+    .product-name {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(26px, 3vw, 40px);
+        font-weight: 400; color: var(--ink);
+        line-height: 1.1; letter-spacing: -0.02em;
+        margin-bottom: 16px;
+    }
+
+    .product-divider { height: 1px; background: var(--rule); margin: 18px 0; }
+
+    .product-desc {
+        font-size: 15px; font-weight: 300;
+        color: var(--muted); line-height: 1.8;
+    }
+
+    /* Attrs */
+    .product-attrs {
+        display: grid; grid-template-columns: repeat(2,1fr);
+        gap: 1px; background: var(--rule);
+        border: 1px solid var(--rule); margin: 8px 0;
+    }
+
+    .attr-cell {
+        background: var(--white); padding: 14px 18px;
+        transition: background 0.2s;
+    }
+    .attr-cell:hover { background: var(--surface); }
+
+    .attr-name {
+        font-size: 10px; font-weight: 700;
+        letter-spacing: 0.14em; text-transform: uppercase;
+        color: var(--muted); margin-bottom: 5px;
+    }
+
+    .attr-val { font-size: 14px; font-weight: 600; color: var(--ink); }
+
+    /* Features */
+    .product-features {
+        border-left: 2px solid var(--rule);
+        padding-left: 18px;
+    }
+
+    .feat-label {
+        font-size: 10px; font-weight: 700;
+        letter-spacing: 0.18em; text-transform: uppercase;
+        color: var(--muted); margin-bottom: 12px;
+    }
+
+    .feat-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+    .feat-list li {
+        display: flex; align-items: flex-start; gap: 10px;
+        font-size: 13px; font-weight: 300;
+        color: var(--ink-mid); line-height: 1.5;
+    }
+    .feat-list li::before { content: '→'; color: var(--green); font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+
+    /* Price & Actions */
+    .product-price-row {
+        display: flex; align-items: baseline;
+        justify-content: space-between;
+        padding: 18px 0;
+        border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+        margin-bottom: 18px;
+    }
+
+    .price-label-txt {
+        font-size: 10px; font-weight: 700;
+        letter-spacing: 0.18em; text-transform: uppercase;
+        color: var(--muted);
+    }
+
+    .price-note { font-size: 11px; font-weight: 500; color: var(--green); margin-top: 5px; }
+
+    .price-amount {
+        font-family: 'Fraunces', serif;
+        font-size: 38px; font-weight: 600;
+        color: var(--ink); line-height: 1;
+        letter-spacing: -0.02em;
+    }
+    .price-curr { font-size: 18px; font-weight: 400; opacity: 0.45; margin-right: 3px; }
+
+    .product-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .btn-order {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        background: var(--ink); color: var(--white);
+        padding: 15px 20px;
+        font-size: 11px; font-weight: 600;
+        letter-spacing: 0.1em; text-transform: uppercase;
+        text-decoration: none; border: 2px solid var(--ink);
+        cursor: pointer; transition: all 0.25s ease;
+    }
+    .btn-order:hover { background: var(--green); border-color: var(--green); }
+
+    .btn-cart {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        background: transparent; color: var(--ink);
+        padding: 15px 20px;
+        font-size: 11px; font-weight: 600;
+        letter-spacing: 0.1em; text-transform: uppercase;
+        border: 2px solid var(--rule);
+        cursor: pointer; transition: all 0.25s ease;
+    }
+    .btn-cart:hover { border-color: var(--ink); background: var(--surface); }
+
+    /* ── WHY SECTION ──────────────────────────── */
+    .p-why {
+        background: var(--ink);
+        padding: 100px 60px;
+        position: relative; overflow: hidden;
+    }
+
+    .p-why-bg {
+        position: absolute; top: -100px; left: -100px;
+        width: 500px; height: 500px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(10,102,64,0.2) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .p-why-inner { max-width: 1320px; margin: 0 auto; position: relative; }
+
+    .p-why-header {
+        display: grid; grid-template-columns: 1fr 1fr;
+        gap: 60px; align-items: end;
+        margin-bottom: 60px; padding-bottom: 48px;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .p-why-title {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(32px,4vw,52px);
+        font-weight: 300; color: var(--white);
+        line-height: 1.1; letter-spacing: -0.02em;
+    }
+
+    .p-why-desc {
+        font-size: 15px; font-weight: 300;
+        color: rgba(255,255,255,0.42); line-height: 1.8;
+    }
+
+    .p-why-grid {
+        display: grid; grid-template-columns: repeat(3,1fr);
+        gap: 1px; background: rgba(255,255,255,0.06);
+    }
+
+    .why-card {
+        background: var(--ink); padding: 44px 38px;
+        position: relative; transition: background 0.3s ease; overflow: hidden;
+    }
+    .why-card:hover { background: #101d14; }
+
+    .why-rule {
+        position: absolute; top: 0; left: 38px;
+        width: 34px; height: 2px; background: var(--amber);
+        transform: scaleX(0); transform-origin: left;
+        transition: transform 0.35s ease;
+    }
+    .why-card:hover .why-rule { transform: scaleX(1); }
+
+    .why-num {
+        font-family: 'Fraunces', serif;
+        font-size: 52px; font-weight: 700;
+        color: rgba(255,255,255,0.04);
+        line-height: 1; margin-bottom: 24px;
+    }
+
+    .why-icon {
+        width: 40px; height: 40px;
+        border: 1px solid rgba(255,255,255,0.1);
+        display: flex; align-items: center; justify-content: center;
+        margin-bottom: 18px; transition: all 0.3s ease;
+    }
+    .why-card:hover .why-icon { border-color: var(--amber); background: rgba(200,117,46,0.08); }
+    .why-icon svg { color: rgba(255,255,255,0.45); transition: color 0.3s; }
+    .why-card:hover .why-icon svg { color: var(--amber); }
+
+    .why-title { font-size: 16px; font-weight: 600; color: var(--white); margin-bottom: 10px; }
+    .why-body  { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.38); line-height: 1.8; }
+
+    /* ── NOTIFICATION ─────────────────────────── */
+    #cart-notification {
+        position: fixed; top: 24px; right: 24px;
+        z-index: 9999; padding: 14px 22px;
+        display: flex; align-items: center; gap: 10px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 12px; font-weight: 600; letter-spacing: 0.05em;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+        transform: translateY(-20px); opacity: 0;
+        transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+    #cart-notification.show { transform: translateY(0); opacity: 1; }
+    #cart-notification.success { background: var(--green); color: white; }
+    #cart-notification.error   { background: #c0392b; color: white; }
+
+    /* ── RESPONSIVE ───────────────────────────── */
+    @media (max-width: 1100px) {
+        .product-card { grid-template-columns: 1fr; }
+        .product-image-panel { min-height: 300px; }
+        .product-content { padding: 36px 28px; }
+        .p-hero-inner { grid-template-columns: 1fr; padding: 80px 28px; }
+        .p-why-header { grid-template-columns: 1fr; }
+        .p-why-grid { grid-template-columns: 1fr; }
+        .p-catalog, .p-why { padding: 60px 28px; }
+        .p-catalog-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+    }
+
+    @media (max-width: 580px) {
+        .product-attrs   { grid-template-columns: 1fr; }
+        .product-actions { grid-template-columns: 1fr; }
+    }
 </style>
 
-<div id="pp">
+<!-- ── HERO ──────────────────────────────────────────── -->
+<section class="p-hero">
+    <div class="p-hero-noise"></div>
+    <div class="p-hero-lines"></div>
+    <div class="p-hero-orb"></div>
 
-<!-- HERO -->
-<div id="pp-hero">
-    <div id="pp-hero-in">
-        <div class="hl">
-            <div class="eyebrow">
-                <div class="eyebrow-bar"></div>
-                <span class="eyebrow-txt">Emem Energy</span>
+    <div class="p-hero-inner">
+        <div>
+            <div class="p-hero-tag">
+                <div class="p-hero-tag-dot"></div>
+                <span>Premium Energy Storage</span>
             </div>
-            <h1 class="h1">
-                Energy<br>
-                <span class="dim">Storage</span>
-                Solutions
+            <h1 class="p-hero-title">
+                Energy Storage<br><em>Solutions</em>
             </h1>
-            <p class="hero-p">Locally manufactured lithium battery systems built for Nigerian homes and businesses — reliable, affordable, engineered to last.</p>
+            <p class="p-hero-sub">
+                Complete range of lithium battery systems designed for reliability, efficiency, and longevity — from residential backup to large-scale commercial deployments.
+            </p>
         </div>
-        <div class="hr">
-            <a href="{% url 'main:contact' %}" class="hero-cta">
-                Request Quote
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+
+        <div class="p-hero-cta">
+            <a href="{% url 'main:contact' %}" class="btn-hero-primary">
+                Request a Quote
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
             </a>
-            <div class="scroll-hint">
-                <div class="scroll-dot"></div>
-                Scroll to browse
+            <button onclick="document.getElementById('catalog').scrollIntoView({behavior:'smooth'})" class="btn-hero-ghost">
+                Browse Products
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ── CATALOG ───────────────────────────────────────── -->
+<section class="p-catalog" id="catalog">
+    <div class="p-catalog-inner">
+        <div class="p-catalog-header">
+            <div>
+                <div class="p-eyebrow">
+                    <div class="p-eyebrow-line"></div>
+                    <span>Product Catalog</span>
+                </div>
+                <h2 class="p-section-title">Our Range</h2>
+            </div>
+            <button class="btn-refresh" onclick="fetchItems()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+                Refresh
+            </button>
+        </div>
+
+        <div id="loading" class="state-loading">
+            <div class="loader-track"></div>
+            <p>Loading Products</p>
+        </div>
+
+        <div id="error" class="state-error">
+            <div class="state-icon err">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+            <h3 class="state-title">Unable to Load</h3>
+            <p id="error-message" class="state-body"></p>
+            <button class="btn-retry" onclick="fetchItems()">Try Again</button>
+        </div>
+
+        <div id="empty" class="state-empty">
+            <div class="state-icon empty-i">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#607568" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                </svg>
+            </div>
+            <h3 class="state-title">No Products Yet</h3>
+            <p class="state-body">Check back soon — new energy solutions are coming.</p>
+        </div>
+
+        <div id="items-container"></div>
+    </div>
+</section>
+
+<!-- ── WHY CHOOSE US ─────────────────────────────────── -->
+<section class="p-why">
+    <div class="p-why-bg"></div>
+    <div class="p-why-inner">
+        <div class="p-why-header">
+            <div>
+                <div class="p-eyebrow" style="margin-bottom:14px;">
+                    <div class="p-eyebrow-line" style="background:var(--amber)"></div>
+                    <span style="color:var(--amber)">Why Choose Us</span>
+                </div>
+                <h2 class="p-why-title">Built for<br>Excellence</h2>
+            </div>
+            <p class="p-why-desc">
+                Every system is engineered with premium components, designed for Nigeria's environment, and backed by comprehensive after-sales care that actually shows up.
+            </p>
+        </div>
+
+        <div class="p-why-grid">
+            <div class="why-card">
+                <div class="why-rule"></div>
+                <div class="why-num">01</div>
+                <div class="why-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                </div>
+                <div class="why-title">Quality Guarantee</div>
+                <p class="why-body">Premium lithium cells with advanced BMS. Every system passes rigorous multi-stage testing before it leaves our facility.</p>
+            </div>
+
+            <div class="why-card">
+                <div class="why-rule"></div>
+                <div class="why-num">02</div>
+                <div class="why-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div class="why-title">24/7 Support</div>
+                <p class="why-body">Expert local technicians available round the clock. Rapid-response assistance anywhere in Nigeria, guaranteed response time.</p>
+            </div>
+
+            <div class="why-card">
+                <div class="why-rule"></div>
+                <div class="why-num">03</div>
+                <div class="why-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                    </svg>
+                </div>
+                <div class="why-title">Best Value</div>
+                <p class="why-body">Locally manufactured to cut import costs. Superior quality at competitive pricing with comprehensive warranty included.</p>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<!-- CATALOG BAR -->
-<div id="pp-cbar">
-    <span class="cb-lbl">Product Catalog — All Systems</span>
-    <button class="cb-btn" onclick="fetchItems()">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-        Refresh
-    </button>
-</div>
-
-<!-- LOADING -->
-<div id="pp-load" class="sbox">
-    <div class="xspin"></div>
-    <span class="sbox-lbl">Loading products…</span>
-</div>
-
-<!-- ERROR -->
-<div id="pp-err" class="sbox xhide">
-    <div class="sc e">
-        <div class="sc-ico">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-        </div>
-        <div class="sc-ttl">Unable to Load Products</div>
-        <p id="pp-errmsg" class="sc-msg"></p>
-        <button class="sc-btn" onclick="fetchItems()">Try Again</button>
-    </div>
-</div>
-
-<!-- EMPTY -->
-<div id="pp-empty" class="sbox xhide">
-    <div class="sc">
-        <div class="sc-ico">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6b7c72" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
-        </div>
-        <div class="sc-ttl">No Products Yet</div>
-        <p class="sc-msg">Check back soon for new energy storage solutions.</p>
-    </div>
-</div>
-
-<!-- PRODUCTS -->
-<div id="pp-list">
-    <div id="pp-con"></div>
-</div>
-
-<!-- WHY -->
-<div id="pp-why">
-    <div id="pp-why-in">
-        <div class="why-top">
-            <h2 class="why-h">Built for<br>Excellence</h2>
-            <p class="why-sub">Every system engineered with premium components and backed by comprehensive local support.</p>
-        </div>
-        <div class="why-grid">
-            <div class="wc">
-                <div class="wc-bar"></div>
-                <div class="wc-n">01</div>
-                <div class="wc-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
-                <div class="wc-ttl">Quality Guarantee</div>
-                <p class="wc-txt">Premium lithium cells with advanced BMS. Every unit passes rigorous testing before delivery.</p>
-            </div>
-            <div class="wc">
-                <div class="wc-bar"></div>
-                <div class="wc-n">02</div>
-                <div class="wc-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-                <div class="wc-ttl">24/7 Support</div>
-                <p class="wc-txt">Round-the-clock local technical teams for rapid-response assistance anywhere in Nigeria.</p>
-            </div>
-            <div class="wc">
-                <div class="wc-bar"></div>
-                <div class="wc-n">03</div>
-                <div class="wc-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/></svg></div>
-                <div class="wc-ttl">Best Value</div>
-                <p class="wc-txt">Local manufacturing cuts import costs — superior quality at better pricing with warranty.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-</div><!-- #pp -->
-
+<!-- User category from Django -->
 <script>
-{% if user.is_authenticated %}{% if user.profile %}window.uCat='{{ user.profile.category|default:"End User" }}';{% else %}window.uCat='End User';{% endif %}{% else %}window.uCat='End User';{% endif %}
+    {% if user.is_authenticated %}
+        {% if user.profile %}
+            window.userCategory = '{{ user.profile.category|default:"End User" }}';
+        {% else %}
+            window.userCategory = 'End User';
+        {% endif %}
+    {% else %}
+        window.userCategory = 'End User';
+    {% endif %}
 </script>
 
 <script>
-const _C=new Map(),_TTL=300000;
-async function _get(u){const n=Date.now(),c=_C.get(u);if(c&&n-c.t<_TTL)return c.d;const r=await fetch(u);if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();_C.set(u,{d,t:n});return d;}
-function _ck(n){for(const c of document.cookie.split(';')){const t=c.trim();if(t.startsWith(n+'='))return decodeURIComponent(t.slice(n.length+1));}return null;}
-const $=id=>document.getElementById(id);
-function xshow(id){$(id).classList.remove('xhide');}
-function xhide(id){$(id).classList.add('xhide');}
+    const apiCache = new Map();
+    const CACHE_TTL = 5 * 60 * 1000;
 
-function pptoast(msg,t='ok'){
-    const el=document.createElement('div');
-    el.className='xt '+t;
-    el.innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">${t==='ok'?'<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>':'<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>'}</svg><span>${msg}</span>`;
-    $('pp').appendChild(el);
-    setTimeout(()=>el.classList.add('show'),10);
-    setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),350);},2800);
-}
+    async function fetchWithCache(url) {
+        const now = Date.now();
+        const cached = apiCache.get(url);
+        if (cached && (now - cached.timestamp) < CACHE_TTL) return cached.data;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        apiCache.set(url, { data, timestamp: now });
+        return data;
+    }
 
-async function addToCart(id,name,img,rp,wp,sp){
-    try{
-        const r=await fetch('/cart/add/',{method:'POST',headers:{'Content-Type':'application/json','X-CSRFToken':_ck('csrftoken')},body:JSON.stringify({item_id:id,quantity:1,name,image:img,retailer_price:rp||sp,wholesale_price:wp||sp,selling_price:sp})});
-        const d=await r.json();
-        if(d.success){pptoast('Added to cart','ok');['cart-count','mobile-cart-count'].forEach(i=>{const e=$(i);if(e){e.textContent=d.cart_count;e.style.display=d.cart_count>0?'flex':'none';}});}
-        else pptoast('Could not add item','err');
-    }catch{pptoast('Could not add item','err');}
-}
+    function getCookie(name) {
+        let val = null;
+        if (document.cookie) document.cookie.split(';').forEach(c => {
+            c = c.trim();
+            if (c.startsWith(name + '=')) val = decodeURIComponent(c.slice(name.length + 1));
+        });
+        return val;
+    }
 
-let busy=false;
-async function fetchItems(){
-    if(busy)return; busy=true;
-    xshow('pp-load'); xhide('pp-err'); xhide('pp-empty');
-    $('pp-con').innerHTML='';
-    try{
-        const data=await _get('https://console.afrikbook.com/api/item_api/');
-        const items=Array.isArray(data)?data:[data];
-        xhide('pp-load');
-        if(!items.length){xshow('pp-empty');return;}
-        renderItems(items);
-        updateBadges(items);
-    }catch(e){
-        xhide('pp-load'); xshow('pp-err');
-        $('pp-errmsg').textContent=e.message;
-    }finally{busy=false;}
-}
+    async function addToCart(itemId, itemName, itemImage, retailPrice, wholesalePrice, sellingPrice) {
+        try {
+            const res = await fetch('/cart/add/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+                body: JSON.stringify({
+                    item_id: itemId, quantity: 1, name: itemName, image: itemImage,
+                    retailer_price: retailPrice || sellingPrice,
+                    wholesale_price: wholesalePrice || sellingPrice,
+                    selling_price: sellingPrice
+                })
+            });
+            const data = await res.json();
+            if (data.success) { showNotification('Item added to cart', 'success'); updateCartCount(data.cart_count); }
+            else showNotification('Could not add to cart', 'error');
+        } catch { showNotification('Could not add to cart', 'error'); }
+    }
 
-async function updateBadges(items){
-    await Promise.all(items.map(async(item,i)=>{
-        const b=$('xb-'+i),btn=$('xbt-'+i);
-        if(!b||!item.generated_code)return;
-        try{
-            const q=await _get('https://console.afrikbook.com/api/check-item-qty?item_id='+encodeURIComponent(item.generated_code));
-            const ok=q.quantity>0;
-            b.textContent=ok?'In Stock':'Pre-Order';
-            b.className='xbadge'+(ok?' ok':'');
-            if(btn)btn.textContent=ok?'Order Now':'Pre-Order';
-        }catch{b.textContent='Check Stock';b.className='xbadge';}
-    }));
-}
+    function showNotification(message, type) {
+        let n = document.getElementById('cart-notification');
+        if (n) n.remove();
+        n = document.createElement('div');
+        n.id = 'cart-notification';
+        n.className = type;
+        n.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+                ${type === 'success'
+                    ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>'
+                    : '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>'
+                }
+            </svg>
+            ${message}`;
+        document.body.appendChild(n);
+        requestAnimationFrame(() => n.classList.add('show'));
+        setTimeout(() => { n.classList.remove('show'); setTimeout(() => n.remove(), 400); }, 3000);
+    }
 
-function renderItems(items){
-    const wrap=$('pp-con'),base='https://console.afrikbook.com',uCat=window.uCat||'End User';
-    const ck=`<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
-    const noImg=`<div class="xnoimg"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#dce6e1" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>`;
+    function updateCartCount(count) {
+        ['cart-count', 'mobile-cart-count'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) { el.textContent = count; el.style.display = count > 0 ? 'flex' : 'none'; }
+        });
+    }
 
-    items.forEach((item,i)=>{
-        const rp=item.retailer_price||item.selling_price,
-              wp=item.wholesale_price||item.selling_price,
-              sp=item.selling_price;
-        let dp=sp,lbl='Price',note='';
-        if(uCat==='Retail'){dp=rp;lbl='Installer Price';note='Special installer pricing';}
-        if(uCat==='Whole Sale'){dp=wp;lbl='Distributor Price';note='Special distributor pricing';}
+    let isFetching = false;
 
-        const attrs=Array.isArray(item.attribute)?item.attribute:[];
-        let specs='';
-        if(attrs.length){
-            specs='<div class="xspecs">'+attrs.map(a=>`<div class="xsc"><div class="xsc-n">${a.name||'—'}</div><div class="xsc-v">${a.value||'—'}</div></div>`).join('')+'</div>';
+    async function fetchItems() {
+        if (isFetching) return;
+        isFetching = true;
+
+        const loading   = document.getElementById('loading');
+        const error     = document.getElementById('error');
+        const empty     = document.getElementById('empty');
+        const container = document.getElementById('items-container');
+
+        loading.style.display = 'flex';
+        error.style.display   = 'none';
+        empty.style.display   = 'none';
+        container.innerHTML   = '';
+
+        try {
+            const data  = await fetchWithCache('https://console.afrikbook.com/api/item_api/');
+            const items = Array.isArray(data) ? data : [data];
+            loading.style.display = 'none';
+            if (!items.length) { empty.style.display = 'block'; return; }
+            displayItems(items);
+            await updateStockBadges(items);
+        } catch (err) {
+            loading.style.display = 'none';
+            error.style.display   = 'block';
+            document.getElementById('error-message').textContent = err.message;
+        } finally {
+            isFetching = false;
         }
+    }
 
-        const safe=(item.item_name||'').replace(/'/g,"\\'"),imgPath=item.image||'';
-        const el=document.createElement('div');
-        el.className='prow'+(i%2!==0?' alt':'');
-        el.style.animationDelay=(i*0.1)+'s';
+    async function updateStockBadges(items) {
+        await Promise.all(items.map(async (item, i) => {
+            const badge    = document.getElementById(`stock-badge-${i}`);
+            const orderBtn = document.getElementById(`order-now-${i}`);
+            if (!badge || !orderBtn) return;
+            if (!item.generated_code) { badge.textContent = 'No ID'; badge.className = 'stock-badge badge-err'; return; }
+            try {
+                const qty = await fetchWithCache(`https://console.afrikbook.com/api/check-item-qty?item_id=${encodeURIComponent(item.generated_code)}`);
+                const inStock = qty.quantity > 0;
+                badge.textContent = inStock ? 'In Stock' : 'Pre-Order';
+                badge.className = `stock-badge ${inStock ? 'badge-instock' : 'badge-preorder'}`;
+                const btn = orderBtn.querySelector('button') || orderBtn;
+                if (btn.tagName === 'A') { btn.querySelector && (btn.querySelector('button') || btn).textContent; }
+                btn.textContent = inStock ? 'Order Now' : 'Pre-Order';
+            } catch {
+                badge.textContent = 'Check Availability';
+                badge.className = 'stock-badge badge-err';
+            }
+        }));
+    }
 
-        el.innerHTML=`
-        <div class="ximg">
-            ${item.image?`<img src="${base}${item.image}" alt="${item.item_name||''}" loading="lazy" onerror="this.parentElement.innerHTML='${noImg.replace(/'/g,"\\'")}'">`:''+noImg}
-            <span id="xb-${i}" class="xbadge">Loading…</span>
-            <div class="xnum">${String(i+1).padStart(2,'0')}</div>
-        </div>
-        <div class="xinfo">
-            <div class="xtag"><div class="xtag-dot"></div><span class="xtag-txt">Lithium Battery System</span></div>
-            <h3 class="xname">${item.item_name||'Product'}</h3>
-            <div class="xhr"></div>
-            ${item.description?`<p class="xdesc">${item.description}</p>`:''}
-            ${specs}
-            <div class="xfeats">
-                <div class="xfeats-lbl">Key Features</div>
-                <div class="xfeat"><div class="xtick">${ck}</div>Scalable modular design for flexible deployment</div>
-                <div class="xfeat"><div class="xtick">${ck}</div>Advanced BMS with intelligent battery management</div>
-                <div class="xfeat"><div class="xtick">${ck}</div>Real-time monitoring and instant alert system</div>
-                <div class="xfeat"><div class="xtick">${ck}</div>24/7 dedicated local technical support</div>
-            </div>
-            ${dp?`<div class="xprice"><div><div class="xprice-lbl">${lbl}</div>${note?`<div class="xprice-note">↳ ${note}</div>`:''}</div><div class="xprice-amt">₦${parseFloat(dp).toLocaleString()}</div></div>`:''}
-            <div class="xacts">
-                <a id="xl-${i}" href="/order/${item.generated_code}/" class="xbtn-o">
-                    <svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3z"/></svg>
-                    <span id="xbt-${i}">Order Now</span>
-                </a>
-                <button class="xbtn-c" onclick="addToCart('${item.generated_code}','${safe}','${imgPath}','${rp}','${wp}','${sp}')">
-                    <svg width="11" height="11" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4z" clip-rule="evenodd"/></svg>
-                    Add to Cart
-                </button>
-            </div>
-        </div>`;
+    function displayItems(items) {
+        const container = document.getElementById('items-container');
+        const baseUrl   = 'https://console.afrikbook.com';
+        const userCat   = window.userCategory || 'End User';
 
-        wrap.appendChild(el);
-    });
-}
+        items.forEach((item, i) => {
+            const rp = item.retailer_price  || item.selling_price;
+            const wp = item.wholesale_price || item.selling_price;
+            const sp = item.selling_price;
 
-let loaded=false;
-document.addEventListener('DOMContentLoaded',()=>{if(!loaded){loaded=true;fetchItems();}});
+            let displayPrice = sp, priceLabel = 'List Price';
+            if (userCat === 'Retail')      { displayPrice = rp; priceLabel = 'Installer Price'; }
+            else if (userCat === 'Whole Sale') { displayPrice = wp; priceLabel = 'Distributor Price'; }
+
+            const attrs = Array.isArray(item.attribute) ? item.attribute : [];
+            let attrsHtml = '';
+            if (attrs.length) {
+                attrsHtml = `<div class="product-attrs">`;
+                attrs.forEach(a => attrsHtml += `
+                    <div class="attr-cell">
+                        <div class="attr-name">${a.name || 'Spec'}</div>
+                        <div class="attr-val">${a.value || '—'}</div>
+                    </div>`);
+                attrsHtml += `</div>`;
+            }
+
+            const imgPath = item.image || '';
+            const imgHtml = `
+                <div class="product-image-panel">
+                    ${item.image
+                        ? `<img src="${baseUrl}${item.image}" alt="${item.item_name}"
+                               onerror="this.closest('.product-image-panel').innerHTML='<div class=\\'product-no-image\\'><svg width=\\'44\\' height=\\'44\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'#c0c8c2\\' stroke-width=\\'1\\'><path d=\\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\\'></path></svg></div>'">`
+                        : `<div class="product-no-image"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#c0c8c2" stroke-width="1"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>`
+                    }
+                    <div class="product-img-overlay"></div>
+                    <span id="stock-badge-${i}" class="stock-badge badge-loading">Checking…</span>
+                    <div class="product-num">${String(i+1).padStart(2,'0')}</div>
+                </div>`;
+
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.style.animationDelay = `${i * 0.12}s`;
+            card.innerHTML = `
+                ${imgHtml}
+                <div class="product-content">
+                    <div>
+                        <div class="product-cat">Energy Storage System</div>
+                        <h3 class="product-name">${item.item_name}</h3>
+                        <div class="product-divider"></div>
+                        ${item.description ? `<p class="product-desc">${item.description}</p>` : ''}
+                        ${attrsHtml}
+                        <div class="product-features">
+                            <div class="feat-label">Key Features</div>
+                            <ul class="feat-list">
+                                <li>Scalable modular design for flexible deployment</li>
+                                <li>Advanced BMS with real-time cell-level monitoring</li>
+                                <li>Compatible with all major solar inverters</li>
+                                <li>7-year manufacturer warranty included</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        ${displayPrice ? `
+                        <div class="product-price-row">
+                            <div>
+                                <div class="price-label-txt">${priceLabel}</div>
+                                ${userCat !== 'End User' ? `<div class="price-note">Special ${userCat === 'Retail' ? 'installer' : 'distributor'} rate applied</div>` : ''}
+                            </div>
+                            <div class="price-amount"><span class="price-curr">₦</span>${parseFloat(displayPrice).toLocaleString()}</div>
+                        </div>` : ''}
+                        <div class="product-actions">
+                            <a id="order-now-${i}" href="/order/${item.generated_code}/" class="btn-order">
+                                <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3z"/>
+                                </svg>
+                                Order Now
+                            </a>
+                            <button class="btn-cart"
+                                onclick="addToCart('${item.generated_code}','${item.item_name.replace(/'/g,"\\'")}','${imgPath}','${rp}','${wp}','${sp}')">
+                                <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"/>
+                                </svg>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+
+            container.appendChild(card);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => fetchItems());
 </script>
 
 {% endblock %}
