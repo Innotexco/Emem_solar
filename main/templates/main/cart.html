@@ -5,899 +5,640 @@
 {% block content %}
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-    
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap');
+
     :root {
-        --primary: #059669;
-        --primary-dark: #047857;
-        --teal: #14b8a6;
-        --amber: #fbbf24;
-        --gray-50: #fafafa;
-        --gray-100: #f5f5f5;
-        --gray-200: #e5e5e5;
-        --gray-300: #d4d4d4;
-        --gray-600: #525252;
-        --gray-700: #404040;
-        --gray-800: #262626;
-        --gray-900: #171717;
+        --ink:       #0c1a0f;
+        --ink-mid:   #1e3324;
+        --green:     #0a6640;
+        --green-sat: #0d8c55;
+        --amber:     #c8752e;
+        --rule:      #d6dfd9;
+        --surface:   #f4f7f5;
+        --white:     #ffffff;
+        --muted:     #607568;
+        --danger:    #c0392b;
+        --danger-lt: #fef2f2;
     }
-    
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-        background: var(--gray-50);
-        color: var(--gray-800);
-        font-size: 16px;
-        line-height: 1.6;
+        font-family: 'Outfit', sans-serif;
+        color: var(--ink);
+        background: var(--surface);
+        -webkit-font-smoothing: antialiased;
         min-height: 100vh;
     }
-    
-    /* Container - Mobile First */
-    .container {
-        width: 100%;
-        padding: 1rem;
+
+    /* ── PAGE ─────────────────────────────────── */
+    .cart-page {
+        max-width: 1320px;
         margin: 0 auto;
+        padding: 60px 60px 100px;
     }
-    
-    @media (min-width: 640px) {
-        .container {
-            padding: 1.5rem;
-        }
+
+    /* ── HEADER ───────────────────────────────── */
+    .cart-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 40px;
+        margin-bottom: 60px;
+        padding-bottom: 48px;
+        border-bottom: 1px solid var(--rule);
     }
-    
-    @media (min-width: 1024px) {
-        .container {
-            max-width: 1280px;
-            padding: 2rem;
-        }
+
+    .cart-eyebrow {
+        display: flex; align-items: center; gap: 10px;
+        margin-bottom: 14px;
     }
-    
-    /* Page Header */
-    .page-header {
-        margin-bottom: 1.5rem;
+    .cart-eyebrow-line { width: 28px; height: 1px; background: var(--green); }
+    .cart-eyebrow span {
+        font-size: 11px; font-weight: 600;
+        letter-spacing: 0.2em; text-transform: uppercase;
+        color: var(--green);
     }
-    
-    @media (min-width: 1024px) {
-        .page-header {
-            margin-bottom: 2.5rem;
-        }
+
+    .cart-title {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(32px, 4vw, 56px);
+        font-weight: 400; color: var(--ink);
+        line-height: 1.05; letter-spacing: -0.025em;
     }
-    
-    .header-content {
+    .cart-title em { font-style: italic; color: var(--muted); }
+
+    .cart-meta {
+        font-size: 13px; font-weight: 300;
+        color: var(--muted); margin-top: 10px;
+        display: flex; align-items: center; gap: 10px;
+    }
+
+    .cart-meta-badge {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 4px 10px;
+        background: rgba(10,102,64,0.08);
+        font-size: 10px; font-weight: 700;
+        letter-spacing: 0.14em; text-transform: uppercase;
+        color: var(--green);
+    }
+
+    .btn-continue {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: transparent; color: var(--muted);
+        padding: 14px 24px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 600;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        text-decoration: none; border: 1px solid var(--rule);
+        cursor: pointer; transition: all 0.25s ease;
+        white-space: nowrap; flex-shrink: 0;
+    }
+    .btn-continue:hover { border-color: var(--ink); color: var(--ink); }
+    .btn-continue svg { transition: transform 0.2s ease; }
+    .btn-continue:hover svg { transform: translateX(-3px); }
+
+    /* ── GRID ─────────────────────────────────── */
+    .cart-grid {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 2px;
+        align-items: start;
+    }
+
+    /* ── ITEMS LIST ───────────────────────────── */
+    .cart-items { display: flex; flex-direction: column; gap: 2px; }
+
+    .cart-item {
+        background: var(--white);
+        border: 1px solid var(--rule);
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        opacity: 0;
+        animation: itemIn 0.55s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .cart-item:hover {
+        border-color: rgba(10,102,64,0.2);
+        box-shadow: 0 2px 20px rgba(12,26,15,0.06);
+        z-index: 1;
+    }
+
+    @keyframes itemIn {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Image panel */
+    .item-img-panel {
+        position: relative;
+        background: var(--ink-mid);
+        overflow: hidden;
+        min-height: 220px;
+    }
+
+    .item-img-panel img {
+        width: 100%; height: 100%;
+        object-fit: cover; display: block;
+        transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+        opacity: 0.88;
+    }
+    .cart-item:hover .item-img-panel img { transform: scale(1.04); }
+
+    .item-img-overlay {
+        position: absolute; inset: 0;
+        background: linear-gradient(135deg, rgba(12,26,15,0.35) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    .item-no-img {
+        width: 100%; height: 100%; min-height: 220px;
+        display: flex; align-items: center; justify-content: center;
+        background: var(--surface);
+    }
+
+    /* Content panel */
+    .item-content {
+        padding: 32px 36px;
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        justify-content: space-between;
+        gap: 20px;
     }
-    
-    @media (min-width: 640px) {
-        .header-content {
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-        }
+
+    .item-top {}
+
+    .item-cat {
+        font-size: 10px; font-weight: 700;
+        letter-spacing: 0.2em; text-transform: uppercase;
+        color: var(--green);
+        display: flex; align-items: center; gap: 8px;
+        margin-bottom: 10px;
     }
-    
-    .page-title {
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: var(--gray-900);
-        margin-bottom: 0.25rem;
-        line-height: 1.2;
+    .item-cat::before { content: ''; display: block; width: 16px; height: 1px; background: var(--green); }
+
+    .item-name {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(18px, 2vw, 26px);
+        font-weight: 400; color: var(--ink);
+        line-height: 1.15; letter-spacing: -0.015em;
+        margin-bottom: 12px;
+    }
+
+    .item-price {
+        font-family: 'Fraunces', serif;
+        font-size: 28px; font-weight: 600;
+        color: var(--ink); line-height: 1;
         letter-spacing: -0.02em;
     }
-    
-    @media (min-width: 768px) {
-        .page-title {
-            font-size: 2.5rem;
-        }
-    }
-    
-    @media (min-width: 1024px) {
-        .page-title {
-            font-size: 3rem;
-        }
-    }
-    
-    .page-subtitle {
-        font-size: 0.875rem;
-        color: var(--gray-600);
-        font-weight: 300;
-    }
-    
-    @media (min-width: 768px) {
-        .page-subtitle {
-            font-size: 1rem;
-        }
-    }
-    
-    @media (min-width: 1024px) {
-        .page-subtitle {
-            font-size: 1.125rem;
-        }
-    }
-    
-    .category-badge {
-        display: inline-block;
-        margin-left: 0.5rem;
-        font-size: 0.75rem;
-        color: var(--primary);
-        font-weight: 600;
-    }
-    
-    @media (min-width: 768px) {
-        .category-badge {
-            font-size: 0.875rem;
-        }
-    }
-    
-    /* Buttons */
-    .btn-primary {
-        background: var(--primary);
-        color: white;
-        font-weight: 600;
-        padding: 0.75rem 1.5rem;
-        border-radius: 10px;
-        border: none;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.875rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        min-height: 44px;
-        width: 100%;
-    }
-    
-    @media (min-width: 640px) {
-        .btn-primary {
-            width: auto;
-        }
-    }
-    
-    @media (min-width: 1024px) {
-        .btn-primary {
-            padding: 1rem 2rem;
-        }
-        
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            box-shadow: 0 8px 20px -4px rgba(5, 150, 105, 0.4);
-            transform: translateY(-2px);
-        }
-    }
-    
-    .btn-secondary {
-        background: white;
-        color: var(--primary);
-        border: 2px solid var(--primary);
-        font-weight: 600;
-        padding: 0.75rem 1.5rem;
-        border-radius: 10px;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.875rem;
-        min-height: 44px;
-        width: 100%;
-    }
-    
-    @media (min-width: 640px) {
-        .btn-secondary {
-            width: auto;
-        }
-    }
-    
-    @media (min-width: 1024px) {
-        .btn-secondary:hover {
-            background: var(--primary);
-            color: white;
-        }
-    }
-    
-    /* Main Grid */
-    .main-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    @media (min-width: 1024px) {
-        .main-grid {
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-        }
-    }
-    
-    /* Cards */
-    .card {
-        background: white;
-        border: 1px solid var(--gray-200);
-        border-radius: 16px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    /* Cart Item */
-    .cart-item {
-        padding: 1rem;
-        margin-bottom: 1rem;
-    }
-    
-    @media (min-width: 768px) {
-        .cart-item {
-            padding: 1.5rem;
-        }
-    }
-    
-    .cart-item:last-child {
-        margin-bottom: 0;
-    }
-    
-    .item-content {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    @media (min-width: 640px) {
-        .item-content {
-            flex-direction: row;
-            gap: 1.5rem;
-        }
-    }
-    
-    .item-image {
-        width: 100%;
-        height: 200px;
-        background: var(--gray-100);
-        border-radius: 12px;
-        overflow: hidden;
-        flex-shrink: 0;
-    }
-    
-    @media (min-width: 640px) {
-        .item-image {
-            width: 120px;
-            height: 120px;
-        }
-    }
-    
-    @media (min-width: 768px) {
-        .item-image {
-            width: 128px;
-            height: 128px;
-        }
-    }
-    
-    .item-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .item-placeholder {
-        width: 100%;
-        height: 100%;
+    .item-price-curr { font-size: 16px; font-weight: 400; opacity: 0.45; margin-right: 2px; }
+
+    .item-divider { height: 1px; background: var(--rule); margin: 16px 0; }
+
+    /* Controls row */
+    .item-controls {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
+        gap: 16px;
     }
-    
-    .item-placeholder svg {
-        width: 48px;
-        height: 48px;
-        color: var(--gray-300);
-    }
-    
-    .item-details {
-        flex: 1;
-        min-width: 0;
-    }
-    
-    .item-name {
-        font-size: 1rem;
-        font-weight: 700;
-        color: var(--gray-900);
-        margin-bottom: 0.5rem;
-    }
-    
-    @media (min-width: 768px) {
-        .item-name {
-            font-size: 1.25rem;
-            margin-bottom: 0.75rem;
-        }
-    }
-    
-    .item-price {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--primary);
-        margin-bottom: 1rem;
-    }
-    
-    @media (min-width: 768px) {
-        .item-price {
-            font-size: 1.75rem;
-        }
-    }
-    
-    .item-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    @media (min-width: 640px) {
-        .item-actions {
-            flex-direction: row;
-            align-items: center;
-        }
-    }
-    
-    /* Quantity Controls */
-    .quantity-controls {
+
+    /* Quantity */
+    .qty-wrap {
         display: flex;
         align-items: center;
-        border: 1px solid var(--gray-300);
-        border-radius: 10px;
-        overflow: hidden;
-        width: 100%;
+        border: 1px solid var(--rule);
+        background: var(--surface);
     }
-    
-    @media (min-width: 640px) {
-        .quantity-controls {
-            width: auto;
-        }
+
+    .qty-btn {
+        width: 40px; height: 40px;
+        background: transparent; border: none;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; color: var(--muted);
+        transition: all 0.2s ease; flex-shrink: 0;
     }
-    
-    .quantity-btn {
-        padding: 0.75rem 1rem;
-        background: white;
-        border: none;
-        cursor: pointer;
-        transition: background 0.2s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 44px;
+    .qty-btn:hover { background: var(--white); color: var(--ink); }
+
+    .qty-input {
+        width: 48px; height: 40px;
+        text-align: center; border: none;
+        border-left: 1px solid var(--rule);
+        border-right: 1px solid var(--rule);
+        background: var(--white);
+        font-family: 'Fraunces', serif;
+        font-size: 16px; font-weight: 600;
+        color: var(--ink); outline: none;
     }
-    
-    @media (min-width: 1024px) {
-        .quantity-btn:hover {
-            background: var(--gray-100);
-        }
-    }
-    
-    .quantity-btn svg {
-        width: 16px;
-        height: 16px;
-    }
-    
-    .quantity-input {
-        width: 60px;
-        text-align: center;
-        border: none;
-        border-left: 1px solid var(--gray-300);
-        border-right: 1px solid var(--gray-300);
-        padding: 0.75rem 0.5rem;
-        font-weight: 600;
-        font-size: 0.875rem;
-        min-height: 44px;
-    }
-    
-    @media (min-width: 640px) {
-        .quantity-input {
-            width: 80px;
-        }
-    }
-    
-    /* Remove Button */
+
+    /* Remove */
     .btn-remove {
-        color: #dc2626;
-        font-weight: 600;
-        font-size: 0.875rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: none;
-        border: none;
-        cursor: pointer;
+        display: inline-flex; align-items: center; gap: 6px;
+        background: none; border: none; cursor: pointer;
+        font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 600;
+        letter-spacing: 0.1em; text-transform: uppercase;
+        color: var(--muted); padding: 0;
         transition: color 0.2s ease;
-        padding: 0.5rem;
-        min-height: 44px;
     }
-    
-    @media (min-width: 1024px) {
-        .btn-remove:hover {
-            color: #b91c1c;
-        }
-    }
-    
-    .btn-remove svg {
-        width: 20px;
-        height: 20px;
-    }
-    
-    /* Subtotal */
+    .btn-remove:hover { color: var(--danger); }
+
+    /* Subtotal row */
     .item-subtotal {
         display: flex;
+        align-items: baseline;
         justify-content: space-between;
-        align-items: center;
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid var(--gray-200);
+        padding-top: 16px;
+        border-top: 1px solid var(--rule);
     }
-    
+
     .subtotal-label {
-        font-size: 0.875rem;
-        color: var(--gray-600);
-        font-weight: 300;
+        font-size: 10px; font-weight: 700;
+        letter-spacing: 0.16em; text-transform: uppercase;
+        color: var(--muted);
     }
-    
+
     .subtotal-amount {
-        font-size: 1.125rem;
-        font-weight: 700;
-        color: var(--gray-900);
+        font-family: 'Fraunces', serif;
+        font-size: 22px; font-weight: 600;
+        color: var(--ink); letter-spacing: -0.015em;
     }
-    
-    @media (min-width: 768px) {
-        .subtotal-amount {
-            font-size: 1.25rem;
-        }
+    .subtotal-curr { font-size: 13px; font-weight: 400; opacity: 0.4; margin-right: 2px; }
+
+    /* ── SUMMARY ──────────────────────────────── */
+    .summary-panel {
+        background: var(--ink);
+        border: 1px solid rgba(255,255,255,0.06);
+        position: sticky;
+        top: 24px;
+        animation: itemIn 0.55s 0.2s cubic-bezier(0.16,1,0.3,1) both;
     }
-    
-    /* Order Summary */
-    .summary-card {
-        padding: 1.5rem;
-        position: relative;
+
+    .summary-header {
+        padding: 32px 36px;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
     }
-    
-    @media (min-width: 768px) {
-        .summary-card {
-            padding: 2rem;
-        }
+
+    .summary-eyebrow {
+        display: flex; align-items: center; gap: 10px;
+        margin-bottom: 12px;
     }
-    
-    @media (min-width: 1024px) {
-        .summary-card {
-            position: sticky;
-            top: 1.5rem;
-        }
+    .summary-eyebrow-line { width: 20px; height: 1px; background: var(--amber); }
+    .summary-eyebrow span {
+        font-size: 10px; font-weight: 700;
+        letter-spacing: 0.2em; text-transform: uppercase;
+        color: var(--amber);
     }
-    
+
     .summary-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--gray-900);
-        margin-bottom: 1.5rem;
+        font-family: 'Fraunces', serif;
+        font-size: 28px; font-weight: 400;
+        color: var(--white); line-height: 1.1;
+        letter-spacing: -0.02em;
     }
-    
-    @media (min-width: 768px) {
-        .summary-title {
-            font-size: 1.5rem;
-        }
-    }
-    
-    .summary-rows {
-        display: grid;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-    }
-    
+
+    .summary-body { padding: 32px 36px; }
+
     .summary-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 0.875rem;
+        display: flex; justify-content: space-between; align-items: baseline;
+        padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-    
-    @media (min-width: 768px) {
-        .summary-row {
-            font-size: 1rem;
-        }
+    .summary-row:last-of-type { border-bottom: none; }
+
+    .summary-row-label {
+        font-size: 12px; font-weight: 400;
+        color: rgba(255,255,255,0.42);
+        letter-spacing: 0.02em;
     }
-    
-    .summary-label {
-        color: var(--gray-700);
-        font-weight: 300;
+
+    .summary-row-value {
+        font-size: 14px; font-weight: 500;
+        color: rgba(255,255,255,0.7);
     }
-    
-    .summary-value {
-        font-weight: 600;
-        color: var(--gray-900);
+
+    .summary-total-row {
+        display: flex; justify-content: space-between; align-items: baseline;
+        padding: 24px 0 0;
+        margin-top: 8px;
+        border-top: 1px solid rgba(255,255,255,0.12);
     }
-    
-    .summary-divider {
-        height: 1px;
-        background: var(--gray-200);
+
+    .summary-total-label {
+        font-size: 11px; font-weight: 700;
+        letter-spacing: 0.16em; text-transform: uppercase;
+        color: rgba(255,255,255,0.5);
     }
-    
-    .summary-total {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 1.125rem;
+
+    .summary-total-amount {
+        font-family: 'Fraunces', serif;
+        font-size: 36px; font-weight: 600;
+        color: var(--white); line-height: 1;
+        letter-spacing: -0.02em;
     }
-    
-    @media (min-width: 768px) {
-        .summary-total {
-            font-size: 1.25rem;
-        }
+    .summary-total-curr { font-size: 18px; font-weight: 400; opacity: 0.4; margin-right: 3px; }
+
+    .summary-footer { padding: 0 36px 36px; }
+
+    .btn-checkout {
+        display: flex; align-items: center; justify-content: center; gap: 10px;
+        width: 100%;
+        background: var(--amber); color: var(--white);
+        padding: 18px 24px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 12px; font-weight: 700;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        text-decoration: none; border: none; cursor: pointer;
+        transition: background 0.25s ease;
+        margin-bottom: 16px;
     }
-    
-    .summary-total .summary-label,
-    .summary-total .summary-value {
-        font-weight: 700;
-        color: var(--gray-900);
+    .btn-checkout:hover { background: #b5661f; }
+    .btn-checkout svg { transition: transform 0.2s ease; }
+    .btn-checkout:hover svg { transform: translateX(3px); }
+
+    .security-note {
+        display: flex; align-items: center; gap: 10px;
+        padding: 14px 16px;
+        border: 1px solid rgba(255,255,255,0.07);
+        background: rgba(255,255,255,0.03);
     }
-    
-    /* Security Badge */
-    .security-badge {
-        margin-top: 1.5rem;
-        padding: 1rem;
-        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-        border-radius: 12px;
-    }
-    
-    .badge-content {
-        display: flex;
-        align-items: flex-start;
-        gap: 0.75rem;
-    }
-    
-    .badge-icon {
-        width: 20px;
-        height: 20px;
-        color: var(--primary);
-        flex-shrink: 0;
-        margin-top: 2px;
-    }
-    
-    .badge-title {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: var(--primary);
-        margin-bottom: 0.25rem;
-    }
-    
-    .badge-desc {
-        font-size: 0.75rem;
-        color: var(--gray-600);
-        font-weight: 300;
-    }
-    
-    /* Empty State */
-    .empty-state {
-        padding: 3rem 1rem;
+
+    .security-note svg { color: var(--green); flex-shrink: 0; }
+
+    .security-note-text {}
+    .security-note-title { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); margin-bottom: 2px; }
+    .security-note-desc  { font-size: 11px; font-weight: 300; color: rgba(255,255,255,0.3); }
+
+    /* ── EMPTY STATE ──────────────────────────── */
+    .cart-empty {
+        background: var(--white);
+        border: 1px solid var(--rule);
+        padding: 100px 60px;
         text-align: center;
+        animation: itemIn 0.55s cubic-bezier(0.16,1,0.3,1) both;
     }
-    
-    @media (min-width: 768px) {
-        .empty-state {
-            padding: 4rem 2rem;
-        }
-    }
-    
+
     .empty-icon {
-        width: 80px;
-        height: 80px;
-        background: var(--gray-100);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1.5rem;
+        width: 64px; height: 64px;
+        border: 1px solid var(--rule);
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 28px;
     }
-    
-    @media (min-width: 768px) {
-        .empty-icon {
-            width: 96px;
-            height: 96px;
-        }
-    }
-    
-    .empty-icon svg {
-        width: 40px;
-        height: 40px;
-        color: var(--gray-400);
-    }
-    
-    @media (min-width: 768px) {
-        .empty-icon svg {
-            width: 48px;
-            height: 48px;
-        }
-    }
-    
+    .empty-icon svg { color: var(--muted); }
+
     .empty-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--gray-900);
-        margin-bottom: 0.75rem;
+        font-family: 'Fraunces', serif;
+        font-size: clamp(28px, 4vw, 44px);
+        font-weight: 400; color: var(--ink);
+        letter-spacing: -0.02em; margin-bottom: 12px;
     }
-    
-    @media (min-width: 768px) {
-        .empty-title {
-            font-size: 2rem;
-        }
-    }
-    
+
     .empty-desc {
-        font-size: 0.875rem;
-        color: var(--gray-600);
-        font-weight: 300;
-        margin-bottom: 2rem;
+        font-size: 15px; font-weight: 300;
+        color: var(--muted); margin-bottom: 40px;
+        line-height: 1.7;
     }
-    
-    @media (min-width: 768px) {
-        .empty-desc {
-            font-size: 1.125rem;
-        }
+
+    .btn-browse {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: var(--ink); color: var(--white);
+        padding: 16px 40px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 700;
+        letter-spacing: 0.12em; text-transform: uppercase;
+        text-decoration: none; border: none; cursor: pointer;
+        transition: background 0.25s ease;
     }
-    
-    /* Animations */
-    .fade-in {
-        animation: fadeIn 0.5s ease-out forwards;
+    .btn-browse:hover { background: var(--green); }
+
+    /* ── RESPONSIVE ───────────────────────────── */
+    @media (max-width: 1100px) {
+        .cart-page { padding: 40px 32px 80px; }
+        .cart-grid { grid-template-columns: 1fr; gap: 20px; }
+        .summary-panel { position: static; }
+        .cart-header { flex-direction: column; align-items: flex-start; gap: 20px; }
     }
-    
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+
+    @media (max-width: 720px) {
+        .cart-item { grid-template-columns: 1fr; }
+        .item-img-panel { min-height: 240px; }
+        .item-content { padding: 24px 22px; }
+        .item-controls { flex-direction: column; align-items: flex-start; gap: 14px; }
+        .cart-empty { padding: 60px 24px; }
     }
 </style>
 
-<!-- Shopping Cart Section -->
-<section style="min-height: 100vh; padding: 1.5rem 0;">
-    <div class="container">
-        
-        <!-- Header -->
-        <div class="page-header fade-in">
-            <div class="header-content">
-                <div>
-                    <h1 class="page-title">Shopping Cart</h1>
-                    <p class="page-subtitle">
-                        {% if cart_count > 0 %}
-                            {{ cart_count }} item{{ cart_count|pluralize }} in your cart
-                            {% if user_category and user_category != 'End User' %}
-                                <span class="category-badge">
-                                    • {{ user_category }} Pricing Applied
-                                </span>
-                            {% endif %}
-                        {% else %}
-                            Your cart is empty
-                        {% endif %}
-                    </p>
+<div class="cart-page">
+
+    <!-- ── HEADER ─────────────────────────────── -->
+    <div class="cart-header">
+        <div>
+            <div class="cart-eyebrow">
+                <div class="cart-eyebrow-line"></div>
+                <span>Your Selection</span>
+            </div>
+            <h1 class="cart-title">
+                Shopping <em>Cart</em>
+            </h1>
+            <div class="cart-meta">
+                {% if cart_count > 0 %}
+                    {{ cart_count }} item{{ cart_count|pluralize }} selected
+                    {% if user_category and user_category != 'End User' %}
+                        <span class="cart-meta-badge">{{ user_category }} Pricing</span>
+                    {% endif %}
+                {% else %}
+                    No items yet
+                {% endif %}
+            </div>
+        </div>
+        <a href="{% url 'main:products' %}" class="btn-continue">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+            Continue Shopping
+        </a>
+    </div>
+
+    {% if cart_items %}
+
+    <div class="cart-grid">
+
+        <!-- ── ITEMS ───────────────────────────── -->
+        <div class="cart-items">
+            {% for cart_item in cart_items %}
+            <div class="cart-item" style="animation-delay: {{ forloop.counter0|multiply:0.1 }}s;">
+
+                <!-- Image -->
+                <div class="item-img-panel">
+                    {% if cart_item.item.image %}
+                        <img src="https://console.afrikbook.com{{ cart_item.item.image }}" alt="{{ cart_item.item.item_name }}">
+                        <div class="item-img-overlay"></div>
+                    {% else %}
+                        <div class="item-no-img">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#c0c8c2" stroke-width="1">
+                                <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                    {% endif %}
                 </div>
-                <a href="{% url 'main:products' %}">
-                    <button class="btn-secondary">
-                        Continue Shopping
-                    </button>
+
+                <!-- Content -->
+                <div class="item-content">
+                    <div class="item-top">
+                        <div class="item-cat">Energy Storage System</div>
+                        <h3 class="item-name">{{ cart_item.item.item_name }}</h3>
+                        <div class="item-price">
+                            <span class="item-price-curr">₦</span>{{ cart_item.item.selling_price|floatformat:0|intcomma }}
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="item-divider"></div>
+
+                        <div class="item-controls">
+                            <!-- Quantity -->
+                            <div class="qty-wrap">
+                                <button class="qty-btn"
+                                    onclick="updateQuantity('{{ cart_item.item.generated_code }}', {{ cart_item.quantity|add:'-1' }})">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 12H4"/>
+                                    </svg>
+                                </button>
+                                <input type="number" value="{{ cart_item.quantity }}" class="qty-input" min="1" readonly>
+                                <button class="qty-btn"
+                                    onclick="updateQuantity('{{ cart_item.item.generated_code }}', {{ cart_item.quantity|add:'1' }})">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- Remove -->
+                            <button class="btn-remove"
+                                onclick="removeFromCart('{{ cart_item.item.generated_code }}')">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                                Remove
+                            </button>
+                        </div>
+
+                        <div class="item-subtotal">
+                            <span class="subtotal-label">Line Total</span>
+                            <span class="subtotal-amount">
+                                <span class="subtotal-curr">₦</span>{{ cart_item.subtotal|floatformat:0|intcomma }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- ── SUMMARY ─────────────────────────── -->
+        <div class="summary-panel">
+            <div class="summary-header">
+                <div class="summary-eyebrow">
+                    <div class="summary-eyebrow-line"></div>
+                    <span>Summary</span>
+                </div>
+                <div class="summary-title">Order Total</div>
+            </div>
+
+            <div class="summary-body">
+                <div class="summary-row">
+                    <span class="summary-row-label">Subtotal ({{ cart_count }} item{{ cart_count|pluralize }})</span>
+                    <span class="summary-row-value">₦{{ total|floatformat:0|intcomma }}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-row-label">Shipping</span>
+                    <span class="summary-row-value" style="color:rgba(255,255,255,0.35); font-size:12px;">At checkout</span>
+                </div>
+                <div class="summary-total-row">
+                    <span class="summary-total-label">Total</span>
+                    <span class="summary-total-amount">
+                        <span class="summary-total-curr">₦</span>{{ total|floatformat:0|intcomma }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="summary-footer">
+                <a href="{% url 'main:checkout' %}" class="btn-checkout">
+                    Proceed to Checkout
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
                 </a>
+                <div class="security-note">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                    <div class="security-note-text">
+                        <div class="security-note-title">Secure Checkout</div>
+                        <div class="security-note-desc">Your payment info is fully protected</div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        {% if cart_items %}
-            <div class="main-grid">
-                
-                <!-- Cart Items -->
-                <div>
-                    {% for cart_item in cart_items %}
-                    <div class="card cart-item fade-in" style="animation-delay: {{ forloop.counter0|multiply:0.1 }}s;">
-                        <div class="item-content">
-                            <!-- Product Image -->
-                            <div class="item-image">
-                                {% if cart_item.item.image %}
-                                    <img src="https://console.afrikbook.com{{ cart_item.item.image }}" alt="{{ cart_item.item.item_name }}">
-                                {% else %}
-                                    <div class="item-placeholder">
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                    </div>
-                                {% endif %}
-                            </div>
-
-                            <!-- Product Details -->
-                            <div class="item-details">
-                                <h3 class="item-name">{{ cart_item.item.item_name }}</h3>
-                                <p class="item-price">₦{{ cart_item.item.selling_price|floatformat:0|intcomma }}</p>
-
-                                <div class="item-actions">
-                                    <!-- Quantity Controls -->
-                                    <div class="quantity-controls">
-                                        <button 
-                                            class="quantity-btn"
-                                            onclick="updateQuantity('{{ cart_item.item.generated_code }}', {{ cart_item.quantity|add:"-1" }})"
-                                        >
-                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                                            </svg>
-                                        </button>
-                                        <input 
-                                            type="number" 
-                                            value="{{ cart_item.quantity }}" 
-                                            class="quantity-input"
-                                            min="1"
-                                            readonly
-                                        >
-                                        <button 
-                                            class="quantity-btn"
-                                            onclick="updateQuantity('{{ cart_item.item.generated_code }}', {{ cart_item.quantity|add:"1" }})"
-                                        >
-                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                            </svg>
-                                        </button>
-                                    </div>
-
-                                    <!-- Remove Button -->
-                                    <button 
-                                        class="btn-remove"
-                                        onclick="removeFromCart('{{ cart_item.item.generated_code }}')"
-                                    >
-                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                        </svg>
-                                        Remove
-                                    </button>
-                                </div>
-
-                                <!-- Subtotal -->
-                                <div class="item-subtotal">
-                                    <span class="subtotal-label">Subtotal:</span>
-                                    <span class="subtotal-amount">₦{{ cart_item.subtotal|floatformat:0|intcomma }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-
-                <!-- Order Summary -->
-                <div>
-                    <div class="card summary-card fade-in" style="animation-delay: 0.2s;">
-                        <h2 class="summary-title">Order Summary</h2>
-                        
-                        <div class="summary-rows">
-                            <div class="summary-row">
-                                <span class="summary-label">Subtotal</span>
-                                <span class="summary-value">₦{{ total|floatformat:0|intcomma }}</span>
-                            </div>
-                            <div class="summary-row">
-                                <span class="summary-label">Shipping</span>
-                                <span class="summary-value">Calculated at checkout</span>
-                            </div>
-                            <div class="summary-divider"></div>
-                            <div class="summary-total">
-                                <span class="summary-label">Total</span>
-                                <span class="summary-value">₦{{ total|floatformat:0|intcomma }}</span>
-                            </div>
-                        </div>
-
-                        <a href="{% url 'main:checkout' %}">
-                            <button class="btn-primary">
-                                Proceed to Checkout
-                            </button>
-                        </a>
-
-                        <div class="security-badge">
-                            <div class="badge-content">
-                                <svg class="badge-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                                </svg>
-                                <div>
-                                    <p class="badge-title">Secure Checkout</p>
-                                    <p class="badge-desc">Your payment information is protected</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        {% else %}
-            <!-- Empty Cart State -->
-            <div class="card fade-in">
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                        </svg>
-                    </div>
-                    <h2 class="empty-title">Your Cart is Empty</h2>
-                    <p class="empty-desc">Start shopping to add items to your cart</p>
-                    <a href="{% url 'main:products' %}">
-                        <button class="btn-primary">
-                            Browse Products
-                        </button>
-                    </a>
-                </div>
-            </div>
-        {% endif %}
-
     </div>
-</section>
+
+    {% else %}
+
+    <!-- ── EMPTY STATE ─────────────────────────── -->
+    <div class="cart-empty">
+        <div class="empty-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+        </div>
+        <h2 class="empty-title">Your Cart is <em style="font-style:italic; color:var(--muted)">Empty</em></h2>
+        <p class="empty-desc">You haven't added any items yet.<br>Browse our range of energy storage solutions.</p>
+        <a href="{% url 'main:products' %}" class="btn-browse">
+            Browse Products
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </a>
+    </div>
+
+    {% endif %}
+
+</div>
 
 <script>
 function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
+    let val = null;
+    if (document.cookie) document.cookie.split(';').forEach(c => {
+        c = c.trim();
+        if (c.startsWith(name + '=')) val = decodeURIComponent(c.slice(name.length + 1));
+    });
+    return val;
 }
 
-async function updateQuantity(itemId, newQuantity) {
-    if (newQuantity < 1) return;
-    
+async function updateQuantity(itemId, qty) {
+    if (qty < 1) return;
     try {
-        const response = await fetch('/cart/update/', {
+        const res = await fetch('/cart/update/', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            body: JSON.stringify({
-                item_id: itemId,
-                quantity: newQuantity
-            })
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+            body: JSON.stringify({ item_id: itemId, quantity: qty })
         });
-
-        if (response.ok) {
-            location.reload();
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Failed to update quantity');
-    }
+        if (res.ok) location.reload();
+    } catch (e) { console.error(e); }
 }
 
 async function removeFromCart(itemId) {
-    if (!confirm('Remove this item from cart?')) return;
-    
+    if (!confirm('Remove this item from your cart?')) return;
     try {
-        const response = await fetch('/cart/remove/', {
+        const res = await fetch('/cart/remove/', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            body: JSON.stringify({
-                item_id: itemId
-            })
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+            body: JSON.stringify({ item_id: itemId })
         });
-
-        if (response.ok) {
-            location.reload();
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Failed to remove item');
-    }
+        if (res.ok) location.reload();
+    } catch (e) { console.error(e); }
 }
 </script>
 
