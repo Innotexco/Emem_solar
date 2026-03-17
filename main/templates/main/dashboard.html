@@ -2,728 +2,594 @@
 {% load static %}
 {% load humanize %}
 
-{% block title %}Admin Dashboard - Solar Battery Store{% endblock %}
+{% block title %}Admin Dashboard - Emem Energy{% endblock %}
 
 {% block content %}
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-    
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap');
+
     :root {
-        --primary: #059669;
-        --primary-dark: #047857;
-        --primary-light: #d1fae5;
-        --gray-50: #f9fafb;
-        --gray-100: #f3f4f6;
-        --gray-200: #e5e7eb;
-        --gray-300: #d1d5db;
-        --gray-400: #9ca3af;
-        --gray-500: #6b7280;
-        --gray-600: #4b5563;
-        --gray-700: #374151;
-        --gray-800: #1f2937;
-        --gray-900: #111827;
+        --ink:       #0c1a0f;
+        --ink-mid:   #1e3324;
+        --green:     #0a6640;
+        --green-sat: #0d8c55;
+        --amber:     #c8752e;
+        --rule:      #d6dfd9;
+        --surface:   #f4f7f5;
+        --white:     #ffffff;
+        --muted:     #607568;
+        --danger:    #c0392b;
+        --danger-lt: #fef2f2;
     }
-    
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-        background: var(--gray-50);
-        color: var(--gray-900);
-        font-size: 16px;
-        line-height: 1.6;
+        font-family: 'Outfit', sans-serif;
+        color: var(--ink);
+        background: var(--surface);
+        -webkit-font-smoothing: antialiased;
         min-height: 100vh;
     }
-    
-    /* Container */
-    .container {
-        width: 100%;
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 1rem;
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
-    
-    @media (min-width: 640px) {
-        .container {
-            padding: 1.5rem;
-        }
+
+    /* ── HERO ─────────────────────────────────── */
+    .admin-hero {
+        background: var(--ink);
+        position: relative; overflow: hidden; margin-bottom: 2px;
     }
-    
-    @media (min-width: 1024px) {
-        .container {
-            padding: 2rem;
-        }
+
+    .hero-grid {
+        position: absolute; inset: 0;
+        background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 80px);
+        pointer-events: none;
     }
-    
-    /* Header */
-    .page-header {
-        margin-bottom: 1.5rem;
+
+    .hero-orb {
+        position: absolute; top: -80px; right: -60px;
+        width: 340px; height: 340px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(10,102,64,0.2) 0%, transparent 70%);
+        pointer-events: none;
     }
-    
-    @media (min-width: 1024px) {
-        .page-header {
-            margin-bottom: 2rem;
-        }
+
+    .hero-inner {
+        position: relative; max-width: 1320px; margin: 0 auto;
+        padding: 48px 60px;
+        display: flex; align-items: flex-end;
+        justify-content: space-between; gap: 40px;
     }
-    
-    .page-title {
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: var(--gray-900);
-        margin-bottom: 0.25rem;
-        line-height: 1.2;
+
+    .hero-eyebrow {
+        display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
     }
-    
-    @media (min-width: 1024px) {
-        .page-title {
-            font-size: 2.5rem;
-        }
+    .hero-eyebrow-line { width: 24px; height: 1px; background: var(--amber); }
+    .hero-eyebrow span {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.22em;
+        text-transform: uppercase; color: var(--amber);
     }
-    
-    .page-subtitle {
-        font-size: 0.875rem;
-        color: var(--gray-600);
+
+    .hero-title {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(28px, 3.5vw, 44px); font-weight: 300;
+        color: var(--white); line-height: 1.0; letter-spacing: -0.025em;
+        margin-bottom: 8px;
     }
-    
-    @media (min-width: 1024px) {
-        .page-subtitle {
-            font-size: 1rem;
-        }
+    .hero-title em { font-style: italic; color: rgba(255,255,255,0.35); }
+
+    .hero-sub { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.42); }
+
+    .hero-date {
+        text-align: right; flex-shrink: 0;
     }
-    
-    /* Stats Grid */
-    .stats-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
+    .hero-date-label {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+        text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 6px;
     }
-    
-    @media (min-width: 640px) {
-        .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
+    .hero-date-val {
+        font-family: 'Fraunces', serif; font-size: 16px; font-weight: 300;
+        color: rgba(255,255,255,0.55); letter-spacing: -0.01em;
     }
-    
-    @media (min-width: 1024px) {
-        .stats-grid {
-            grid-template-columns: repeat(4, 1fr);
-            margin-bottom: 2rem;
-        }
+
+    /* ── PAGE ─────────────────────────────────── */
+    .admin-page {
+        max-width: 1320px; margin: 0 auto; padding: 0 60px 100px;
     }
-    
+
+    /* ── STATS ────────────────────────────────── */
+    .stats-row {
+        display: grid; grid-template-columns: repeat(4, 1fr);
+        gap: 2px; margin-bottom: 2px;
+        animation: fadeUp 0.55s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
     .stat-card {
-        background: white;
-        border: 1px solid var(--gray-200);
-        border-radius: 16px;
-        padding: 1.5rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
+        background: var(--white); border: 1px solid var(--rule);
+        padding: 32px 28px; position: relative; overflow: hidden;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease;
     }
-    
-    .stat-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-        transform: scaleX(0);
-        transform-origin: left;
-        transition: transform 0.3s ease;
+    .stat-card:hover {
+        border-color: rgba(10,102,64,0.2);
+        box-shadow: 0 2px 16px rgba(12,26,15,0.06);
+        z-index: 1;
     }
-    
-    @media (min-width: 1024px) {
-        .stat-card:hover {
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            border-color: var(--primary);
-            transform: translateY(-4px);
-        }
-        
-        .stat-card:hover::before {
-            transform: scaleX(1);
-        }
+
+    .stat-card-rule {
+        position: absolute; top: 0; left: 28px;
+        width: 32px; height: 2px; background: var(--green);
+        transform: scaleX(0); transform-origin: left;
+        transition: transform 0.35s ease;
     }
-    
+    .stat-card:hover .stat-card-rule { transform: scaleX(1); }
+
+    .stat-num {
+        font-family: 'Fraunces', serif; font-size: 48px; font-weight: 600;
+        color: var(--ink); line-height: 1; letter-spacing: -0.02em;
+        margin-bottom: 10px;
+    }
+    .stat-num.amber { color: var(--amber); }
+    .stat-num.green { color: var(--green); }
+
     .stat-label {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--gray-600);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-bottom: 0.75rem;
+        font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+        text-transform: uppercase; color: var(--muted);
+        display: flex; align-items: center; gap: 8px;
     }
-    
-    @media (min-width: 1024px) {
-        .stat-label {
-            font-size: 0.8125rem;
-        }
-    }
-    
-    .stat-value {
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--gray-900);
-        margin-bottom: 0.75rem;
-        line-height: 1;
-    }
-    
-    @media (min-width: 1024px) {
-        .stat-value {
-            font-size: 2.5rem;
-        }
-    }
-    
+    .stat-label::before { content: ''; display: block; width: 14px; height: 1px; background: var(--rule); }
+
     .stat-meta {
-        font-size: 0.8125rem;
-        color: var(--gray-600);
-        font-weight: 500;
+        font-size: 11px; font-weight: 300; color: var(--muted); margin-top: 6px;
     }
-    
-    /* Main Grid */
-    .main-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+
+    /* ── MAIN GRID ────────────────────────────── */
+    .admin-grid {
+        display: grid; grid-template-columns: 1fr 320px;
+        gap: 2px; align-items: start;
     }
-    
-    @media (min-width: 1024px) {
-        .main-grid {
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-        }
+
+    /* ── ORDERS TABLE ─────────────────────────── */
+    .orders-card {
+        background: var(--white); border: 1px solid var(--rule);
+        animation: fadeUp 0.55s 0.1s cubic-bezier(0.16,1,0.3,1) both;
     }
-    
-    /* Card */
-    .card {
-        background: white;
-        border: 1px solid var(--gray-200);
-        border-radius: 16px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        overflow: hidden;
-        transition: all 0.3s ease;
+
+    .card-head {
+        padding: 24px 36px; border-bottom: 1px solid var(--rule);
+        display: flex; align-items: center; justify-content: space-between;
     }
-    
-    @media (min-width: 1024px) {
-        .card:hover {
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-        }
+
+    .card-head-label {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+        text-transform: uppercase; color: var(--muted);
+        display: flex; align-items: center; gap: 8px;
     }
-    
-    .card-header {
-        padding: 1.25rem 1.5rem;
-        border-bottom: 1px solid var(--gray-200);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        background: linear-gradient(to bottom, var(--gray-50), white);
+    .card-head-label::before { content: ''; display: block; width: 16px; height: 1px; background: var(--green); }
+
+    .view-all {
+        font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; color: var(--green); text-decoration: none;
+        display: flex; align-items: center; gap: 5px; transition: gap 0.2s;
     }
-    
-    .card-title {
-        font-size: 1.125rem;
-        font-weight: 700;
-        color: var(--gray-900);
-        margin: 0;
-    }
-    
-    @media (min-width: 1024px) {
-        .card-title {
-            font-size: 1.25rem;
-        }
-    }
-    
-    .view-link {
-        color: var(--primary);
-        font-size: 0.875rem;
-        font-weight: 600;
-        text-decoration: none;
-        white-space: nowrap;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-    }
-    
-    @media (min-width: 1024px) {
-        .view-link:hover {
-            color: var(--primary-dark);
-            gap: 0.5rem;
-        }
-    }
-    
+    .view-all:hover { gap: 9px; }
+
     /* Table */
-    .table-wrap {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.875rem;
-    }
-    
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead tr { border-bottom: 1px solid var(--rule); }
+
     th {
-        text-align: left;
-        padding: 1rem 1.25rem;
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--gray-600);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        background: var(--gray-50);
-        white-space: nowrap;
+        padding: 14px 20px; text-align: left;
+        font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+        text-transform: uppercase; color: var(--muted);
+        background: var(--surface); white-space: nowrap;
     }
-    
+    th:first-child { padding-left: 36px; }
+    th:last-child  { padding-right: 36px; }
+
     td {
-        padding: 1rem 1.25rem;
-        border-top: 1px solid var(--gray-200);
-        white-space: nowrap;
+        padding: 18px 20px; font-size: 13px;
+        border-bottom: 1px solid var(--rule); white-space: nowrap;
+        color: var(--ink);
     }
-    
-    tbody tr {
-        transition: all 0.2s ease;
+    td:first-child { padding-left: 36px; }
+    td:last-child  { padding-right: 36px; }
+
+    tbody tr:last-child td { border-bottom: none; }
+
+    tbody tr { transition: background 0.2s ease; }
+    tbody tr:hover { background: var(--surface); }
+
+    .td-order {
+        font-family: 'Fraunces', serif; font-size: 16px; font-weight: 400;
+        color: var(--green); text-decoration: none; letter-spacing: -0.01em;
+        transition: color 0.2s;
     }
-    
-    @media (min-width: 1024px) {
-        tbody tr:hover {
-            background: linear-gradient(to right, rgba(5, 150, 105, 0.02), transparent);
-        }
+    .td-order:hover { color: var(--green-sat); }
+
+    .td-customer { font-size: 13px; font-weight: 500; color: var(--ink); }
+
+    .td-amount {
+        font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600;
+        color: var(--ink); letter-spacing: -0.01em;
     }
-    
-    .order-link {
-        color: var(--primary);
-        text-decoration: none;
-        font-weight: 600;
-        transition: color 0.2s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.25rem;
-    }
-    
-    @media (min-width: 1024px) {
-        .order-link:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
-        }
-    }
-    
+    .td-amount-curr { font-size: 11px; font-weight: 400; opacity: 0.4; margin-right: 1px; }
+
+    .td-date { font-size: 12px; font-weight: 300; color: var(--muted); }
+
     /* Badges */
     .badge {
-        display: inline-block;
-        padding: 0.375rem 0.75rem;
-        border-radius: 999px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        white-space: nowrap;
-        letter-spacing: 0.01em;
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 4px 10px; font-size: 10px; font-weight: 700;
+        letter-spacing: 0.12em; text-transform: uppercase;
     }
-    
-    .badge-pickup { 
-        background: linear-gradient(135deg, #dbeafe, #bfdbfe); 
-        color: #1e40af; 
+    .badge-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+
+    .badge-pickup     { background: #eff6ff; color: #1e40af; }
+    .badge-home       { background: rgba(10,102,64,0.08); color: var(--green); }
+    .badge-success    { background: rgba(10,102,64,0.08); color: var(--green); }
+    .badge-cancelled  { background: var(--danger-lt); color: var(--danger); }
+    .badge-pending    { background: #fffbeb; color: #92400e; }
+    .badge-default    { background: var(--surface); color: var(--muted); }
+
+    /* Table empty */
+    .table-empty {
+        padding: 60px; text-align: center;
+        font-size: 13px; font-weight: 300; color: var(--muted);
     }
-    
-    .badge-home { 
-        background: linear-gradient(135deg, #d1fae5, #a7f3d0); 
-        color: #065f46; 
+
+    /* ── SIDEBAR ──────────────────────────────── */
+    .admin-sidebar {
+        display: flex; flex-direction: column; gap: 2px;
+        position: sticky; top: 24px;
+        animation: fadeUp 0.55s 0.15s cubic-bezier(0.16,1,0.3,1) both;
     }
-    
-  .badge-cancelled { 
-        background: linear-gradient(135deg, #fee2e2, #fecaca); 
-        color: #991b1b; 
+
+    /* Actions panel — dark */
+    .actions-panel { background: var(--ink); border: 1px solid rgba(255,255,255,0.06); }
+
+    .actions-head {
+        padding: 24px 28px; border-bottom: 1px solid rgba(255,255,255,0.07);
     }
-    
-    .badge-delivered { 
-        background: linear-gradient(135deg, #d1fae5, #a7f3d0); 
-        color: #065f46; 
+
+    .actions-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .actions-eyebrow-line { width: 18px; height: 1px; background: var(--amber); }
+    .actions-eyebrow span {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+        text-transform: uppercase; color: var(--amber);
     }
-    
-    /* Sidebar */
-    .sidebar {
-        display: grid;
-        gap: 1.5rem;
+
+    .actions-title {
+        font-family: 'Fraunces', serif; font-size: 20px; font-weight: 400;
+        color: var(--white); letter-spacing: -0.02em;
     }
-    
-    /* Quick Actions */
-    .actions {
-        padding: 1.25rem;
-        display: grid;
-        gap: 0.75rem;
+
+    .actions-list { display: flex; flex-direction: column; gap: 1px; background: rgba(255,255,255,0.04); }
+
+    .action-item {
+        display: flex; align-items: center; gap: 14px;
+        padding: 16px 28px; text-decoration: none;
+        background: var(--ink); transition: background 0.2s ease;
     }
-    
-    .action-btn {
-        display: flex;
-        align-items: center;
-        gap: 0.875rem;
-        padding: 1rem 1.25rem;
-        background: white;
-        border: 2px solid var(--gray-200);
-        border-radius: 12px;
-        text-decoration: none;
-        color: var(--gray-900);
-        font-weight: 600;
-        font-size: 0.875rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        min-height: 48px;
-        position: relative;
-        overflow: hidden;
+    .action-item:hover { background: #101d14; }
+
+    .action-icon {
+        width: 34px; height: 34px; flex-shrink: 0;
+        border: 1px solid rgba(255,255,255,0.1);
+        display: flex; align-items: center; justify-content: center;
+        transition: all 0.25s ease;
     }
-    
-    .action-btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 4px;
-        height: 100%;
-        background: var(--primary);
-        transform: scaleY(0);
-        transition: transform 0.3s ease;
+    .action-item:hover .action-icon { border-color: var(--amber); background: rgba(200,117,46,0.08); }
+    .action-icon svg { color: rgba(255,255,255,0.45); transition: color 0.25s; }
+    .action-item:hover .action-icon svg { color: var(--amber); }
+
+    .action-label { font-size: 13px; font-weight: 500; color: var(--white); line-height: 1.3; }
+
+    .action-arrow { margin-left: auto; color: rgba(255,255,255,0.15); transition: all 0.2s; flex-shrink: 0; }
+    .action-item:hover .action-arrow { color: var(--amber); transform: translateX(3px); }
+
+    /* Alerts panel — light */
+    .alerts-panel { background: var(--white); border: 1px solid var(--rule); }
+
+    .alerts-head {
+        padding: 20px 28px; border-bottom: 1px solid var(--rule);
+        display: flex; align-items: center; justify-content: space-between;
     }
-    
-    @media (min-width: 1024px) {
-        .action-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: linear-gradient(to right, rgba(5, 150, 105, 0.05), white);
-            transform: translateX(4px);
-        }
-        
-        .action-btn:hover::before {
-            transform: scaleY(1);
-        }
+
+    .alerts-label {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+        text-transform: uppercase; color: var(--muted);
+        display: flex; align-items: center; gap: 8px;
     }
-    
-    .action-btn svg {
-        width: 20px;
-        height: 20px;
-        flex-shrink: 0;
-        transition: transform 0.3s ease;
+    .alerts-label::before { content: ''; display: block; width: 14px; height: 1px; background: var(--green); }
+
+    .alerts-count {
+        display: inline-flex; align-items: center; gap: 4px;
+        padding: 3px 10px; font-size: 10px; font-weight: 700;
+        letter-spacing: 0.1em; text-transform: uppercase;
+        background: rgba(200,117,46,0.1); color: var(--amber);
     }
-    
-    @media (min-width: 1024px) {
-        .action-btn:hover svg {
-            transform: scale(1.1);
-        }
+
+    .alerts-list { display: flex; flex-direction: column; gap: 0; }
+
+    .alert-row {
+        display: flex; gap: 14px; align-items: flex-start;
+        padding: 16px 28px; border-bottom: 1px solid var(--rule);
+        transition: background 0.2s ease;
     }
-    
-    /* Alerts */
-    .alerts {
-        padding: 1.25rem;
+    .alert-row:last-of-type { border-bottom: none; }
+    .alert-row:hover { background: var(--surface); }
+
+    .alert-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: var(--amber); flex-shrink: 0; margin-top: 5px;
     }
-    
-    .alert-item {
-        display: flex;
-        gap: 0.875rem;
-        padding: 1rem;
-        background: linear-gradient(135deg, #fffbeb, #fef3c7);
-        border: 1px solid #fde68a;
-        border-radius: 12px;
-        margin-bottom: 0.75rem;
-        transition: all 0.3s ease;
+
+    .alert-item-name {
+        font-size: 13px; font-weight: 500; color: var(--ink);
+        margin-bottom: 3px; line-height: 1.3;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        max-width: 180px;
     }
-    
-    .alert-item:last-child {
-        margin-bottom: 0;
+    .alert-item-date { font-size: 11px; font-weight: 300; color: var(--muted); }
+
+    .alerts-empty {
+        padding: 40px 28px; text-align: center;
+        font-size: 13px; font-weight: 300; color: var(--muted);
     }
-    
-    @media (min-width: 1024px) {
-        .alert-item:hover {
-            transform: translateX(4px);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
-        }
+
+    .btn-view-alerts {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        padding: 16px 28px; margin: 0;
+        background: var(--surface); color: var(--green);
+        font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+        text-transform: uppercase; text-decoration: none;
+        border-top: 1px solid var(--rule); transition: background 0.2s;
     }
-    
-    .alert-icon {
-        width: 20px;
-        height: 20px;
-        color: #f59e0b;
-        flex-shrink: 0;
-        margin-top: 2px;
+    .btn-view-alerts:hover { background: rgba(10,102,64,0.05); }
+
+    /* ── RESPONSIVE ───────────────────────────── */
+    @media (max-width: 1100px) {
+        .hero-inner, .admin-page { padding-left: 32px; padding-right: 32px; }
+        .hero-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
+        .hero-date { text-align: left; }
+        .stats-row { grid-template-columns: repeat(2, 1fr); }
+        .admin-grid { grid-template-columns: 1fr; gap: 20px; }
+        .admin-sidebar { position: static; }
+        .admin-page { padding-bottom: 80px; }
     }
-    
-    .alert-content {
-        flex: 1;
-        min-width: 0;
-    }
-    
-    .alert-title {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: var(--gray-900);
-        margin-bottom: 0.25rem;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    
-    .alert-date {
-        font-size: 0.75rem;
-        color: var(--gray-600);
-        font-weight: 500;
-    }
-    
-    /* Empty state */
-    .empty {
-        text-align: center;
-        padding: 3rem 1rem;
-        color: var(--gray-500);
-        font-size: 0.875rem;
-    }
-    
-    /* Button */
-    .btn-primary {
-        display: block;
-        width: 100%;
-        padding: 0.875rem 1rem;
-        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-weight: 600;
-        font-size: 0.875rem;
-        text-align: center;
-        text-decoration: none;
-        margin-top: 1rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        min-height: 48px;
-        line-height: 1.5;
-        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
-    }
-    
-    @media (min-width: 1024px) {
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
-        }
-        
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-    }
-    
-    /* Animation */
-    .fade-in {
-        animation: fadeIn 0.5s ease-out forwards;
-    }
-    
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    /* Responsive improvements */
+
     @media (max-width: 640px) {
-        .stat-card {
-            padding: 1.25rem;
-        }
-        
-        th, td {
-            padding: 0.75rem !important;
-            font-size: 0.8125rem;
-        }
-        
-        th {
-            font-size: 0.6875rem;
-        }
+        .stats-row { grid-template-columns: 1fr 1fr; }
+        th:first-child, td:first-child { padding-left: 20px; }
+        th:last-child, td:last-child   { padding-right: 20px; }
+        .card-head { padding-left: 20px; padding-right: 20px; }
     }
 </style>
 
-<section style="min-height: 100vh; padding: 1rem 0;">
-    <div class="container">
-        
-        <!-- Header -->
-        <div class="page-header">
-            <h1 class="page-title">Dashboard</h1>
-            <p class="page-subtitle">Overview of your store performance</p>
+<!-- Hero -->
+<div class="admin-hero">
+    <div class="hero-grid"></div>
+    <div class="hero-orb"></div>
+    <div class="hero-inner">
+        <div>
+            <div class="hero-eyebrow">
+                <div class="hero-eyebrow-line"></div>
+                <span>Admin</span>
+            </div>
+            <h1 class="hero-title">Store <em>Dashboard</em></h1>
+            <p class="hero-sub">Overview of your store performance</p>
+        </div>
+        <div class="hero-date">
+            <div class="hero-date-label">Today</div>
+            <div class="hero-date-val">{% now "F j, Y" %}</div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-page">
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-card-rule"></div>
+            <div class="stat-num">{{ total_orders }}</div>
+            <div class="stat-label">Total Orders</div>
+            <div class="stat-meta">{{ pending_orders }} pending</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-rule"></div>
+            <div class="stat-num amber">{{ pickup_orders }}</div>
+            <div class="stat-label">Pickup Orders</div>
+            <div class="stat-meta">Station pickups</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-rule"></div>
+            <div class="stat-num" style="color:var(--amber);">{{ active_alerts|length }}</div>
+            <div class="stat-label">Stock Alerts</div>
+            <div class="stat-meta">Active alerts</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-rule"></div>
+            <div class="stat-num green">{{ total_stations }}</div>
+            <div class="stat-label">Pickup Stations</div>
+            <div class="stat-meta">Active locations</div>
+        </div>
+    </div>
+
+    <div class="admin-grid">
+
+        <!-- Orders table -->
+        <div class="orders-card">
+            <div class="card-head">
+                <div class="card-head-label">Recent Orders</div>
+                <a href="{% url 'main:view_orders' %}" class="view-all">
+                    View All
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order</th>
+                            <th>Customer</th>
+                            <th>Delivery</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in recent_orders %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'main:order_detail' order.id %}" class="td-order">
+                                    #{{ order.id }}
+                                </a>
+                            </td>
+                            <td class="td-customer">
+                                {{ order.user.get_full_name|default:order.user.email|truncatewords:2 }}
+                            </td>
+                            <td>
+                                {% if order.delivery_method == 'pickup' %}
+                                    <span class="badge badge-pickup"><span class="badge-dot"></span>Pickup</span>
+                                {% else %}
+                                    <span class="badge badge-home"><span class="badge-dot"></span>Home</span>
+                                {% endif %}
+                            </td>
+                            <td class="td-amount">
+                                <span class="td-amount-curr">₦</span>{{ order.total_amount|floatformat:0|intcomma }}
+                            </td>
+                            <td>
+                                {% if order.status == 'success' %}
+                                    <span class="badge badge-success"><span class="badge-dot"></span>Success</span>
+                                {% elif order.status == 'cancelled' %}
+                                    <span class="badge badge-cancelled"><span class="badge-dot"></span>Cancelled</span>
+                                {% elif order.status == 'pending' %}
+                                    <span class="badge badge-pending"><span class="badge-dot"></span>Pending</span>
+                                {% else %}
+                                    <span class="badge badge-default"><span class="badge-dot"></span>{{ order.get_status_display }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="td-date">{{ order.created_at|date:"M d, Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="table-empty">No orders yet</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <!-- Stats Grid -->
-        <div class="stats-grid">
-            <div class="stat-card fade-in" style="animation-delay: 0ms;">
-                <div class="stat-label">Total Orders</div>
-                <div class="stat-value">{{ total_orders }}</div>
-                <div class="stat-meta">{{ pending_orders }} pending</div>
-            </div>
-            
-            <div class="stat-card fade-in" style="animation-delay: 50ms;">
-                <div class="stat-label">Pickup Orders</div>
-                <div class="stat-value">{{ pickup_orders }}</div>
-                <div class="stat-meta">Station pickups</div>
-            </div>
-            
-            <div class="stat-card fade-in" style="animation-delay: 100ms;">
-                <div class="stat-label">Stock Alerts</div>
-                <div class="stat-value">{{ active_alerts|length }}</div>
-                <div class="stat-meta">Active alerts</div>
-            </div>
-            
-            <div class="stat-card fade-in" style="animation-delay: 150ms;">
-                <div class="stat-label">Pickup Stations</div>
-                <div class="stat-value">{{ total_stations }}</div>
-                <div class="stat-meta">Active locations</div>
-            </div>
-        </div>
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
 
-        <!-- Main Grid -->
-        <div class="main-grid">
-            
-            <!-- Recent Orders -->
-            <div class="card fade-in" style="animation-delay: 200ms;">
-                <div class="card-header">
-                    <h2 class="card-title">Recent Orders</h2>
-                    <a href="{% url 'main:view_orders' %}" class="view-link">
-                        View all →
+            <!-- Quick Actions — dark -->
+            <div class="actions-panel">
+                <div class="actions-head">
+                    <div class="actions-eyebrow">
+                        <div class="actions-eyebrow-line"></div>
+                        <span>Admin</span>
+                    </div>
+                    <div class="actions-title">Quick Actions</div>
+                </div>
+                <div class="actions-list">
+                    <a href="{% url 'main:view_orders' %}" class="action-item">
+                        <div class="action-icon">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                            </svg>
+                        </div>
+                        <span class="action-label">Manage Orders</span>
+                        <svg class="action-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+
+                    <a href="{% url 'main:manage_stations' %}" class="action-item">
+                        <div class="action-icon">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </div>
+                        <span class="action-label">Pickup Stations</span>
+                        <svg class="action-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+
+                    <a href="{% url 'main:manage_stock_alerts' %}" class="action-item">
+                        <div class="action-icon">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                        </div>
+                        <span class="action-label">Stock Alerts</span>
+                        <svg class="action-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+
+                    <a href="{% url 'account:pending_verifications' %}" class="action-item">
+                        <div class="action-icon">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <span class="action-label">Pending Verifications</span>
+                        <svg class="action-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
                     </a>
                 </div>
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Order</th>
-                                <th>Customer</th>
-                                <th>Delivery</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for order in recent_orders %}
-                            <tr>
-                                <td>
-                                    <a href="{% url 'main:order_detail' order.id %}" class="order-link">
-                                        #{{ order.id }}
-                                    </a>
-                                </td>
-                                <td style="color: var(--gray-900); font-weight: 500;">
-                                    {{ order.user.get_full_name|default:order.user.email|truncatewords:2 }}
-                                </td>
-                                <td>
-                                    {% if order.delivery_method == 'pickup' %}
-                                        <span class="badge badge-pickup">Pickup</span>
-                                    {% else %}
-                                        <span class="badge badge-home">Home</span>
-                                    {% endif %}
-                                </td>
-                                <td style="font-weight: 700; color: var(--gray-900);">
-                                    ₦{{ order.total_amount|floatformat:0|intcomma }}
-                                </td>
-                                <td>
-                                    {% if order.status == 'pending' %}
-                                        <span class="badge badge-pending">Pending</span>
-                                    {% elif order.status == 'cancelled' %}
-                                        <span class="badge badge-cancelled">Cancelled</span>
-                                    {% elif order.status == 'success' %}
-                                        <span class="badge badge-delivered">Success</span>
-                                    {% else %}
-                                        <span class="badge" style="background: var(--gray-100); color: var(--gray-700);">
-                                            {{ order.get_status_display }}
-                                        </span>
-                                    {% endif %}
-                                </td>
-                                <td style="color: var(--gray-600); font-weight: 500;">
-                                    {{ order.created_at|date:"M d" }}
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="6" class="empty">No orders yet</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
             </div>
 
-            <!-- Sidebar -->
-            <div class="sidebar">
-                
-                <!-- Quick Actions -->
-                <div class="card fade-in" style="animation-delay: 250ms;">
-                    <div class="card-header">
-                        <h2 class="card-title">Quick Actions</h2>
-                    </div>
-                    <div class="actions">
-                        <a href="{% url 'main:view_orders' %}" class="action-btn">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                            </svg>
-                            <span>Manage Orders</span>
-                        </a>
-                        
-                        <a href="{% url 'main:manage_stations' %}" class="action-btn">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                            </svg>
-                            <span>Pickup Stations</span>
-                        </a>
-                        
-                        <a href="{% url 'main:manage_stock_alerts' %}" class="action-btn">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                            </svg>
-                            <span>Stock Alerts</span>
-                        </a>
-
-                        <a href="{% url 'account:pending_verifications' %}" class="action-btn">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                            </svg>
-                            <span>View Pending  Profile Verifications</span>
-                        </a>
-                    </div>
+            <!-- Stock Alerts — light -->
+            <div class="alerts-panel">
+                <div class="alerts-head">
+                    <div class="alerts-label">Stock Alerts</div>
+                    {% if active_alerts|length > 0 %}
+                    <span class="alerts-count">{{ active_alerts|length }} Active</span>
+                    {% endif %}
                 </div>
 
-                <!-- Stock Alerts -->
-                <div class="card fade-in" style="animation-delay: 300ms;">
-                    <div class="card-header">
-                        <h2 class="card-title">Stock Alerts</h2>
-                        <span class="badge badge-pending">{{ active_alerts|length }}</span>
-                    </div>
-                    <div class="alerts">
-                        {% for alert in active_alerts|slice:":4" %}
-                        <div class="alert-item">
-                            <svg class="alert-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                            </svg>
-                            <div class="alert-content">
-                                <div class="alert-title">{{ alert.item_name }}</div>
-                                <div class="alert-date">{{ alert.expected_date|date:"M d, Y" }}</div>
-                            </div>
+                <div class="alerts-list">
+                    {% for alert in active_alerts|slice:":5" %}
+                    <div class="alert-row">
+                        <div class="alert-dot"></div>
+                        <div>
+                            <div class="alert-item-name">{{ alert.item_name }}</div>
+                            <div class="alert-item-date">Restock: {{ alert.expected_date|date:"M d, Y" }}</div>
                         </div>
-                        {% empty %}
-                        <div class="empty">No active alerts</div>
-                        {% endfor %}
-                        
-                        {% if active_alerts|length > 0 %}
-                        <a href="{% url 'main:manage_stock_alerts' %}" class="btn-primary">
-                            View All Alerts
-                        </a>
-                        {% endif %}
                     </div>
+                    {% empty %}
+                    <div class="alerts-empty">No active stock alerts</div>
+                    {% endfor %}
                 </div>
 
+                {% if active_alerts|length > 0 %}
+                <a href="{% url 'main:manage_stock_alerts' %}" class="btn-view-alerts">
+                    View All Alerts
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                {% endif %}
             </div>
-        </div>
 
+        </div>
     </div>
-</section>
+</div>
 
 {% endblock %}
