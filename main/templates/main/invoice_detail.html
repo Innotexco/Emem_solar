@@ -2,613 +2,545 @@
 {% load static %}
 {% load humanize %}
 
-{% block title %}Invoice #{{ invoice.invoiceID }} - Solar Battery Store{% endblock %}
+{% block title %}Invoice #{{ invoice.invoiceID }} - Emem Energy{% endblock %}
 
 {% block content %}
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-    
-    * {
-        font-family: 'Inter', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap');
+
     :root {
-        --primary: #059669;
-        --primary-dark: #047857;
-        --success: #10b981;
-        --warning: #f59e0b;
-        --danger: #ef4444;
-        --gray-50: #f9fafb;
-        --gray-100: #f3f4f6;
-        --gray-200: #e5e7eb;
-        --gray-300: #d1d5db;
-        --gray-400: #9ca3af;
-        --gray-500: #6b7280;
-        --gray-600: #4b5563;
-        --gray-700: #374151;
-        --gray-800: #1f2937;
-        --gray-900: #111827;
+        --ink:       #0c1a0f;
+        --ink-mid:   #1e3324;
+        --green:     #0a6640;
+        --green-sat: #0d8c55;
+        --amber:     #c8752e;
+        --rule:      #d6dfd9;
+        --surface:   #f4f7f5;
+        --white:     #ffffff;
+        --muted:     #607568;
+        --danger:    #c0392b;
+        --danger-lt: #fef2f2;
     }
-    
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-        background: var(--gray-50);
-        color: var(--gray-900);
+        font-family: 'Outfit', sans-serif;
+        color: var(--ink);
+        background: var(--surface);
+        -webkit-font-smoothing: antialiased;
+        min-height: 100vh;
     }
-    
-    .invoice-wrapper {
-        max-width: 900px;
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── PAGE ─────────────────────────────────── */
+    .invoice-page {
+        max-width: 1000px;
         margin: 0 auto;
+        padding: 60px 40px 100px;
     }
-    
+
+    /* ── TOP BAR ──────────────────────────────── */
+    .invoice-topbar {
+        display: flex; align-items: center;
+        justify-content: space-between; gap: 20px;
+        margin-bottom: 32px;
+        animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    .back-link {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+        text-transform: uppercase; color: var(--muted); text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    .back-link:hover { color: var(--green); }
+    .back-link svg { transition: transform 0.2s; }
+    .back-link:hover svg { transform: translateX(-3px); }
+
     .invoice-actions {
-        background: white;
-        border: 1px solid var(--gray-200);
-        border-radius: 12px;
-        padding: 1.25rem;
-        margin-bottom: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 1rem;
+        display: flex; align-items: center; gap: 10px;
     }
-    
-    .invoice-container {
-        background: white;
-        border: 1px solid var(--gray-200);
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+
+    /* Status badge */
+    .status-badge {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 6px 14px; font-size: 10px; font-weight: 700;
+        letter-spacing: 0.14em; text-transform: uppercase;
     }
-    
-    .invoice-header {
-        padding: 3rem 3rem 2rem;
-        border-bottom: 3px solid var(--primary);
+    .status-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+    .status-paid   { background: rgba(10,102,64,0.08); color: var(--green); }
+    .status-unpaid { background: var(--danger-lt); color: var(--danger); }
+
+    /* Buttons */
+    .btn-print {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: transparent; color: var(--muted);
+        padding: 10px 20px; font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; border: 1px solid var(--rule);
+        cursor: pointer; transition: all 0.2s ease;
     }
-    
-    .company-details {
-        display: flex;
-        justify-content: space-between;
-        align-items: start;
-        margin-bottom: 3rem;
+    .btn-print:hover { border-color: var(--ink); color: var(--ink); }
+
+    .btn-download {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: var(--ink); color: var(--white);
+        padding: 10px 20px; font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+        text-transform: uppercase; text-decoration: none;
+        border: 2px solid var(--ink); transition: all 0.25s ease;
     }
-    
-    .company-logo {
-        font-size: 1.75rem;
-        font-weight: 800;
-        color: var(--primary);
+    .btn-download:hover { background: var(--green); border-color: var(--green); }
+
+    /* ── INVOICE DOCUMENT ─────────────────────── */
+    .invoice-doc {
+        background: var(--white);
+        border: 1px solid var(--rule);
+        animation: fadeUp 0.55s 0.05s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    /* Document header — dark */
+    .doc-header {
+        background: var(--ink);
+        padding: 48px 56px;
+        position: relative; overflow: hidden;
+        border-bottom: 3px solid var(--amber);
+    }
+
+    .doc-header-grid {
+        position: absolute; inset: 0;
+        background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 80px);
+        pointer-events: none;
+    }
+
+    .doc-header-inner {
+        position: relative;
+        display: flex; justify-content: space-between; align-items: flex-start; gap: 40px;
+    }
+
+    .doc-company {}
+
+    .doc-company-name {
+        font-family: 'Fraunces', serif;
+        font-size: 22px; font-weight: 600;
+        color: var(--white); letter-spacing: -0.01em;
+        margin-bottom: 12px;
+    }
+
+    .doc-company-addr {
+        font-size: 12px; font-weight: 300;
+        color: rgba(255,255,255,0.4); line-height: 1.8;
+    }
+
+    .doc-invoice-id {
+        text-align: right;
+    }
+
+    .doc-invoice-word {
+        font-family: 'Fraunces', serif;
+        font-size: 48px; font-weight: 300;
+        color: rgba(255,255,255,0.08); letter-spacing: -0.02em;
+        line-height: 1; margin-bottom: 8px;
+        font-style: italic;
+    }
+
+    .doc-invoice-num {
+        font-family: 'Fraunces', serif;
+        font-size: 20px; font-weight: 600;
+        color: var(--white); letter-spacing: -0.01em;
+    }
+
+    .doc-invoice-status { margin-top: 10px; display: flex; justify-content: flex-end; }
+
+    /* Document body */
+    .doc-body { padding: 48px 56px; }
+
+    /* Section label */
+    .doc-section-label {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+        text-transform: uppercase; color: var(--muted);
+        display: flex; align-items: center; gap: 8px;
+        margin-bottom: 16px;
+    }
+    .doc-section-label::before { content: ''; display: block; width: 16px; height: 1px; background: var(--green); }
+
+    /* Parties */
+    .doc-parties {
+        display: grid; grid-template-columns: 1fr 1fr;
+        gap: 2px; margin-bottom: 32px;
+    }
+
+    .party-panel {
+        background: var(--surface); border: 1px solid var(--rule);
+        padding: 24px 28px;
+    }
+
+    .party-name {
+        font-family: 'Fraunces', serif;
+        font-size: 18px; font-weight: 400; color: var(--ink);
+        letter-spacing: -0.01em; margin-bottom: 10px;
+    }
+
+    .party-row {
+        display: flex; gap: 8px; align-items: baseline;
+        font-size: 12px; margin-bottom: 5px;
+    }
+    .party-row:last-child { margin-bottom: 0; }
+    .party-row-key { font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-size: 10px; flex-shrink: 0; }
+    .party-row-val { font-weight: 300; color: var(--ink-mid); }
+
+    /* Dates strip */
+    .doc-dates {
+        display: grid; grid-template-columns: repeat(3, 1fr);
+        gap: 1px; background: var(--rule);
+        border: 1px solid var(--rule); margin-bottom: 32px;
+    }
+
+    .date-cell {
+        background: var(--surface); padding: 18px 22px;
+    }
+
+    .date-cell-key {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+        text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+    }
+
+    .date-cell-val {
+        font-family: 'Fraunces', serif;
+        font-size: 16px; font-weight: 400; color: var(--ink);
+        letter-spacing: -0.01em;
+    }
+
+    /* Items table */
+    .doc-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; border: 1px solid var(--rule); }
+
+    .doc-table thead { background: var(--ink); }
+
+    .doc-table th {
+        padding: 14px 18px;
+        font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+        text-transform: uppercase; color: rgba(255,255,255,0.5);
+        text-align: left; border: none;
+    }
+    .doc-table th:not(:first-child) { text-align: right; }
+
+    .doc-table tbody tr {
+        border-bottom: 1px solid var(--rule);
+        transition: background 0.15s ease;
+    }
+    .doc-table tbody tr:last-child { border-bottom: none; }
+    .doc-table tbody tr:hover { background: var(--surface); }
+
+    .doc-table td {
+        padding: 18px 18px;
+        font-size: 13px; font-weight: 300; color: var(--muted);
+        vertical-align: top;
+    }
+    .doc-table td:not(:first-child) { text-align: right; }
+
+    .td-item-name {
+        font-size: 14px; font-weight: 600; color: var(--ink);
+        margin-bottom: 3px;
+    }
+
+    .td-item-code {
+        font-size: 11px; font-weight: 300; color: var(--muted);
+    }
+
+    .td-amount {
+        font-family: 'Fraunces', serif;
+        font-size: 16px; font-weight: 600; color: var(--ink);
+        letter-spacing: -0.01em;
+    }
+
+    /* Totals */
+    .doc-totals {
+        display: flex; justify-content: flex-end;
+    }
+
+    .totals-block { width: 320px; border: 1px solid var(--rule); }
+
+    .totals-row {
+        display: flex; justify-content: space-between; align-items: baseline;
+        padding: 14px 20px; border-bottom: 1px solid var(--rule);
+        font-size: 13px;
+    }
+    .totals-row:last-child { border-bottom: none; }
+
+    .totals-row-label { font-weight: 400; color: var(--muted); }
+    .totals-row-val   { font-weight: 600; color: var(--ink); }
+
+    .totals-row.total-row {
+        background: var(--ink); border-bottom: none;
+    }
+    .totals-row.total-row .totals-row-label {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+        text-transform: uppercase; color: rgba(255,255,255,0.4);
+    }
+    .totals-row.total-row .totals-row-val {
+        font-family: 'Fraunces', serif;
+        font-size: 26px; font-weight: 600; color: var(--white);
         letter-spacing: -0.02em;
     }
-    
-    .invoice-meta {
-        text-align: right;
-    }
-    
-    .invoice-number {
-        font-size: 1.125rem;
-        font-weight: 700;
-        color: var(--gray-900);
-        margin-bottom: 0.5rem;
-    }
-    
-    .invoice-body {
-        padding: 2rem 3rem 3rem;
-    }
-    
-    .parties-info {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem;
-        margin-bottom: 2.5rem;
-    }
-    
-    .party-card {
-        background: var(--gray-50);
-        padding: 1.5rem;
-        border-radius: 8px;
-        border: 1px solid var(--gray-200);
-    }
-    
-    .party-label {
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--gray-500);
-        margin-bottom: 0.75rem;
-    }
-    
-    .party-name {
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: var(--gray-900);
-        margin-bottom: 0.5rem;
-    }
-    
-    .party-detail {
-        font-size: 0.875rem;
-        color: var(--gray-600);
-        line-height: 1.5;
-    }
-    
-    .invoice-dates {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 1.5rem;
-        padding: 1.5rem;
-        background: var(--gray-50);
-        border-radius: 8px;
-        margin-bottom: 2.5rem;
-    }
-    
-    .date-item {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .date-label {
-        font-size: 0.75rem;
-        font-weight: 500;
-        color: var(--gray-500);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-bottom: 0.25rem;
-    }
-    
-    .date-value {
-        font-size: 0.9375rem;
-        font-weight: 600;
-        color: var(--gray-900);
-    }
-    
-    .items-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 2rem;
-        border: 1px solid var(--gray-200);
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    
-    .items-table thead {
-        background: var(--gray-100);
-    }
-    
-    .items-table th {
-        padding: 0.875rem 1rem;
-        text-align: left;
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--gray-700);
-        border-bottom: 1px solid var(--gray-200);
-    }
-    
-    .items-table th:last-child,
-    .items-table td:last-child {
-        text-align: right;
-    }
-    
-    .items-table tbody tr {
-        border-bottom: 1px solid var(--gray-200);
-    }
-    
-    .items-table tbody tr:last-child {
-        border-bottom: none;
-    }
-    
-    .items-table td {
-        padding: 1rem;
-        font-size: 0.875rem;
-        color: var(--gray-700);
-    }
-    
-    .item-name {
-        font-weight: 600;
-        color: var(--gray-900);
-        margin-bottom: 0.25rem;
-    }
-    
-    .item-description {
-        font-size: 0.8125rem;
-        color: var(--gray-500);
-    }
-    
-    .totals-section {
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 2rem;
-    }
-    
-    .totals-table {
-        width: 100%;
-        max-width: 350px;
-    }
-    
-    .totals-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 0.75rem 0;
-        font-size: 0.9375rem;
-    }
-    
-    .totals-row.subtotal {
-        color: var(--gray-600);
-        border-bottom: 1px solid var(--gray-200);
-    }
-    
-    .totals-row.total {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--gray-900);
-        padding-top: 1rem;
-        border-top: 2px solid var(--gray-300);
-    }
-    
-    .totals-row.paid {
-        color: var(--success);
-        font-weight: 600;
-    }
-    
-    .totals-row.balance {
-        color: var(--danger);
-        font-weight: 700;
-        font-size: 1.125rem;
-        padding-top: 0.75rem;
-        border-top: 1px solid var(--gray-200);
-    }
-    
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.375rem;
-        padding: 0.375rem 0.875rem;
-        border-radius: 6px;
-        font-size: 0.8125rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.025em;
-    }
-    
-    .status-paid {
-        background: #d1fae5;
-        color: #065f46;
-    }
-    
-    .status-unpaid {
-        background: #fee2e2;
-        color: #991b1b;
-    }
-    
-    .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.625rem 1.25rem;
-        font-size: 0.875rem;
-        font-weight: 600;
-        border-radius: 8px;
-        transition: all 0.15s ease;
-        cursor: pointer;
-        border: none;
-        text-decoration: none;
-    }
-    
-    .btn-primary {
-        background: var(--primary);
-        color: white;
-    }
-    
-    .btn-primary:hover {
-        background: var(--primary-dark);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    
-    .btn-secondary {
-        background: white;
-        color: var(--gray-700);
-        border: 1px solid var(--gray-300);
-    }
-    
-    .btn-secondary:hover {
-        background: var(--gray-50);
-        border-color: var(--gray-400);
-    }
-    
-    .back-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: var(--gray-600);
-        font-size: 0.875rem;
-        font-weight: 500;
-        text-decoration: none;
-        transition: color 0.15s ease;
-    }
-    
-    .back-link:hover {
-        color: var(--primary);
-    }
-    
-    .invoice-footer {
-        padding: 2rem 3rem;
-        background: var(--gray-50);
-        border-top: 1px solid var(--gray-200);
+    .totals-row.total-row .totals-curr { font-size: 14px; font-weight: 400; opacity: 0.38; margin-right: 2px; }
+
+    .totals-row.paid-row .totals-row-label { color: var(--green); font-weight: 600; }
+    .totals-row.paid-row .totals-row-val   { color: var(--green); }
+
+    .totals-row.balance-row { background: var(--danger-lt); }
+    .totals-row.balance-row .totals-row-label { color: var(--danger); font-weight: 700; }
+    .totals-row.balance-row .totals-row-val   { color: var(--danger); font-weight: 700; }
+
+    /* Document footer */
+    .doc-footer {
+        padding: 32px 56px;
+        background: var(--surface); border-top: 1px solid var(--rule);
         text-align: center;
     }
-    
-    .footer-text {
-        font-size: 0.875rem;
-        color: var(--gray-600);
-        line-height: 1.6;
+
+    .doc-footer-text {
+        font-size: 13px; font-weight: 300; color: var(--muted); line-height: 1.8;
     }
-    
-    .footer-contact {
-        margin-top: 0.5rem;
-        font-weight: 500;
-        color: var(--primary);
+
+    .doc-footer-contact {
+        font-size: 12px; font-weight: 600; color: var(--green);
+        margin-top: 6px; letter-spacing: 0.02em;
     }
-    
+
+    /* ── PRINT ────────────────────────────────── */
     @media print {
-        body {
-            background: white;
-        }
-        
-        .no-print {
-            display: none !important;
-        }
-        
-        .invoice-container {
-            border: none;
-            box-shadow: none;
-        }
-        
-        .invoice-wrapper {
-            max-width: 100%;
-        }
+        body { background: white; }
+        .no-print { display: none !important; }
+        .invoice-page { padding: 0; max-width: 100%; }
+        .invoice-doc { border: none; }
+        .doc-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .doc-table thead { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .totals-row.total-row { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     }
-    
+
+    /* ── RESPONSIVE ───────────────────────────── */
     @media (max-width: 768px) {
-        .invoice-header,
-        .invoice-body {
-            padding: 1.5rem;
-        }
-        
-        .parties-info {
-            grid-template-columns: 1fr;
-        }
-        
-        .company-details {
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        
-        .invoice-meta {
-            text-align: left;
-        }
-        
-        .items-table {
-            font-size: 0.8125rem;
-        }
-        
-        .items-table th,
-        .items-table td {
-            padding: 0.75rem 0.5rem;
-        }
+        .invoice-page { padding: 32px 20px 60px; }
+        .doc-header { padding: 32px 28px; }
+        .doc-header-inner { flex-direction: column; gap: 20px; }
+        .doc-invoice-id { text-align: left; }
+        .doc-invoice-status { justify-content: flex-start; }
+        .doc-body { padding: 28px 22px; }
+        .doc-parties { grid-template-columns: 1fr; }
+        .doc-dates { grid-template-columns: 1fr 1fr; }
+        .invoice-topbar { flex-direction: column; align-items: flex-start; }
+        .doc-footer { padding: 24px 22px; }
+        .totals-block { width: 100%; }
     }
 </style>
 
-<section class="py-8 min-h-screen">
-    <div class="container mx-auto px-4 sm:px-6">
-        <div class="invoice-wrapper">
-            
-            <!-- Back Button -->
-            <div class="mb-6 no-print">
-                <a href="{% url 'main:my_orders' %}" class="back-link">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                    </svg>
-                    Back to Orders
-                </a>
-            </div>
+<div class="invoice-page">
 
-            <!-- Action Buttons -->
-            <div class="invoice-actions no-print">
-                <div>
-                    {% if invoice.is_paid %}
-                        <span class="status-badge status-paid">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                            </svg>
-                            Paid in Full
-                        </span>
-                    {% else %}
-                        <span class="status-badge status-unpaid">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
-                            </svg>
-                            Payment Pending
-                        </span>
+    <!-- Top bar -->
+    <div class="invoice-topbar no-print">
+        <a href="{% url 'main:my_orders' %}" class="back-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+            Back to Orders
+        </a>
+
+        <div class="invoice-actions">
+            {% if invoice.is_paid %}
+                <span class="status-badge status-paid"><span class="status-dot"></span>Paid in Full</span>
+            {% else %}
+                <span class="status-badge status-unpaid"><span class="status-dot"></span>Payment Pending</span>
+            {% endif %}
+
+            <button onclick="window.print()" class="btn-print">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+                </svg>
+                Print
+            </button>
+
+            <a href="https://console.afrikbook.com/api/invoices/{{ invoice.invoiceID }}/download/"
+               class="btn-download" download="invoice_{{ invoice.invoiceID }}.pdf">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Download PDF
+            </a>
+        </div>
+    </div>
+
+    <!-- Invoice Document -->
+    <div class="invoice-doc">
+
+        <!-- Header -->
+        <div class="doc-header">
+            <div class="doc-header-grid"></div>
+            <div class="doc-header-inner">
+                <div class="doc-company">
+                    <div class="doc-company-name">Emem Energy Innovation Ltd.</div>
+                    <div class="doc-company-addr">
+                        14 Dennis Osadebe Way<br>
+                        Asaba, Delta State, Nigeria<br>
+                        info@ememenergy.com
+                    </div>
+                </div>
+                <div class="doc-invoice-id">
+                    <div class="doc-invoice-word">Invoice</div>
+                    <div class="doc-invoice-num">#{{ invoice.invoiceID }}</div>
+                    <div class="doc-invoice-status">
+                        {% if invoice.is_paid %}
+                            <span class="status-badge status-paid"><span class="status-dot"></span>Paid</span>
+                        {% else %}
+                            <span class="status-badge status-unpaid"><span class="status-dot"></span>Pending</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Body -->
+        <div class="doc-body">
+
+            <!-- Bill To + Payment Details -->
+            <div class="doc-parties">
+                <div class="party-panel">
+                    <div class="doc-section-label">Bill To</div>
+                    <div class="party-name">{{ invoice.customer_name }}</div>
+                    <div class="party-row">
+                        <span class="party-row-key">Customer ID</span>
+                        <span class="party-row-val">{{ invoice.cusID }}</span>
+                    </div>
+                    <div class="party-row">
+                        <span class="party-row-key">Order</span>
+                        <span class="party-row-val">#{{ invoice.order_ID }}</span>
+                    </div>
+                    {% if invoice.Gdescription %}
+                    <div class="party-row">
+                        <span class="party-row-key">Note</span>
+                        <span class="party-row-val">{{ invoice.Gdescription }}</span>
+                    </div>
                     {% endif %}
                 </div>
-                <div style="display: flex; gap: 0.75rem;">
-                    <button onclick="window.print()" class="btn btn-secondary">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-                        </svg>
-                        Print
-                    </button>
-                    <a href="https://console.afrikbook.com/api/invoices/{{ invoice.invoiceID }}/download/" 
-                       class="btn btn-primary"
-                       download="invoice_{{ invoice.invoiceID }}.pdf">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        Download PDF
-                    </a>
+
+                <div class="party-panel">
+                    <div class="doc-section-label">Payment Details</div>
+                    <div class="party-row">
+                        <span class="party-row-key">Method</span>
+                        <span class="party-row-val">Paystack</span>
+                    </div>
+                    <div class="party-row">
+                        <span class="party-row-key">Status</span>
+                        <span class="party-row-val">{% if invoice.status == '1' %}Successful{% else %}Pending{% endif %}</span>
+                    </div>
+                    <div class="party-row">
+                        <span class="party-row-key">Outlet</span>
+                        <span class="party-row-val">{{ invoice.outlet }}</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Invoice Document -->
-            <div class="invoice-container">
-                
-                <!-- Header -->
-                <div class="invoice-header">
-                    <div class="company-details">
-                        <div>
-                            <div class="company-logo">EMEM ENERGY TECH.</div>
-                            <div style="margin-top: 0.5rem; color: var(--gray-600); font-size: 0.875rem;">
-                                <div>14 Dennis OSadebe Way</div>
-                                <div>Asaba, Delta State, Nigeria</div>
-                                <div style="margin-top: 0.5rem;">contact@solarbattery.com</div>
-                            </div>
-                        </div>
-                        <div class="invoice-meta">
-                            <div style="font-size: 2rem; font-weight: 800; color: var(--gray-900); margin-bottom: 0.5rem;">INVOICE</div>
-                            <div class="invoice-number">{{ invoice.invoiceID }}</div>
-                        </div>
-                    </div>
+            <!-- Dates -->
+            <div class="doc-dates">
+                <div class="date-cell">
+                    <div class="date-cell-key">Invoice Date</div>
+                    <div class="date-cell-val">{{ invoice.invoice_date|date:"M d, Y" }}</div>
                 </div>
-
-                <!-- Body -->
-                <div class="invoice-body">
-                    
-                    <!-- Bill To / From -->
-                    <div class="parties-info">
-                        <div class="party-card">
-                            <div class="party-label">Bill To</div>
-                            <div class="party-name">{{ invoice.customer_name }}</div>
-                            <div class="party-detail">Customer ID: {{ invoice.cusID }}</div>
-                            <div class="party-detail">Order #{{ invoice.order_ID }}</div>
-                            {% if invoice.Gdescription %}
-                            <div class="party-detail" style="margin-top: 0.5rem;">{{ invoice.Gdescription }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="party-card">
-                            <div class="party-label">Payment Details</div>
-                            <div class="party-detail">
-                                <div style="margin-bottom: 0.5rem;">
-                                    <strong>Method:</strong>  Paystack
-                                </div>
-                                <div style="margin-bottom: 0.5rem;">
-                                    <strong>Status:</strong>
-                                    {% if invoice.status == '1' %}
-                                        Successful
-                                    {% else %}
-                                        Pending
-                                    {% endif %}
-                                </div>
-                                <div>
-                                    <strong>Outlet:</strong> {{ invoice.outlet }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Dates -->
-                    <div class="invoice-dates">
-                        <div class="date-item">
-                            <div class="date-label">Invoice Date</div>
-                            <div class="date-value">{{ invoice.invoice_date|date:"M d, Y" }}</div>
-                        </div>
-                        <div class="date-item">
-                            <div class="date-label">Due Date</div>
-                            <div class="date-value">{{ invoice.due_date|date:"M d, Y" }}</div>
-                        </div>
-                        <div class="date-item">
-                            <div class="date-label">Invoice State</div>
-                            <div class="date-value">{{ invoice.invoice_state|title }}</div>
-                        </div>
-                    </div>
-
-                    <!-- Items Table -->
-                    <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th>Description</th>
-                                <th style="text-align: center;">Quantity</th>
-                                <th style="text-align: right;">Unit Price</th>
-                                <th style="text-align: right;">Discount</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in invoice.items %}
-                            <tr>
-                                <td>
-                                    <div class="item-name">{{ item.item_name }}</div>
-                                    {% if item.item_description %}
-                                    <div class="item-description">{{ item.item_description }}</div>
-                                    {% endif %}
-                                    <div class="item-description">Code: {{ item.itemcode }}</div>
-                                </td>
-                                <td style="text-align: center;">{{ item.qty }}</td>
-                                <td style="text-align: right;">₦{{ item.unit_p|floatformat:2|intcomma }}</td>
-                                <td style="text-align: right;">
-                                    {% if item.discount != "0" and item.discount != "0.00" %}
-                                        ₦{{ item.discount|floatformat:2|intcomma }}
-                                    {% else %}
-                                        -
-                                    {% endif %}
-                                </td>
-                                <td style="text-align: right; font-weight: 600;">₦{{ item.amount|floatformat:2|intcomma }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-
-                    <!-- Totals -->
-                    <div class="totals-section">
-                        <div class="totals-table">
-                            <div class="totals-row subtotal">
-                                <span>Subtotal</span>
-                                <span>₦{{ invoice.sub_total|floatformat:2|intcomma }}</span>
-                            </div>
-                            
-                            {% if invoice.vat_amount != "0.00" and invoice.vat_amount != "0" %}
-                            <div class="totals-row subtotal">
-                                <span>VAT</span>
-                                <span>₦{{ invoice.vat_amount|floatformat:2|intcomma }}</span>
-                            </div>
-                            {% endif %}
-                            
-                            <div class="totals-row total">
-                                <span>Total Amount</span>
-                                <span>₦{{ invoice.total_amount|floatformat:2|intcomma }}</span>
-                            </div>
-
-                            {% if invoice.amount_paid != "0" and invoice.amount_paid != "0.00" %}
-                            <div class="totals-row paid">
-                                <span>Amount Paid</span>
-                                <span>₦{{ invoice.amount_paid|floatformat:2|intcomma }}</span>
-                            </div>
-                            {% endif %}
-
-                            {% if invoice.balance != "0" and invoice.balance != "0.00" %}
-                            <div class="totals-row balance">
-                                <span>Balance Due</span>
-                                <span>₦{{ invoice.balance|floatformat:2|intcomma }}</span>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-
+                <div class="date-cell">
+                    <div class="date-cell-key">Due Date</div>
+                    <div class="date-cell-val">{{ invoice.due_date|date:"M d, Y" }}</div>
                 </div>
-
-                <!-- Footer -->
-                <div class="invoice-footer">
-                    <p class="footer-text">
-                        Thank you for your business!<br>
-                        <span class="footer-contact">For inquiries, contact us at contact@solarbattery.com</span>
-                    </p>
+                <div class="date-cell">
+                    <div class="date-cell-key">Invoice State</div>
+                    <div class="date-cell-val">{{ invoice.invoice_state|title }}</div>
                 </div>
+            </div>
 
+            <!-- Items -->
+            <table class="doc-table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Qty</th>
+                        <th>Unit Price</th>
+                        <th>Discount</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in invoice.items %}
+                    <tr>
+                        <td>
+                            <div class="td-item-name">{{ item.item_name }}</div>
+                            {% if item.item_description %}
+                            <div class="td-item-code">{{ item.item_description }}</div>
+                            {% endif %}
+                            <div class="td-item-code">Code: {{ item.itemcode }}</div>
+                        </td>
+                        <td>{{ item.qty }}</td>
+                        <td>₦{{ item.unit_p|floatformat:2|intcomma }}</td>
+                        <td>
+                            {% if item.discount != "0" and item.discount != "0.00" %}
+                                ₦{{ item.discount|floatformat:2|intcomma }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                        <td><span class="td-amount">₦{{ item.amount|floatformat:2|intcomma }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Totals -->
+            <div class="doc-totals">
+                <div class="totals-block">
+                    <div class="totals-row">
+                        <span class="totals-row-label">Subtotal</span>
+                        <span class="totals-row-val">₦{{ invoice.sub_total|floatformat:2|intcomma }}</span>
+                    </div>
+
+                    {% if invoice.vat_amount != "0.00" and invoice.vat_amount != "0" %}
+                    <div class="totals-row">
+                        <span class="totals-row-label">VAT</span>
+                        <span class="totals-row-val">₦{{ invoice.vat_amount|floatformat:2|intcomma }}</span>
+                    </div>
+                    {% endif %}
+
+                    <div class="totals-row total-row">
+                        <span class="totals-row-label">Total Amount</span>
+                        <span class="totals-row-val"><span class="totals-curr">₦</span>{{ invoice.total_amount|floatformat:2|intcomma }}</span>
+                    </div>
+
+                    {% if invoice.amount_paid != "0" and invoice.amount_paid != "0.00" %}
+                    <div class="totals-row paid-row">
+                        <span class="totals-row-label">Amount Paid</span>
+                        <span class="totals-row-val">₦{{ invoice.amount_paid|floatformat:2|intcomma }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if invoice.balance != "0" and invoice.balance != "0.00" %}
+                    <div class="totals-row balance-row">
+                        <span class="totals-row-label">Balance Due</span>
+                        <span class="totals-row-val">₦{{ invoice.balance|floatformat:2|intcomma }}</span>
+                    </div>
+                    {% endif %}
+                </div>
             </div>
 
         </div>
+
+        <!-- Footer -->
+        <div class="doc-footer">
+            <p class="doc-footer-text">Thank you for your business with Emem Energy Innovation Ltd.</p>
+            <p class="doc-footer-contact">For inquiries — info@ememenergy.com</p>
+        </div>
+
     </div>
-</section>
+</div>
 
 {% endblock %}
