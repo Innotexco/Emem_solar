@@ -5,295 +5,454 @@
 
 {% block content %}
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-  
-  * { font-family: 'Inter', sans-serif; }
-  
-  :root {
-    --forest-green: #059669;
-    --forest-green-dark: #047857;
-    --gray-50: #f9fafb;
-    --gray-100: #f3f4f6;
-    --gray-200: #e5e7eb;
-    --gray-300: #d1d5db;
-    --gray-700: #374151;
-    --gray-900: #111827;
-  }
-  
-  body { background-color: var(--gray-50); }
-  
-  .content-card {
-    background: white;
-    border: 1px solid var(--gray-200);
-    border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-  }
-  
-  .btn-primary {
-    background: var(--forest-green);
-    color: white;
-    font-weight: 600;
-    padding: 0.75rem 1.25rem;
-    border-radius: 10px;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .btn-primary:hover {
-    background: var(--forest-green-dark);
-    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
-  }
-  
-  .filter-input {
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--gray-300);
-    border-radius: 10px;
-    font-size: 0.875rem;
-    transition: all 0.2s ease;
-  }
-  
-  .filter-input:focus {
-    border-color: var(--forest-green);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
-  }
-  
-  table {
-    font-size: 0.875rem;
-  }
-  
-  th {
-    background: var(--gray-50);
-    font-weight: 600;
-    color: var(--gray-700);
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    padding: 1rem !important;
-  }
-  
-  td {
-    padding: 1rem !important;
-    vertical-align: middle;
-    border-top: 1px solid var(--gray-200);
-  }
-  
-  tbody tr {
-    transition: background 0.2s ease;
-  }
-  
-  tbody tr:hover {
-    background: var(--gray-50);
-  }
-  
-  .badge {
-    padding: 0.375rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-  }
-  
-  .badge-active { background: #d1fae5; color: #065f46; }
-  .badge-inactive { background: #f3f4f6; color: #6b7280; }
-  
-  .action-btn {
-    padding: 0.5rem;
-    border: 1px solid var(--gray-300);
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .action-btn:hover {
-    background: var(--gray-50);
-  }
-  
-  .action-btn-delete {
-    border-color: #fecaca;
-    color: #dc2626;
-  }
-  
-  .action-btn-delete:hover {
-    background: #fef2f2;
-  }
-  
-  .pagination-btn {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--gray-300);
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-  
-  .pagination-btn:hover {
-    background: var(--gray-50);
-  }
-  
-  .pagination-btn.active {
-    background: var(--forest-green);
-    color: white;
-    border-color: var(--forest-green);
-  }
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300&family=Outfit:wght@300;400;500;600&display=swap');
+
+    :root {
+        --ink:       #0c1a0f;
+        --ink-mid:   #1e3324;
+        --green:     #0a6640;
+        --green-sat: #0d8c55;
+        --amber:     #c8752e;
+        --rule:      #d6dfd9;
+        --surface:   #f4f7f5;
+        --white:     #ffffff;
+        --muted:     #607568;
+        --danger:    #c0392b;
+        --danger-lt: #fef2f2;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: 'Outfit', sans-serif;
+        color: var(--ink);
+        background: var(--surface);
+        -webkit-font-smoothing: antialiased;
+        min-height: 100vh;
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── PAGE ─────────────────────────────────── */
+    .stations-page {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 0 60px 100px;
+    }
+
+    /* ── HERO ─────────────────────────────────── */
+    .stations-hero {
+        background: var(--ink);
+        position: relative; overflow: hidden;
+        margin-bottom: 2px;
+    }
+
+    .hero-bg {
+        position: absolute; inset: 0;
+        background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 80px);
+        pointer-events: none;
+    }
+
+    .hero-orb {
+        position: absolute; bottom: -80px; right: -60px;
+        width: 300px; height: 300px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(10,102,64,0.18) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .hero-inner {
+        position: relative; padding: 48px 60px;
+        display: flex; align-items: center;
+        justify-content: space-between; gap: 40px;
+    }
+
+    .hero-eyebrow {
+        display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+    }
+    .hero-eyebrow-line { width: 24px; height: 1px; background: var(--amber); }
+    .hero-eyebrow span {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.22em;
+        text-transform: uppercase; color: var(--amber);
+    }
+
+    .hero-title {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(28px, 3.5vw, 44px); font-weight: 300;
+        color: var(--white); line-height: 1.0; letter-spacing: -0.025em;
+        margin-bottom: 8px;
+    }
+    .hero-title em { font-style: italic; color: rgba(255,255,255,0.35); }
+
+    .hero-sub { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.42); }
+
+    .btn-add {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: var(--amber); color: var(--white);
+        padding: 14px 28px; font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+        text-transform: uppercase; text-decoration: none;
+        border: none; cursor: pointer; transition: background 0.25s ease;
+        white-space: nowrap; flex-shrink: 0;
+    }
+    .btn-add:hover { background: #b5661f; }
+
+    /* ── FILTERS ──────────────────────────────── */
+    .filters-bar {
+        background: var(--white); border: 1px solid var(--rule);
+        padding: 24px 32px; margin-bottom: 2px;
+        animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    .filters-form {
+        display: grid; grid-template-columns: 1fr 1fr 1fr auto;
+        gap: 12px; align-items: end;
+    }
+
+    .filter-field {}
+
+    .filter-label {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+        text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+        display: block;
+    }
+
+    .filter-input,
+    .filter-select {
+        width: 100%; background: var(--surface);
+        border: 1px solid var(--rule); padding: 12px 14px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 13px; font-weight: 400; color: var(--ink);
+        outline: none; appearance: none; -webkit-appearance: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .filter-input:focus, .filter-select:focus {
+        border-color: var(--green);
+        box-shadow: 0 0 0 3px rgba(10,102,64,0.08);
+        background: var(--white);
+    }
+
+    .filter-select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23607568' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 14px center;
+        padding-right: 36px; cursor: pointer;
+    }
+
+    .filter-actions { display: flex; gap: 8px; }
+
+    .btn-filter {
+        display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+        background: var(--ink); color: var(--white);
+        padding: 12px 20px; font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+        text-transform: uppercase; border: 2px solid var(--ink);
+        cursor: pointer; transition: all 0.25s ease; white-space: nowrap;
+    }
+    .btn-filter:hover { background: var(--green); border-color: var(--green); }
+
+    .btn-reset {
+        display: inline-flex; align-items: center; justify-content: center;
+        background: transparent; color: var(--muted);
+        padding: 12px 16px; font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; text-decoration: none;
+        border: 1px solid var(--rule); transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    .btn-reset:hover { border-color: var(--ink); color: var(--ink); }
+
+    /* ── TABLE ────────────────────────────────── */
+    .table-card {
+        background: var(--white); border: 1px solid var(--rule);
+        overflow: hidden;
+        animation: fadeUp 0.55s 0.05s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+        width: 100%; border-collapse: collapse;
+        font-family: 'Outfit', sans-serif;
+    }
+
+    thead { background: var(--ink); }
+
+    th {
+        padding: 14px 20px;
+        font-size: 10px; font-weight: 700;
+        letter-spacing: 0.16em; text-transform: uppercase;
+        color: rgba(255,255,255,0.45);
+        text-align: left; border: none; white-space: nowrap;
+    }
+    th:last-child { text-align: right; }
+
+    tbody tr {
+        border-bottom: 1px solid var(--rule);
+        transition: background 0.15s ease;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface); }
+
+    td {
+        padding: 16px 20px;
+        font-size: 13px; font-weight: 300; color: var(--muted);
+        vertical-align: middle;
+    }
+
+    .td-name {
+        font-size: 14px; font-weight: 600; color: var(--ink);
+    }
+
+    .td-addr { max-width: 180px; }
+
+    /* Status badge */
+    .status-badge {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 5px 12px; font-size: 10px; font-weight: 700;
+        letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .status-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+    .badge-active   { background: rgba(10,102,64,0.08); color: var(--green); }
+    .badge-inactive { background: var(--surface); color: var(--muted); }
+
+    /* Action buttons */
+    .td-actions { text-align: right; white-space: nowrap; }
+
+    .action-btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 34px; height: 34px;
+        border: 1px solid var(--rule); background: transparent;
+        color: var(--muted); text-decoration: none;
+        transition: all 0.2s ease; cursor: pointer;
+    }
+    .action-btn:hover { border-color: var(--green); color: var(--green); background: rgba(10,102,64,0.04); }
+
+    .action-btn-del:hover { border-color: var(--danger); color: var(--danger); background: var(--danger-lt); }
+
+    .actions-gap { display: inline-flex; gap: 6px; justify-content: flex-end; }
+
+    /* Empty state */
+    .table-empty {
+        display: flex; flex-direction: column; align-items: center;
+        justify-content: center; padding: 80px 40px; gap: 14px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 52px; height: 52px; border: 1px solid var(--rule);
+        display: flex; align-items: center; justify-content: center;
+    }
+    .empty-icon svg { color: var(--muted); }
+
+    .empty-title {
+        font-family: 'Fraunces', serif;
+        font-size: 20px; font-weight: 400; color: var(--ink);
+        letter-spacing: -0.01em;
+    }
+
+    .empty-link {
+        font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; color: var(--green);
+        text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
+        transition: gap 0.2s ease;
+    }
+    .empty-link:hover { gap: 9px; }
+
+    /* ── PAGINATION ───────────────────────────── */
+    .pagination-bar {
+        padding: 20px 28px;
+        border-top: 1px solid var(--rule);
+        display: flex; align-items: center; justify-content: center;
+        gap: 4px;
+    }
+
+    .page-btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: 36px; height: 36px; padding: 0 10px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+        text-decoration: none; color: var(--muted);
+        border: 1px solid var(--rule); background: var(--white);
+        transition: all 0.2s ease;
+    }
+    .page-btn:hover { border-color: var(--ink); color: var(--ink); }
+    .page-btn.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+    /* ── RESPONSIVE ───────────────────────────── */
+    @media (max-width: 1100px) {
+        .stations-page { padding: 0 32px 80px; }
+        .hero-inner { padding: 40px 32px; flex-direction: column; align-items: flex-start; gap: 20px; }
+        .filters-form { grid-template-columns: 1fr 1fr; }
+        .filter-actions { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 640px) {
+        .filters-form { grid-template-columns: 1fr; }
+        .filters-bar { padding: 20px 20px; }
+    }
 </style>
 
-<section class="py-12 min-h-screen">
-  <div class="container mx-auto px-6">
-    
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
-      <div>
-        <h1 class="text-3xl font-bold text-gray-900 mb-1">Pickup Stations</h1>
-        <p class="text-gray-600 text-sm">Manage your pickup locations</p>
-      </div>
-      <a href="{% url 'main:add_station' %}" class="btn-primary">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
-        Add New Station
-      </a>
+<!-- Hero -->
+<div class="stations-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-orb"></div>
+    <div class="hero-inner">
+        <div>
+            <div class="hero-eyebrow">
+                <div class="hero-eyebrow-line"></div>
+                <span>Admin</span>
+            </div>
+            <h1 class="hero-title">
+                Pickup <em>Stations</em>
+            </h1>
+            <p class="hero-sub">Manage your pickup locations nationwide</p>
+        </div>
+        <a href="{% url 'main:add_station' %}" class="btn-add">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 4v16m8-8H4"/>
+            </svg>
+            Add New Station
+        </a>
     </div>
+</div>
+
+<div class="stations-page">
 
     <!-- Filters -->
-    <div class="content-card p-6 mb-8">
-      <form method="GET">
-        <div class="grid md:grid-cols-4 gap-4">
-          <input 
-            type="text" 
-            name="search" 
-            placeholder="Search by name, city..."
-            value="{{ request.GET.search }}"
-            class="filter-input w-full"
-          >
+    <div class="filters-bar">
+        <form method="GET" class="filters-form">
+            <div class="filter-field">
+                <label class="filter-label">Search</label>
+                <input type="text" name="search"
+                    placeholder="Name, city…"
+                    value="{{ request.GET.search }}"
+                    class="filter-input">
+            </div>
 
-          <select name="state" class="filter-input w-full">
-            <option value="">All States</option>
-            {% for state in states %}
-            <option value="{{ state }}" {% if request.GET.state == state %}selected{% endif %}>
-              {{ state }}
-            </option>
-            {% endfor %}
-          </select>
+            <div class="filter-field">
+                <label class="filter-label">State</label>
+                <select name="state" class="filter-select">
+                    <option value="">All States</option>
+                    {% for state in states %}
+                    <option value="{{ state }}" {% if request.GET.state == state %}selected{% endif %}>{{ state }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-          <select name="status" class="filter-input w-full">
-            <option value="">All Status</option>
-            <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Active</option>
-            <option value="inactive" {% if request.GET.status == 'inactive' %}selected{% endif %}>Inactive</option>
-          </select>
+            <div class="filter-field">
+                <label class="filter-label">Status</label>
+                <select name="status" class="filter-select">
+                    <option value="">All Statuses</option>
+                    <option value="active"   {% if request.GET.status == 'active'   %}selected{% endif %}>Active</option>
+                    <option value="inactive" {% if request.GET.status == 'inactive' %}selected{% endif %}>Inactive</option>
+                </select>
+            </div>
 
-          <div class="flex gap-3">
-            <button type="submit" class="btn-primary flex-1">Filter</button>
-            <a href="{% url 'main:manage_stations' %}" 
-               class="flex-1 text-center px-4 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50 transition">
-              Reset
-            </a>
-          </div>
-        </div>
-      </form>
+            <div class="filter-actions">
+                <button type="submit" class="btn-filter">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 4h18M7 12h10M11 20h2"/>
+                    </svg>
+                    Filter
+                </button>
+                <a href="{% url 'main:manage_stations' %}" class="btn-reset">Reset</a>
+            </div>
+        </form>
     </div>
 
-    <!-- Stations Table -->
-    <div class="content-card overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="min-w-full">
-          <thead>
-            <tr>
-              <th class="text-left">Name</th>
-              <th class="text-left">Address</th>
-              <th class="text-left">City</th>
-              <th class="text-left">State</th>
-              <th class="text-left">Phone</th>
-              <th class="text-left">Status</th>
-              <th class="text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for station in stations %}
-            <tr>
-              <td class="font-semibold text-gray-900">{{ station.name }}</td>
-              <td class="text-gray-700">{{ station.address|truncatewords:5 }}</td>
-              <td class="text-gray-700">{{ station.city }}</td>
-              <td class="text-gray-700">{{ station.state }}</td>
-              <td class="text-gray-700">{{ station.phone }}</td>
-              <td>
-                {% if station.is_active %}
-                <span class="badge badge-active">Active</span>
-                {% else %}
-                <span class="badge badge-inactive">Inactive</span>
-                {% endif %}
-              </td>
-              <td>
-                <div class="flex justify-end gap-2">
-                  <a href="{% url 'main:edit_station' station.id %}" 
-                     class="action-btn" 
-                     title="Edit station">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                  </a>
-                  <a href="{% url 'main:delete_station' station.id %}" 
-                     class="action-btn action-btn-delete"
-                     title="Delete station">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </a>
-                </div>
-              </td>
-            </tr>
-            {% empty %}
-            <tr>
-              <td colspan="7" class="text-center py-12">
-                <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                </svg>
-                <p class="text-gray-500 mb-2">No pickup stations found</p>
-                <a href="{% url 'main:add_station' %}" class="text-forest-green font-semibold hover:underline">
-                  Add your first station
-                </a>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Pagination -->
-      {% if stations.has_other_pages %}
-      <div class="border-t border-gray-200 px-6 py-4">
-        <div class="flex justify-center items-center gap-2">
-          {% if stations.has_previous %}
-          <a href="?page={{ stations.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.state %}&state={{ request.GET.state }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"
-             class="pagination-btn">
-             Previous
-          </a>
-          {% endif %}
-
-          {% for num in stations.paginator.page_range %}
-          <a href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.state %}&state={{ request.GET.state }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"
-             class="pagination-btn {% if stations.number == num %}active{% endif %}">
-             {{ num }}
-          </a>
-          {% endfor %}
-
-          {% if stations.has_next %}
-          <a href="?page={{ stations.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.state %}&state={{ request.GET.state }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"
-             class="pagination-btn">
-             Next
-          </a>
-          {% endif %}
+    <!-- Table -->
+    <div class="table-card">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th style="text-align:right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for station in stations %}
+                    <tr>
+                        <td><span class="td-name">{{ station.name }}</span></td>
+                        <td class="td-addr">{{ station.address|truncatewords:5 }}</td>
+                        <td>{{ station.city }}</td>
+                        <td>{{ station.state }}</td>
+                        <td>{{ station.phone }}</td>
+                        <td>
+                            {% if station.is_active %}
+                                <span class="status-badge badge-active"><span class="status-dot"></span>Active</span>
+                            {% else %}
+                                <span class="status-badge badge-inactive"><span class="status-dot"></span>Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td class="td-actions">
+                            <div class="actions-gap">
+                                <a href="{% url 'main:edit_station' station.id %}" class="action-btn" title="Edit">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                </a>
+                                <a href="{% url 'main:delete_station' station.id %}" class="action-btn action-btn-del" title="Delete">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="padding:0;">
+                            <div class="table-empty">
+                                <div class="empty-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+                                    </svg>
+                                </div>
+                                <div class="empty-title">No stations found</div>
+                                <a href="{% url 'main:add_station' %}" class="empty-link">
+                                    Add your first station
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-      </div>
-      {% endif %}
+
+        <!-- Pagination -->
+        {% if stations.has_other_pages %}
+        <div class="pagination-bar">
+            {% if stations.has_previous %}
+            <a href="?page={{ stations.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.state %}&state={{ request.GET.state }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"
+               class="page-btn">← Prev</a>
+            {% endif %}
+
+            {% for num in stations.paginator.page_range %}
+            <a href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.state %}&state={{ request.GET.state }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"
+               class="page-btn {% if stations.number == num %}active{% endif %}">{{ num }}</a>
+            {% endfor %}
+
+            {% if stations.has_next %}
+            <a href="?page={{ stations.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.state %}&state={{ request.GET.state }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}"
+               class="page-btn">Next →</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
     </div>
 
-  </div>
-</section>
+</div>
+
 {% endblock %}
