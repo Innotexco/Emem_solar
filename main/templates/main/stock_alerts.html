@@ -5,156 +5,479 @@
 
 {% block content %}
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-  * { font-family: 'Inter', sans-serif; }
-  :root { --amber: #f59e0b; --forest-green: #059669; }
-  .btn-primary { background: var(--forest-green); color: white; }
-  .btn-primary:hover { background: #047857; }
-  .btn-warning { background: var(--amber); color: white; }
-  .btn-warning:hover { background: #d97706; }
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300&family=Outfit:wght@300;400;500;600&display=swap');
+
+    :root {
+        --ink:       #0c1a0f;
+        --ink-mid:   #1e3324;
+        --green:     #0a6640;
+        --green-sat: #0d8c55;
+        --amber:     #c8752e;
+        --rule:      #d6dfd9;
+        --surface:   #f4f7f5;
+        --white:     #ffffff;
+        --muted:     #607568;
+        --danger:    #c0392b;
+        --danger-lt: #fef2f2;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: 'Outfit', sans-serif;
+        color: var(--ink);
+        background: var(--surface);
+        -webkit-font-smoothing: antialiased;
+        min-height: 100vh;
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── PAGE ─────────────────────────────────── */
+    .alerts-page {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 0 60px 100px;
+    }
+
+    /* ── HERO ─────────────────────────────────── */
+    .alerts-hero {
+        background: var(--ink);
+        position: relative; overflow: hidden;
+        margin-bottom: 2px;
+    }
+
+    .hero-bg {
+        position: absolute; inset: 0;
+        background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 80px);
+        pointer-events: none;
+    }
+
+    .hero-orb {
+        position: absolute; bottom: -80px; right: -60px;
+        width: 300px; height: 300px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(200,117,46,0.15) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .hero-inner {
+        position: relative; padding: 48px 60px;
+        display: flex; align-items: center;
+        justify-content: space-between; gap: 40px;
+    }
+
+    .hero-eyebrow {
+        display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+    }
+    .hero-eyebrow-line { width: 24px; height: 1px; background: var(--amber); }
+    .hero-eyebrow span {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.22em;
+        text-transform: uppercase; color: var(--amber);
+    }
+
+    .hero-title {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(28px, 3.5vw, 44px); font-weight: 300;
+        color: var(--white); line-height: 1.0; letter-spacing: -0.025em;
+        margin-bottom: 8px;
+    }
+    .hero-title em { font-style: italic; color: rgba(255,255,255,0.35); }
+
+    .hero-sub { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.42); }
+
+    .btn-add {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: var(--amber); color: var(--white);
+        padding: 14px 28px; font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+        text-transform: uppercase; text-decoration: none;
+        border: none; cursor: pointer; transition: background 0.25s ease;
+        white-space: nowrap; flex-shrink: 0;
+    }
+    .btn-add:hover { background: #b5661f; }
+
+    /* ── FILTERS ──────────────────────────────── */
+    .filters-bar {
+        background: var(--white); border: 1px solid var(--rule);
+        padding: 24px 32px; margin-bottom: 2px;
+        animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    .filters-form {
+        display: grid; grid-template-columns: 1fr 1fr 1fr auto;
+        gap: 12px; align-items: end;
+    }
+
+    .filter-field {}
+
+    .filter-label {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+        text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+        display: block;
+    }
+
+    .filter-input,
+    .filter-select {
+        width: 100%; background: var(--surface);
+        border: 1px solid var(--rule); padding: 12px 14px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 13px; font-weight: 400; color: var(--ink);
+        outline: none; appearance: none; -webkit-appearance: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .filter-input:focus, .filter-select:focus {
+        border-color: var(--green);
+        box-shadow: 0 0 0 3px rgba(10,102,64,0.08);
+        background: var(--white);
+    }
+
+    .filter-select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23607568' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 14px center;
+        padding-right: 36px; cursor: pointer;
+    }
+
+    .filter-actions { display: flex; gap: 8px; }
+
+    .btn-filter {
+        display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+        background: var(--ink); color: var(--white);
+        padding: 12px 20px; font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+        text-transform: uppercase; border: 2px solid var(--ink);
+        cursor: pointer; transition: all 0.25s ease; white-space: nowrap;
+    }
+    .btn-filter:hover { background: var(--green); border-color: var(--green); }
+
+    .btn-reset {
+        display: inline-flex; align-items: center; justify-content: center;
+        background: transparent; color: var(--muted);
+        padding: 12px 16px; font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; text-decoration: none;
+        border: 1px solid var(--rule); transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    .btn-reset:hover { border-color: var(--ink); color: var(--ink); }
+
+    /* ── TABLE ────────────────────────────────── */
+    .table-card {
+        background: var(--white); border: 1px solid var(--rule);
+        overflow: hidden;
+        animation: fadeUp 0.55s 0.05s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+        width: 100%; border-collapse: collapse;
+        font-family: 'Outfit', sans-serif;
+    }
+
+    thead { background: var(--ink); }
+
+    th {
+        padding: 14px 20px;
+        font-size: 10px; font-weight: 700;
+        letter-spacing: 0.16em; text-transform: uppercase;
+        color: rgba(255,255,255,0.45);
+        text-align: left; border: none; white-space: nowrap;
+    }
+    th:last-child { text-align: right; }
+
+    tbody tr {
+        border-bottom: 1px solid var(--rule);
+        transition: background 0.15s ease;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--surface); }
+    tbody tr.inactive { opacity: 0.6; }
+
+    td {
+        padding: 16px 20px;
+        font-size: 13px; font-weight: 300; color: var(--muted);
+        vertical-align: middle;
+    }
+
+    .td-product-name {
+        font-size: 14px; font-weight: 600; color: var(--ink);
+        margin-bottom: 2px;
+    }
+
+    .td-product-sub {
+        font-size: 11px; font-weight: 300; color: var(--muted);
+    }
+
+    .td-date { font-size: 13px; color: var(--ink-mid); }
+
+    .overdue-tag {
+        display: inline-flex; align-items: center; gap: 4px;
+        margin-left: 8px; padding: 3px 8px;
+        font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+        text-transform: uppercase; background: var(--danger-lt); color: var(--danger);
+    }
+
+    /* Status badges */
+    .status-badge {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 5px 12px; font-size: 10px; font-weight: 700;
+        letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .status-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+    .badge-active   { background: rgba(200,117,46,0.1); color: var(--amber); }
+    .badge-inactive { background: var(--surface); color: var(--muted); }
+
+    /* Action buttons */
+    .td-actions { text-align: right; white-space: nowrap; }
+
+    .actions-gap { display: inline-flex; gap: 6px; justify-content: flex-end; }
+
+    .action-btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 34px; height: 34px;
+        border: 1px solid var(--rule); background: transparent;
+        color: var(--muted); text-decoration: none;
+        transition: all 0.2s ease; cursor: pointer;
+    }
+    .action-btn:hover       { border-color: var(--green); color: var(--green); background: rgba(10,102,64,0.04); }
+    .action-btn-del:hover   { border-color: var(--danger); color: var(--danger); background: var(--danger-lt); }
+
+    /* Empty state */
+    .table-empty {
+        display: flex; flex-direction: column; align-items: center;
+        justify-content: center; padding: 80px 40px; gap: 14px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 52px; height: 52px; border: 1px solid var(--rule);
+        display: flex; align-items: center; justify-content: center;
+    }
+    .empty-icon svg { color: var(--muted); }
+
+    .empty-title {
+        font-family: 'Fraunces', serif;
+        font-size: 20px; font-weight: 400; color: var(--ink);
+        letter-spacing: -0.01em;
+    }
+
+    .empty-link {
+        font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; color: var(--amber);
+        text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
+        transition: gap 0.2s ease;
+    }
+    .empty-link:hover { gap: 9px; }
+
+    /* ── PAGINATION ───────────────────────────── */
+    .pagination-bar {
+        padding: 20px 28px;
+        border-top: 1px solid var(--rule);
+        display: flex; align-items: center; justify-content: center;
+        gap: 4px;
+    }
+
+    .page-btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: 36px; height: 36px; padding: 0 10px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+        text-decoration: none; color: var(--muted);
+        border: 1px solid var(--rule); background: var(--white);
+        transition: all 0.2s ease;
+    }
+    .page-btn:hover { border-color: var(--ink); color: var(--ink); }
+    .page-btn.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+    /* ── RESPONSIVE ───────────────────────────── */
+    @media (max-width: 1100px) {
+        .alerts-page { padding: 0 32px 80px; }
+        .hero-inner { padding: 40px 32px; flex-direction: column; align-items: flex-start; gap: 20px; }
+        .filters-form { grid-template-columns: 1fr 1fr; }
+        .filter-actions { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 640px) {
+        .filters-form { grid-template-columns: 1fr; }
+        .filters-bar { padding: 20px 20px; }
+    }
 </style>
 
-<section class="py-12 bg-neutral-50 min-h-screen">
-  <div class="container mx-auto px-6">
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
-      <h1 class="text-3xl font-bold text-neutral-900">Stock Alerts</h1>
-      <a href="{% url 'main:add_stock_alert' %}" 
-         class="btn-warning inline-flex items-center gap-2 px-5 py-3 rounded-lg font-medium shadow-sm">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-             viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-        </svg>
-        Add Stock Alert
-      </a>
+<!-- Hero -->
+<div class="alerts-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-orb"></div>
+    <div class="hero-inner">
+        <div>
+            <div class="hero-eyebrow">
+                <div class="hero-eyebrow-line"></div>
+                <span>Admin</span>
+            </div>
+            <h1 class="hero-title">
+                Stock <em>Alerts</em>
+            </h1>
+            <p class="hero-sub">Manage out-of-stock notifications for customers</p>
+        </div>
+        <a href="{% url 'main:add_stock_alert' %}" class="btn-add">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 4v16m8-8H4"/>
+            </svg>
+            Add Stock Alert
+        </a>
     </div>
+</div>
+
+<div class="alerts-page">
 
     <!-- Filters -->
-    <div class="bg-white border border-neutral-200 rounded-2xl shadow-sm p-6 mb-10">
-      <form method="GET" class="grid md:grid-cols-4 gap-4">
-        <input type="text" name="search" placeholder="Search by product name..." 
-               value="{{ request.GET.search }}"
-               class="px-4 py-3 border border-neutral-300 rounded-lg w-full">
+    <div class="filters-bar">
+        <form method="GET" class="filters-form">
+            <div class="filter-field">
+                <label class="filter-label">Search</label>
+                <input type="text" name="search"
+                    placeholder="Product name…"
+                    value="{{ request.GET.search }}"
+                    class="filter-input">
+            </div>
 
-        <select name="status" class="px-4 py-3 border border-neutral-300 rounded-lg w-full">
-          <option value="">All Status</option>
-          <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Active</option>
-          <option value="inactive" {% if request.GET.status == 'inactive' %}selected{% endif %}>Inactive</option>
-        </select>
+            <div class="filter-field">
+                <label class="filter-label">Status</label>
+                <select name="status" class="filter-select">
+                    <option value="">All Statuses</option>
+                    <option value="active"   {% if request.GET.status == 'active'   %}selected{% endif %}>Active</option>
+                    <option value="inactive" {% if request.GET.status == 'inactive' %}selected{% endif %}>Inactive</option>
+                </select>
+            </div>
 
-        <select name="sort" class="px-4 py-3 border border-neutral-300 rounded-lg w-full">
-          <option value="">Sort by...</option>
-          <option value="date_asc" {% if request.GET.sort == 'date_asc' %}selected{% endif %}>Restock Date (Earliest)</option>
-          <option value="date_desc" {% if request.GET.sort == 'date_desc' %}selected{% endif %}>Restock Date (Latest)</option>
-          <option value="created" {% if request.GET.sort == 'created' %}selected{% endif %}>Recently Added</option>
-        </select>
+            <div class="filter-field">
+                <label class="filter-label">Sort By</label>
+                <select name="sort" class="filter-select">
+                    <option value="">Default</option>
+                    <option value="date_asc"  {% if request.GET.sort == 'date_asc'  %}selected{% endif %}>Restock Date (Earliest)</option>
+                    <option value="date_desc" {% if request.GET.sort == 'date_desc' %}selected{% endif %}>Restock Date (Latest)</option>
+                    <option value="created"   {% if request.GET.sort == 'created'   %}selected{% endif %}>Recently Added</option>
+                </select>
+            </div>
 
-        <div class="flex items-center gap-3">
-          <button type="submit" class="btn-primary px-5 py-3 rounded-lg w-full">Filter</button>
-          <a href="{% url 'main:manage_stock_alerts' %}" 
-             class="px-5 py-3 border border-neutral-300 rounded-lg w-full text-center font-medium hover:bg-neutral-100">
-            Reset
-          </a>
+            <div class="filter-actions">
+                <button type="submit" class="btn-filter">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 4h18M7 12h10M11 20h2"/>
+                    </svg>
+                    Filter
+                </button>
+                <a href="{% url 'main:manage_stock_alerts' %}" class="btn-reset">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Expected Restock</th>
+                        <th>Expected Qty</th>
+                        <th>Notes</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th style="text-align:right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for alert in alerts %}
+                    <tr class="{% if not alert.is_active %}inactive{% endif %}">
+                        <td>
+                            <div class="td-product-name">{{ alert.product.name }}</div>
+                            <div class="td-product-sub">{{ alert.product.capacity }}</div>
+                        </td>
+                        <td>
+                            <span class="td-date">{{ alert.expected_restock_date|date:"M d, Y" }}</span>
+                            {% if alert.is_overdue %}
+                                <span class="overdue-tag">
+                                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                                    </svg>
+                                    Overdue
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>{{ alert.expected_quantity|default:"—" }}</td>
+                        <td>{{ alert.notes|truncatewords:8|default:"—" }}</td>
+                        <td>
+                            {% if alert.is_active %}
+                                <span class="status-badge badge-active"><span class="status-dot"></span>Active</span>
+                            {% else %}
+                                <span class="status-badge badge-inactive"><span class="status-dot"></span>Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ alert.created_at|date:"M d, Y" }}</td>
+                        <td class="td-actions">
+                            <div class="actions-gap">
+                                <a href="{% url 'main:edit_stock_alert' alert.id %}" class="action-btn" title="Edit">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                </a>
+                                <a href="{% url 'main:delete_stock_alert' alert.id %}" class="action-btn action-btn-del" title="Delete">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="padding:0;">
+                            <div class="table-empty">
+                                <div class="empty-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                                    </svg>
+                                </div>
+                                <div class="empty-title">No stock alerts found</div>
+                                <a href="{% url 'main:add_stock_alert' %}" class="empty-link">
+                                    Add your first alert
+                                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-      </form>
-    </div>
 
-    <!-- Alerts Table -->
-    <div class="bg-white border border-neutral-200 rounded-2xl shadow-sm overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-neutral-200">
-          <thead class="bg-neutral-100">
-            <tr class="text-left text-sm font-semibold text-neutral-700">
-              <th class="px-6 py-3">Product</th>
-              <th class="px-6 py-3">Expected Restock Date</th>
-              <th class="px-6 py-3">Expected Quantity</th>
-              <th class="px-6 py-3">Notes</th>
-              <th class="px-6 py-3">Status</th>
-              <th class="px-6 py-3">Created</th>
-              <th class="px-6 py-3 text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-neutral-200">
-            {% for alert in alerts %}
-            <tr class="hover:bg-neutral-50 transition {% if not alert.is_active %}opacity-70{% endif %}">
-              <td class="px-6 py-4">
-                <div class="font-medium text-neutral-900">{{ alert.product.name }}</div>
-                <div class="text-sm text-neutral-500">{{ alert.product.capacity }}</div>
-              </td>
-              <td class="px-6 py-4 text-neutral-700">
-                {{ alert.expected_restock_date|date:"M d, Y" }}
-                {% if alert.is_overdue %}
-                <span class="ml-2 px-2 py-1 text-xs bg-red-100 text-red-700 rounded-full font-medium">Overdue</span>
-                {% endif %}
-              </td>
-              <td class="px-6 py-4">{{ alert.expected_quantity|default:"—" }}</td>
-              <td class="px-6 py-4 text-neutral-700">{{ alert.notes|truncatewords:8|default:"—" }}</td>
-              <td class="px-6 py-4">
-                {% if alert.is_active %}
-                <span class="px-3 py-1 text-xs font-medium bg-amber-100 text-amber-700 rounded-full">Active</span>
-                {% else %}
-                <span class="px-3 py-1 text-xs font-medium bg-neutral-200 text-neutral-700 rounded-full">Inactive</span>
-                {% endif %}
-              </td>
-              <td class="px-6 py-4 text-sm text-neutral-600">{{ alert.created_at|date:"M d, Y" }}</td>
-              <td class="px-6 py-4 text-right">
-                <div class="flex justify-end gap-2">
-                  <a href="{% url 'main:edit_stock_alert' alert.id %}" 
-                     class="p-2 rounded-lg border border-neutral-300 hover:bg-neutral-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" stroke="currentColor"
-                         stroke-width="2" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" 
-                            d="M15.232 5.232l3.536 3.536M9 11l6 6L4 20l1.5-7.5L9 11z" />
-                    </svg>
-                  </a>
-                  <a href="{% url 'main:delete_stock_alert' alert.id %}" 
-                     class="p-2 rounded-lg border border-red-300 text-red-600 hover:bg-red-50">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" stroke="currentColor"
-                         stroke-width="2" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" 
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </a>
-                </div>
-              </td>
-            </tr>
-            {% empty %}
-            <tr>
-              <td colspan="7" class="px-6 py-10 text-center text-neutral-500">
-                No stock alerts found. 
-                <a href="{% url 'main:add_stock_alert' %}" 
-                   class="text-forest-green font-medium hover:underline">Add one now</a>.
-              </td>
-            </tr>
+        <!-- Pagination -->
+        {% if alerts.has_other_pages %}
+        <div class="pagination-bar">
+            {% if alerts.has_previous %}
+            <a href="?page={{ alerts.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
+               class="page-btn">← Prev</a>
+            {% endif %}
+
+            {% for num in alerts.paginator.page_range %}
+            <a href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
+               class="page-btn {% if alerts.number == num %}active{% endif %}">{{ num }}</a>
             {% endfor %}
-          </tbody>
-        </table>
-      </div>
 
-      <!-- Pagination -->
-      {% if alerts.has_other_pages %}
-      <div class="flex justify-center items-center py-6">
-        <nav class="flex gap-2">
-          {% if alerts.has_previous %}
-          <a href="?page={{ alerts.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
-             class="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-100">Previous</a>
-          {% endif %}
+            {% if alerts.has_next %}
+            <a href="?page={{ alerts.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
+               class="page-btn">Next →</a>
+            {% endif %}
+        </div>
+        {% endif %}
 
-          {% for num in alerts.paginator.page_range %}
-          <a href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
-             class="px-4 py-2 border border-neutral-300 rounded-lg {% if alerts.number == num %}bg-forest-green text-white{% else %}hover:bg-neutral-100{% endif %}">
-             {{ num }}
-          </a>
-          {% endfor %}
-
-          {% if alerts.has_next %}
-          <a href="?page={{ alerts.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
-             class="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-100">Next</a>
-          {% endif %}
-        </nav>
-      </div>
-      {% endif %}
     </div>
-  </div>
-</section>
+
+</div>
+
 {% endblock %}
