@@ -2,1155 +2,636 @@
 {% load static %}
 {% load humanize %}
 
-{% block title %}My Orders - Solar Battery Store{% endblock %}
+{% block title %}My Orders - Emem Energy{% endblock %}
 
 {% block content %}
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-    
-    * {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap');
+
     :root {
-        --forest-green: #059669;
-        --forest-green-dark: #047857;
-        --forest-green-light: #10b981;
-        --ocean-teal: #14b8a6;
-        --solar-amber: #f59e0b;
-        --neutral-50: #fafafa;
-        --neutral-100: #f5f5f5;
-        --neutral-200: #e5e5e5;
-        --neutral-300: #d4d4d4;
-        --neutral-400: #a3a3a3;
-        --neutral-500: #737373;
-        --neutral-600: #525252;
-        --neutral-700: #404040;
-        --neutral-800: #262626;
-        --neutral-900: #171717;
-        --success: #10b981;
-        --error: #ef4444;
-        --warning: #f59e0b;
-        --info: #3b82f6;
+        --ink:       #0c1a0f;
+        --ink-mid:   #1e3324;
+        --green:     #0a6640;
+        --green-sat: #0d8c55;
+        --amber:     #c8752e;
+        --rule:      #d6dfd9;
+        --surface:   #f4f7f5;
+        --white:     #ffffff;
+        --muted:     #607568;
+        --danger:    #c0392b;
+        --danger-lt: #fef2f2;
     }
-    
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-        background-color: var(--neutral-50);
-        color: var(--neutral-800);
-        font-size: 16px;
-        line-height: 1.5;
+        font-family: 'Outfit', sans-serif;
+        color: var(--ink);
+        background: var(--surface);
+        -webkit-font-smoothing: antialiased;
+        min-height: 100vh;
     }
-    
-    /* Mobile-first container */
-    .container {
-        width: 100%;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        margin-left: auto;
-        margin-right: auto;
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
-    
-    @media (min-width: 640px) {
-        .container {
-            max-width: 640px;
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
-        }
+
+    /* ── PAGE ─────────────────────────────────── */
+    .orders-page {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 0 60px 100px;
     }
-    
-    @media (min-width: 768px) {
-        .container {
-            max-width: 768px;
-        }
+
+    /* ── HERO ─────────────────────────────────── */
+    .orders-hero {
+        background: var(--ink);
+        position: relative; overflow: hidden;
+        margin-bottom: 2px;
     }
-    
-    @media (min-width: 1024px) {
-        .container {
-            max-width: 1024px;
-        }
+
+    .hero-grid {
+        position: absolute; inset: 0;
+        background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 80px);
+        pointer-events: none;
     }
-    
-    @media (min-width: 1280px) {
-        .container {
-            max-width: 1280px;
-        }
+
+    .hero-orb {
+        position: absolute; bottom: -80px; right: -60px;
+        width: 300px; height: 300px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(10,102,64,0.18) 0%, transparent 70%);
+        pointer-events: none;
     }
-    
-    /* Page header - mobile optimized */
-    .page-header {
-        background: white;
-        border-bottom: 1px solid var(--neutral-200);
-        padding: 1rem 0;
-        position: sticky;
-        top: 0;
-        z-index: 40;
-        backdrop-filter: blur(8px);
-        background-color: rgba(255, 255, 255, 0.95);
+
+    .hero-inner {
+        position: relative; padding: 48px 60px;
+        display: flex; align-items: center;
+        justify-content: space-between; gap: 40px;
     }
-    
-    @media (min-width: 768px) {
-        .page-header {
-            padding: 1.5rem 0;
-            position: relative;
-        }
+
+    .hero-eyebrow {
+        display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
     }
-    
-    .page-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--neutral-900);
-        margin: 0 0 0.25rem 0;
-        line-height: 1.2;
+    .hero-eyebrow-line { width: 24px; height: 1px; background: var(--amber); }
+    .hero-eyebrow span {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.22em;
+        text-transform: uppercase; color: var(--amber);
     }
-    
-    @media (min-width: 768px) {
-        .page-title {
-            font-size: 2rem;
-        }
+
+    .hero-title {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(28px, 3.5vw, 44px);
+        font-weight: 300; color: var(--white);
+        line-height: 1.0; letter-spacing: -0.025em;
+        margin-bottom: 8px;
     }
-    
-    @media (min-width: 1024px) {
-        .page-title {
-            font-size: 2.5rem;
-        }
+    .hero-title em { font-style: italic; color: rgba(255,255,255,0.35); }
+
+    .hero-sub { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.42); }
+
+    .btn-shop {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: var(--amber); color: var(--white);
+        padding: 14px 28px; font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+        text-transform: uppercase; text-decoration: none;
+        border: none; cursor: pointer; transition: background 0.25s ease;
+        white-space: nowrap; flex-shrink: 0;
     }
-    
-    .page-subtitle {
-        font-size: 0.875rem;
-        color: var(--neutral-600);
-        margin: 0;
+    .btn-shop:hover { background: #b5661f; }
+    .btn-shop svg { transition: transform 0.2s; }
+    .btn-shop:hover svg { transform: translateX(3px); }
+
+    /* ── STATS ────────────────────────────────── */
+    .stats-row {
+        display: grid; grid-template-columns: repeat(3, 1fr);
+        gap: 2px; margin-bottom: 2px;
+        animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
     }
-    
-    @media (min-width: 768px) {
-        .page-subtitle {
-            font-size: 1rem;
-        }
+
+    .stat-card {
+        background: var(--white); border: 1px solid var(--rule);
+        padding: 28px 28px;
+        transition: border-color 0.25s ease;
     }
-    
-    /* Stats cards - responsive grid */
-    .stats-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-        margin-bottom: 1.5rem;
+    .stat-card:hover { border-color: rgba(10,102,64,0.2); }
+
+    .stat-num {
+        font-family: 'Fraunces', serif;
+        font-size: 36px; font-weight: 600;
+        color: var(--ink); line-height: 1; letter-spacing: -0.02em;
+        margin-bottom: 8px;
     }
-    
-    @media (min-width: 640px) {
-        .stats-grid {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-        }
+    .stat-num.green { color: var(--green); }
+
+    .stat-label {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+        text-transform: uppercase; color: var(--muted);
+        display: flex; align-items: center; gap: 8px;
     }
-    
-    .stats-card {
-        background: white;
-        border: 1px solid var(--neutral-200);
-        border-radius: 12px;
-        padding: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
+    .stat-label::before { content: ''; display: block; width: 14px; height: 1px; background: var(--rule); }
+
+    /* ── FILTERS ──────────────────────────────── */
+    .filters-bar {
+        background: var(--white); border: 1px solid var(--rule);
+        padding: 0; margin-bottom: 2px;
+        display: flex; overflow-x: auto;
+        scrollbar-width: none; -ms-overflow-style: none;
+        animation: fadeUp 0.5s 0.05s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .filters-bar::-webkit-scrollbar { display: none; }
+
+    .filter-btn {
+        display: flex; align-items: center; gap: 7px;
+        padding: 18px 28px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; color: var(--muted);
+        background: none; border: none; border-bottom: 2px solid transparent;
+        cursor: pointer; transition: all 0.2s ease;
+        white-space: nowrap; flex-shrink: 0;
+    }
+    .filter-btn:hover { color: var(--ink); }
+    .filter-btn.active { color: var(--green); border-bottom-color: var(--green); }
+
+    .filter-count {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 18px; height: 18px; border-radius: 50%;
+        font-size: 9px; font-weight: 700;
+        background: var(--surface); color: var(--muted);
         transition: all 0.2s ease;
     }
-    
-    .stats-card:active {
-        transform: scale(0.98);
-    }
-    
-    @media (min-width: 768px) {
-        .stats-card {
-            padding: 1.25rem;
-        }
-        
-        .stats-card:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            border-color: var(--forest-green);
-        }
-    }
-    
-    .stats-icon {
-        width: 2.5rem;
-        height: 2.5rem;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-    
-    @media (min-width: 768px) {
-        .stats-icon {
-            width: 3rem;
-            height: 3rem;
-        }
-    }
-    
-    .stats-value {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--neutral-900);
-        line-height: 1;
-        margin-bottom: 0.25rem;
-    }
-    
-    @media (min-width: 768px) {
-        .stats-value {
-            font-size: 1.5rem;
-        }
-    }
-    
-    .stats-label {
-        font-size: 0.75rem;
-        color: var(--neutral-600);
-        line-height: 1;
-    }
-    
-    @media (min-width: 768px) {
-        .stats-label {
-            font-size: 0.875rem;
-        }
-    }
-    
-    /* Filter chips - horizontal scroll on mobile */
-    .filter-container {
-        margin-bottom: 1rem;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-    
-    .filter-container::-webkit-scrollbar {
-        display: none;
-    }
-    
-    .filter-chips {
-        display: flex;
-        gap: 0.5rem;
-        padding-bottom: 0.25rem;
-        min-width: min-content;
-    }
-    
-    @media (min-width: 768px) {
-        .filter-chips {
-            gap: 0.75rem;
-        }
-    }
-    
-    .filter-chip {
-        padding: 0.625rem 1rem;
-        border-radius: 999px;
-        border: 2px solid var(--neutral-200);
-        background: white;
-        font-weight: 600;
-        font-size: 0.8125rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        color: var(--neutral-700);
-        white-space: nowrap;
-        flex-shrink: 0;
-        -webkit-tap-highlight-color: transparent;
-    }
-    
-    @media (min-width: 768px) {
-        .filter-chip {
-            padding: 0.75rem 1.25rem;
-            font-size: 0.875rem;
-        }
-        
-        .filter-chip:hover {
-            border-color: var(--forest-green);
-            color: var(--forest-green);
-        }
-    }
-    
-    .filter-chip.active {
-        background: var(--forest-green);
-        color: white;
-        border-color: var(--forest-green);
-    }
-    
-    .filter-chip:active {
-        transform: scale(0.95);
-    }
-    
-    /* Order cards - optimized for touch */
-    .orders-list {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    @media (min-width: 768px) {
-        .orders-list {
-            gap: 1.25rem;
-        }
-    }
-    
+    .filter-btn.active .filter-count { background: rgba(10,102,64,0.1); color: var(--green); }
+
+    /* ── ORDER LIST ───────────────────────────── */
+    .orders-list { display: flex; flex-direction: column; gap: 2px; }
+
     .order-card {
-        background: white;
-        border: 1px solid var(--neutral-200);
-        border-radius: 12px;
-        overflow: hidden;
-        transition: all 0.2s ease;
+        background: var(--white); border: 1px solid var(--rule);
+        display: grid; grid-template-columns: 1fr auto;
+        gap: 0; align-items: stretch;
+        opacity: 0; animation: fadeUp 0.55s cubic-bezier(0.16,1,0.3,1) forwards;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease;
     }
-    
-    @media (min-width: 768px) {
-        .order-card {
-            border-radius: 16px;
-        }
-        
-        .order-card:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-            transform: translateY(-2px);
-            border-color: var(--forest-green);
-        }
+    .order-card:hover {
+        border-color: rgba(10,102,64,0.2);
+        box-shadow: 0 2px 16px rgba(12,26,15,0.06);
+        z-index: 1;
     }
-    
-    .order-card-content {
-        padding: 1rem;
+
+    /* Main content */
+    .order-main { padding: 28px 36px; }
+
+    .order-top {
+        display: flex; align-items: flex-start;
+        justify-content: space-between; gap: 16px;
+        margin-bottom: 16px;
     }
-    
-    @media (min-width: 768px) {
-        .order-card-content {
-            padding: 1.5rem;
-        }
-    }
-    
-    /* Order header - stacked on mobile */
-    .order-header {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        margin-bottom: 1rem;
-    }
-    
-    @media (min-width: 768px) {
-        .order-header {
-            flex-direction: row;
-            align-items: flex-start;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-        }
-    }
-    
+
     .order-id {
-        font-size: 1.125rem;
-        font-weight: 700;
-        color: var(--neutral-900);
-        margin: 0 0 0.5rem 0;
+        font-family: 'Fraunces', serif;
+        font-size: 22px; font-weight: 400; color: var(--ink);
+        letter-spacing: -0.015em; margin-bottom: 6px;
     }
-    
-    @media (min-width: 768px) {
-        .order-id {
-            font-size: 1.25rem;
-        }
+
+    .order-date { font-size: 12px; font-weight: 300; color: var(--muted); }
+
+    /* Status */
+    .order-status {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 5px 12px; font-size: 10px; font-weight: 700;
+        letter-spacing: 0.12em; text-transform: uppercase; flex-shrink: 0;
     }
-    
-    .badges-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        align-items: center;
-        margin-bottom: 0.75rem;
-    }
-    
-    /* Status badges - touch-friendly */
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.375rem;
-        padding: 0.375rem 0.75rem;
-        border-radius: 999px;
-        font-size: 0.6875rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.025em;
-    }
-    
-    @media (min-width: 768px) {
-        .status-badge {
-            padding: 0.5rem 1rem;
-            font-size: 0.75rem;
-        }
-    }
-    
-    .status-success {
-        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-        color: #065f46;
-    }
-    
-    .status-cancelled {
-        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-        color: #991b1b;
-    }
-    
-    .status-pending {
-        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-        color: #92400e;
-    }
-    
-    .invoice-badge {
-        background: #dbeafe;
-        color: #1e40af;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.25rem;
-        padding: 0.375rem 0.625rem;
-        border-radius: 6px;
-        font-size: 0.6875rem;
-        font-weight: 600;
-    }
-    
-    @media (min-width: 768px) {
-        .invoice-badge {
-            padding: 0.375rem 0.75rem;
-            font-size: 0.75rem;
-        }
-    }
-    
-    /* Order meta - responsive layout */
+    .status-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+
+    .status-success    { background: rgba(10,102,64,0.08); color: var(--green); }
+    .status-cancelled  { background: var(--danger-lt); color: var(--danger); }
+    .status-pending    { background: #fffbeb; color: #92400e; }
+    .status-processing { background: #eff6ff; color: #1e40af; }
+    .status-shipped    { background: #eef2ff; color: #4338ca; }
+
+    /* Meta row */
     .order-meta {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        font-size: 0.8125rem;
-        color: var(--neutral-600);
+        display: flex; align-items: center; gap: 20px;
+        flex-wrap: wrap; margin-bottom: 16px;
     }
-    
-    @media (min-width: 640px) {
-        .order-meta {
-            flex-direction: row;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
+
+    .order-meta-item {
+        display: flex; align-items: center; gap: 6px;
+        font-size: 12px; font-weight: 300; color: var(--muted);
     }
-    
-    @media (min-width: 768px) {
-        .order-meta {
-            font-size: 0.875rem;
-        }
+    .order-meta-item svg { color: var(--muted); flex-shrink: 0; }
+
+    /* Item thumbnails */
+    .item-thumbs {
+        display: flex; gap: 4px; align-items: center;
+        overflow-x: auto; scrollbar-width: none;
     }
-    
-    .meta-item {
-        display: flex;
-        align-items: center;
-        gap: 0.375rem;
+    .item-thumbs::-webkit-scrollbar { display: none; }
+
+    .item-thumb {
+        width: 44px; height: 44px; flex-shrink: 0;
+        overflow: hidden; border: 1px solid var(--rule);
+        background: var(--surface);
     }
-    
-    /* Order items preview - horizontal scroll */
-    .items-preview {
-        display: flex;
-        gap: 0.5rem;
-        margin-top: 0.75rem;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        padding-bottom: 0.25rem;
+    .item-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.85; }
+
+    .item-thumb-empty {
+        width: 100%; height: 100%;
+        display: flex; align-items: center; justify-content: center;
     }
-    
-    .items-preview::-webkit-scrollbar {
-        display: none;
+
+    .item-thumb-more {
+        width: 44px; height: 44px; flex-shrink: 0;
+        border: 1px solid var(--rule); background: var(--surface);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 10px; font-weight: 700; color: var(--muted);
     }
-    
-    .item-thumbnail {
-        width: 2.5rem;
-        height: 2.5rem;
-        border-radius: 8px;
-        background: var(--neutral-100);
-        overflow: hidden;
-        border: 2px solid white;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        flex-shrink: 0;
+
+    .item-thumb-loader {
+        display: flex; align-items: center; gap: 6px;
+        font-size: 11px; font-weight: 300; color: var(--muted);
     }
-    
-    @media (min-width: 768px) {
-        .item-thumbnail {
-            width: 3rem;
-            height: 3rem;
-        }
-    }
-    
-    .item-thumbnail img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    /* Order amount - prominent on mobile */
-    .order-amount-section {
-        text-align: left;
-        padding-top: 0.75rem;
-        border-top: 1px solid var(--neutral-200);
-    }
-    
-    @media (min-width: 768px) {
-        .order-amount-section {
-            text-align: right;
-            padding-top: 0;
-            border-top: none;
-        }
-    }
-    
-    .amount-label {
-        font-size: 0.75rem;
-        color: var(--neutral-600);
-        margin-bottom: 0.25rem;
-    }
-    
-    @media (min-width: 768px) {
-        .amount-label {
-            font-size: 0.875rem;
-        }
-    }
-    
-    .amount-value {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--neutral-900);
-        line-height: 1;
-    }
-    
-    @media (min-width: 768px) {
-        .amount-value {
-            font-size: 2rem;
-        }
-    }
-    
-    /* Order footer - stacked on mobile */
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spin { animation: spin 0.8s linear infinite; }
+
+    /* Order footer */
     .order-footer {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        padding-top: 1rem;
-        border-top: 1px solid var(--neutral-200);
-        margin-top: 1rem;
+        display: flex; align-items: center; gap: 16px;
+        padding-top: 16px; border-top: 1px solid var(--rule);
+        margin-top: 16px; flex-wrap: wrap;
     }
-    
-    @media (min-width: 768px) {
-        .order-footer {
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            padding-top: 1.25rem;
-            margin-top: 1.25rem;
-        }
+
+    .invoice-actions { display: flex; align-items: center; gap: 10px; flex: 1; flex-wrap: wrap; }
+
+    .btn-invoice-link {
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+        text-transform: uppercase; color: var(--green); text-decoration: none;
+        transition: gap 0.2s ease;
     }
-    
-    .invoice-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        width: 100%;
+    .btn-invoice-link:hover { gap: 9px; }
+
+    .btn-invoice-download {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: transparent; color: var(--muted);
+        padding: 8px 16px; font-family: 'Outfit', sans-serif;
+        font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; border: 1px solid var(--rule);
+        text-decoration: none; transition: all 0.2s ease;
     }
-    
-    @media (min-width: 640px) {
-        .invoice-actions {
-            flex-direction: row;
-            align-items: center;
-            gap: 0.75rem;
-            width: auto;
-        }
+    .btn-invoice-download:hover { border-color: var(--ink); color: var(--ink); }
+
+    .invoice-unavailable {
+        font-size: 11px; font-weight: 300; color: var(--muted);
+        font-style: italic;
     }
-    
-    /* Buttons - touch-optimized */
-    .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.25rem;
-        border-radius: 10px;
-        font-weight: 600;
-        font-size: 0.875rem;
-        text-decoration: none;
-        transition: all 0.2s ease;
-        cursor: pointer;
-        border: none;
+
+    /* Right panel — amount + details */
+    .order-right {
+        display: flex; flex-direction: column;
+        align-items: flex-end; justify-content: space-between;
+        padding: 28px 36px;
+        border-left: 1px solid var(--rule);
+        min-width: 180px;
+    }
+
+    .order-amount-label {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+        text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+    }
+
+    .order-amount {
+        font-family: 'Fraunces', serif;
+        font-size: 28px; font-weight: 600; color: var(--ink);
+        letter-spacing: -0.02em; line-height: 1; margin-bottom: 4px;
+    }
+    .order-amount-curr { font-size: 14px; font-weight: 400; opacity: 0.38; margin-right: 2px; }
+
+    .btn-details {
+        display: inline-flex; align-items: center; gap: 7px;
+        background: var(--ink); color: var(--white);
+        padding: 12px 18px; font-family: 'Outfit', sans-serif;
+        font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+        text-transform: uppercase; text-decoration: none;
+        border: 2px solid var(--ink); transition: all 0.25s ease;
         white-space: nowrap;
-        -webkit-tap-highlight-color: transparent;
-        min-height: 44px;
     }
-    
-    @media (min-width: 768px) {
-        .btn {
-            padding: 0.75rem 1.5rem;
-            font-size: 0.9375rem;
-            min-height: auto;
-        }
+    .btn-details:hover { background: var(--green); border-color: var(--green); }
+    .btn-details svg { transition: transform 0.2s; }
+    .btn-details:hover svg { transform: translateX(3px); }
+
+    /* ── EMPTY STATE ──────────────────────────── */
+    .orders-empty {
+        background: var(--white); border: 1px solid var(--rule);
+        padding: 100px 60px; text-align: center;
+        animation: fadeUp 0.55s cubic-bezier(0.16,1,0.3,1) both;
     }
-    
-    .btn-primary {
-        background: var(--forest-green);
-        color: white;
-    }
-    
-    .btn-primary:active {
-        background: var(--forest-green-dark);
-        transform: scale(0.98);
-    }
-    
-    @media (min-width: 768px) {
-        .btn-primary:hover {
-            background: var(--forest-green-dark);
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
-            transform: translateY(-1px);
-        }
-    }
-    
-    .btn-secondary {
-        background: white;
-        color: var(--neutral-700);
-        border: 2px solid var(--neutral-300);
-    }
-    
-    .btn-secondary:active {
-        background: var(--neutral-100);
-        border-color: var(--forest-green);
-        color: var(--forest-green);
-    }
-    
-    @media (min-width: 768px) {
-        .btn-secondary:hover {
-            background: var(--neutral-100);
-            border-color: var(--forest-green);
-            color: var(--forest-green);
-        }
-    }
-    
-    .btn-link {
-        color: var(--neutral-700);
-        font-size: 0.8125rem;
-        font-weight: 500;
-        padding: 0.5rem;
-    }
-    
-    @media (min-width: 768px) {
-        .btn-link {
-            font-size: 0.875rem;
-        }
-        
-        .btn-link:hover {
-            color: var(--forest-green);
-        }
-    }
-    
-    /* Empty state */
-    .empty-state {
-        text-align: center;
-        padding: 3rem 1.5rem;
-        background: white;
-        border-radius: 12px;
-        border: 1px solid var(--neutral-200);
-    }
-    
-    @media (min-width: 768px) {
-        .empty-state {
-            padding: 5rem 2rem;
-            border-radius: 16px;
-        }
-    }
-    
+
     .empty-icon {
-        width: 4rem;
-        height: 4rem;
-        margin: 0 auto 1.5rem;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #f5f5f5 0%, #e5e5e5 100%);
+        width: 56px; height: 56px; border: 1px solid var(--rule);
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 24px;
     }
-    
-    @media (min-width: 768px) {
-        .empty-icon {
-            width: 5rem;
-            height: 5rem;
-        }
-    }
-    
+    .empty-icon svg { color: var(--muted); }
+
     .empty-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--neutral-900);
-        margin: 0 0 0.5rem 0;
+        font-family: 'Fraunces', serif;
+        font-size: 32px; font-weight: 400; color: var(--ink);
+        letter-spacing: -0.02em; margin-bottom: 10px;
     }
-    
-    @media (min-width: 768px) {
-        .empty-title {
-            font-size: 1.5rem;
-        }
+
+    .empty-desc {
+        font-size: 14px; font-weight: 300; color: var(--muted);
+        margin-bottom: 36px; line-height: 1.7;
     }
-    
-    .empty-description {
-        font-size: 0.875rem;
-        color: var(--neutral-600);
-        margin: 0 0 1.5rem 0;
-        max-width: 28rem;
-        margin-left: auto;
-        margin-right: auto;
+
+    .btn-start {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: var(--ink); color: var(--white);
+        padding: 16px 36px; font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+        text-transform: uppercase; text-decoration: none;
+        border: none; transition: background 0.25s ease;
     }
-    
-    @media (min-width: 768px) {
-        .empty-description {
-            font-size: 1rem;
-        }
+    .btn-start:hover { background: var(--green); }
+
+    /* ── RESPONSIVE ───────────────────────────── */
+    @media (max-width: 1100px) {
+        .orders-page { padding: 0 32px 80px; }
+        .hero-inner { padding: 40px 32px; flex-direction: column; align-items: flex-start; }
+        .stats-row { grid-template-columns: repeat(3, 1fr); }
     }
-    
-    /* Loading states */
-    .loading-spinner {
-        animation: spin 1s linear infinite;
+
+    @media (max-width: 768px) {
+        .order-card { grid-template-columns: 1fr; }
+        .order-right { border-left: none; border-top: 1px solid var(--rule); flex-direction: row; align-items: center; padding: 20px 22px; }
+        .order-main { padding: 22px; }
+        .order-top { flex-direction: column; }
+        .stats-row { grid-template-columns: 1fr 1fr; }
     }
-    
-    @keyframes spin {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-    
-    /* Fade in animation */
-    .fade-in {
-        animation: fadeIn 0.4s ease-out forwards;
-    }
-    
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(12px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    /* Utility classes */
-    .icon-sm {
-        width: 1rem;
-        height: 1rem;
-    }
-    
-    .icon-md {
-        width: 1.25rem;
-        height: 1.25rem;
-    }
-    
-    @media (min-width: 768px) {
-        .icon-md {
-            width: 1.5rem;
-            height: 1.5rem;
-        }
-    }
-    
-    /* Safe area insets for notched devices */
-    @supports (padding: max(0px)) {
-        .container {
-            padding-left: max(1rem, env(safe-area-inset-left));
-            padding-right: max(1rem, env(safe-area-inset-right));
-        }
-        
-        .page-header {
-            padding-top: max(1rem, env(safe-area-inset-top));
-        }
+
+    @media (max-width: 480px) {
+        .stats-row { grid-template-columns: 1fr; }
     }
 </style>
 
-<section class="py-4 md:py-8 min-h-screen">
-    <div class="container">
-        
-        <!-- Page Header -->
-        <div class="page-header mb-4 md:mb-6">
-            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-4 md:mb-6">
-                <div class="flex-1">
-                    <h1 class="page-title">My Orders</h1>
-                    <p class="page-subtitle">Track and manage your purchases</p>
+<!-- Hero -->
+<div class="orders-hero">
+    <div class="hero-grid"></div>
+    <div class="hero-orb"></div>
+    <div class="hero-inner">
+        <div>
+            <div class="hero-eyebrow">
+                <div class="hero-eyebrow-line"></div>
+                <span>Order History</span>
+            </div>
+            <h1 class="hero-title">My <em>Orders</em></h1>
+            <p class="hero-sub">Track and manage all your purchases</p>
+        </div>
+        <a href="{% url 'main:products' %}" class="btn-shop">
+            Continue Shopping
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </a>
+    </div>
+</div>
+
+<div class="orders-page">
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-num">{{ total_orders }}</div>
+            <div class="stat-label">Total Orders</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num green">{{ completed_orders }}</div>
+            <div class="stat-label">Completed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num" style="font-size:24px;">₦{{ total_spent|floatformat:0|intcomma }}</div>
+            <div class="stat-label">Total Spent</div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-bar">
+        <button class="filter-btn active" data-status="all">
+            All Orders
+            <span class="filter-count">{{ orders|length }}</span>
+        </button>
+        <button class="filter-btn" data-status="success">Completed</button>
+        <button class="filter-btn" data-status="cancelled">Cancelled</button>
+        <button class="filter-btn" data-status="pending">Pending</button>
+        <button class="filter-btn" data-status="processing">Processing</button>
+        <button class="filter-btn" data-status="shipped">Shipped</button>
+    </div>
+
+    {% if orders %}
+    <div class="orders-list">
+        {% for order in orders %}
+        <div class="order-card"
+             data-status="{{ order.status }}"
+             data-order-id="{{ order.id }}"
+             style="animation-delay: {{ forloop.counter0 }}00ms;">
+
+            <!-- Main content -->
+            <div class="order-main">
+                <div class="order-top">
+                    <div>
+                        <div class="order-id">Order #{{ order.id }}</div>
+                        <div class="order-date">{{ order.created_at|date:"F d, Y · g:i A" }}</div>
+                    </div>
+                    {% if order.status == 'success' %}
+                        <span class="order-status status-success"><span class="status-dot"></span>Completed</span>
+                    {% elif order.status == 'cancelled' %}
+                        <span class="order-status status-cancelled"><span class="status-dot"></span>Cancelled</span>
+                    {% elif order.status == 'pending' %}
+                        <span class="order-status status-pending"><span class="status-dot"></span>Pending</span>
+                    {% elif order.status == 'processing' %}
+                        <span class="order-status status-processing"><span class="status-dot"></span>Processing</span>
+                    {% elif order.status == 'shipped' %}
+                        <span class="order-status status-shipped"><span class="status-dot"></span>Shipped</span>
+                    {% endif %}
                 </div>
-                <a href="{% url 'main:products' %}" class="btn btn-primary w-full sm:w-auto">
-                    <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+
+                <div class="order-meta">
+                    <div class="order-meta-item">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                        {{ order.items.count }} item{{ order.items.count|pluralize }}
+                    </div>
+                    {% if order.delivery_method %}
+                    <div class="order-meta-item">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+                        </svg>
+                        {% if order.delivery_method == 'home' %}Home Delivery{% else %}Pickup Station{% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Item thumbnails -->
+                <div class="item-thumbs order-items-{{ order.id }}">
+                    <div class="item-thumb-loader">
+                        <svg class="spin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                        Loading items…
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="order-footer">
+                    <div class="invoice-actions invoice-links-{{ order.id }}">
+                        <div class="item-thumb-loader">
+                            <svg class="spin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            Loading invoice…
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Amount + details -->
+            <div class="order-right">
+                <div>
+                    <div class="order-amount-label">Total</div>
+                    <div class="order-amount">
+                        <span class="order-amount-curr">₦</span>{{ order.total_amount|floatformat:0|intcomma }}
+                    </div>
+                </div>
+                <a href="{% url 'main:order_detail' order.id %}" class="btn-details">
+                    Details
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
-                    Continue Shopping
                 </a>
             </div>
 
-            <!-- Quick Stats -->
-            <div class="stats-grid">
-                <div class="stats-card">
-                    <div class="stats-icon" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);">
-                        <svg class="icon-md" style="color: #1e40af;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="stats-value">{{ total_orders }}</div>
-                        <div class="stats-label">Total Orders</div>
-                    </div>
-                </div>
-
-                <div class="stats-card">
-                    <div class="stats-icon" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);">
-                        <svg class="icon-md" style="color: #065f46;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="stats-value">{{ completed_orders }}</div>
-                        <div class="stats-label">Completed</div>
-                    </div>
-                </div>
-
-                <div class="stats-card">
-                    <div class="stats-icon" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);">
-                        <svg class="icon-md" style="color: #92400e;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="stats-value">₦{{ total_spent|floatformat:0|intcomma }}</div>
-                        <div class="stats-label">Total Spent</div>
-                    </div>
-                </div>
-            </div>
         </div>
-
-        <!-- Filters -->
-        <div class="filter-container">
-            <div class="filter-chips">
-                <button class="filter-chip active" data-status="all">All Orders</button>
-                <button class="filter-chip" data-status="success">Completed</button>
-                <button class="filter-chip" data-status="cancelled">Cancelled</button>
-                <button class="filter-chip" data-status="pending">Pending</button>
-            </div>
-        </div>
-
-        {% if orders %}
-        <!-- Orders List -->
-        <div class="orders-list">
-            {% for order in orders %}
-            <div class="order-card fade-in" data-status="{{ order.status }}" data-order-id="{{ order.id }}" style="animation-delay: {{ forloop.counter0|add:"0" }}ms;">
-                <div class="order-card-content">
-                    <!-- Order Header -->
-                    <div class="order-header">
-                        <div class="flex-1">
-                            <h3 class="order-id">Order #{{ order.id }}</h3>
-                            
-                            <div class="badges-row">
-                                {% if order.status == "success" %}
-                                    <span class="status-badge status-success">
-                                        <svg class="icon-sm" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                        </svg>
-                                        Completed
-                                    </span>
-                                {% elif order.status == "cancelled" %}
-                                    <span class="status-badge status-cancelled">
-                                        <svg class="icon-sm" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                                        </svg>
-                                        Cancelled
-                                    </span>
-                                {% else %}
-                                    <span class="status-badge status-pending">
-                                        <svg class="icon-sm" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
-                                        </svg>
-                                        Pending
-                                    </span>
-                                {% endif %}
-                                
-                                <span class="invoice-count-badge-{{ order.id }}" style="display: none;">
-                                    <span class="invoice-badge">
-                                        <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                        </svg>
-                                        <span class="invoice-count">0</span> Invoice(s)
-                                    </span>
-                                </span>
-                            </div>
-                            
-                            <div class="order-meta">
-                                <div class="meta-item">
-                                    <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                    <span>{{ order.created_at|date:"M d, Y" }}</span>
-                                </div>
-                                
-                                <div class="meta-item">
-                                    <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                                    </svg>
-                                    <span>{{ order.items.count }} item{{ order.items.count|pluralize }}</span>
-                                </div>
-
-                                {% if order.delivery_method %}
-                                <div class="meta-item">
-                                    <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path>
-                                    </svg>
-                                    <span>
-                                        {% if order.delivery_method == 'home' %}
-                                            Home Delivery
-                                        {% else %}
-                                            Pickup Station
-                                        {% endif %}
-                                    </span>
-                                </div>
-                                {% endif %}
-                            </div>
-
-                            <!-- Order Items Preview -->
-                            <div class="items-preview order-items-{{ order.id }}">
-                                <div class="item-thumbnail">
-                                    <div class="w-full h-full flex items-center justify-center">
-                                        <svg class="icon-sm text-neutral-300 loading-spinner" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="order-amount-section">
-                            <div class="amount-label">Total Amount</div>
-                            <div class="amount-value">₦{{ order.total_amount|floatformat:0|intcomma }}</div>
-                        </div>
-                    </div>
-
-                    <!-- Order Footer -->
-                    <div class="order-footer">
-                        <div class="invoice-actions invoice-links-{{ order.id }}">
-                            <span class="btn-link">
-                                <svg class="icon-sm loading-spinner" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                </svg>
-                                Loading invoices...
-                            </span>
-                        </div>
-
-                        <a href="{% url 'main:order_detail' order.id %}" class="btn btn-primary w-full sm:w-auto">
-                            View Full Details
-                            <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-
-        {% else %}
-        <!-- Empty State -->
-        <div class="empty-state fade-in">
-            <div class="empty-icon">
-                <svg class="icon-md text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                </svg>
-            </div>
-            <h2 class="empty-title">No Orders Yet</h2>
-            <p class="empty-description">
-                You haven't placed any orders yet. Start shopping to see your orders here.
-            </p>
-            <a href="{% url 'main:products' %}" class="btn btn-primary">
-                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                </svg>
-                Start Shopping
-            </a>
-        </div>
-        {% endif %}
-
+        {% endfor %}
     </div>
-</section>
+
+    {% else %}
+
+    <div class="orders-empty">
+        <div class="empty-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+        </div>
+        <h2 class="empty-title">No Orders Yet</h2>
+        <p class="empty-desc">You haven't placed any orders yet.<br>Browse our range of energy storage solutions.</p>
+        <a href="{% url 'main:products' %}" class="btn-start">
+            Start Shopping
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </a>
+    </div>
+
+    {% endif %}
+
+</div>
 
 <script>
-// Filter functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const filterButtons = document.querySelectorAll('.filter-chip');
+document.addEventListener('DOMContentLoaded', function () {
+
+    /* ── Filter ─────────────────────────────── */
+    const filterBtns = document.querySelectorAll('.filter-btn');
     const orderCards = document.querySelectorAll('.order-card');
-    
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const status = this.getAttribute('data-status');
-            
-            // Update active button
-            filterButtons.forEach(btn => btn.classList.remove('active'));
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            filterBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-            
-            // Filter orders
+            const status = this.dataset.status;
             orderCards.forEach(card => {
-                const orderStatus = card.getAttribute('data-status');
-                
-                if (status === 'all') {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = orderStatus === status ? 'block' : 'none';
-                }
+                card.style.display = (status === 'all' || card.dataset.status === status) ? '' : 'none';
             });
         });
     });
-    
-    // Load order items and invoices for each order
-    loadOrderDetails();
+
+    /* ── Load order details ─────────────────── */
+    orderCards.forEach(card => {
+        const id = card.dataset.orderId;
+        loadOrderItems(id);
+        loadOrderInvoices(id);
+    });
 });
 
-async function loadOrderDetails() {
-    const orderCards = document.querySelectorAll('.order-card');
-    
-    for (const card of orderCards) {
-        const orderId = card.getAttribute('data-order-id');
-        
-        // Load order items
-        await loadOrderItems(orderId);
-        
-        // Load invoices
-        await loadOrderInvoices(orderId);
-    }
-}
-
 async function loadOrderItems(orderId) {
+    const container = document.querySelector(`.order-items-${orderId}`);
+    if (!container) return;
     try {
-        const response = await fetch(`https://console.afrikbook.com/api/orders/${orderId}/items/`);
-        const data = await response.json();
-        
+        const res  = await fetch(`https://console.afrikbook.com/api/orders/${orderId}/items/`);
+        const data = await res.json();
+
         if (data.success && data.items && data.items.length > 0) {
-            const container = document.querySelector(`.order-items-${orderId}`);
             container.innerHTML = '';
-            
-            // Show first 4 items
-            const itemsToShow = data.items.slice(0, 4);
-            
-            itemsToShow.forEach(item => {
-                const thumbnail = document.createElement('div');
-                thumbnail.className = 'item-thumbnail';
-                
-                if (item.image) {
-                    thumbnail.innerHTML = `<img src="${item.image}" alt="${item.item_name}">`;
-                } else {
-                    thumbnail.innerHTML = `
-                        <div class="w-full h-full flex items-center justify-center">
-                            <svg class="icon-sm text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                    `;
-                }
-                
-                container.appendChild(thumbnail);
+            data.items.slice(0, 5).forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'item-thumb';
+                el.innerHTML = item.image
+                    ? `<img src="${item.image}" alt="${item.item_name}">`
+                    : `<div class="item-thumb-empty"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c0c8c2" stroke-width="1"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>`;
+                container.appendChild(el);
             });
-            
-            // Show "+N more" if there are more items
-            if (data.items.length > 4) {
-                const moreBadge = document.createElement('div');
-                moreBadge.className = 'item-thumbnail flex items-center justify-center text-xs font-semibold text-neutral-600';
-                moreBadge.style.background = 'linear-gradient(135deg, #f5f5f5 0%, #e5e5e5 100%)';
-                moreBadge.textContent = `+${data.items.length - 4}`;
-                container.appendChild(moreBadge);
+            if (data.items.length > 5) {
+                const more = document.createElement('div');
+                more.className = 'item-thumb-more';
+                more.textContent = `+${data.items.length - 5}`;
+                container.appendChild(more);
             }
+        } else {
+            container.innerHTML = '';
         }
-    } catch (error) {
-        console.error('Error loading order items:', error);
-        const container = document.querySelector(`.order-items-${orderId}`);
-        if (container) {
-            container.innerHTML = '<div class="text-xs text-neutral-500">Items unavailable</div>';
-        }
+    } catch {
+        container.innerHTML = '';
     }
 }
 
 async function loadOrderInvoices(orderId) {
+    const container = document.querySelector(`.invoice-links-${orderId}`);
+    if (!container) return;
     try {
-        const response = await fetch(`https://console.afrikbook.com/api/orders/${orderId}/invoices/`);
-        const data = await response.json();
-        
-        const linksContainer = document.querySelector(`.invoice-links-${orderId}`);
-        const badgeContainer = document.querySelector(`.invoice-count-badge-${orderId}`);
-        
-        if (!linksContainer) return;
-        
+        const res  = await fetch(`https://console.afrikbook.com/api/orders/${orderId}/invoices/`);
+        const data = await res.json();
+
         if (data.success && data.invoices && data.invoices.length > 0) {
-            // Update invoice count badge
-            if (badgeContainer) {
-                const countSpan = badgeContainer.querySelector('.invoice-count');
-                if (countSpan) {
-                    countSpan.textContent = data.invoices.length;
-                    badgeContainer.style.display = 'inline-block';
-                }
-            }
-            
-            // Clear loading state
-            linksContainer.innerHTML = '';
-            
-            // Show first invoice link
-            const firstInvoice = data.invoices[0];
-            const invoiceLink = document.createElement('a');
-            invoiceLink.href = `https://console.afrikbook.com/invoice/${firstInvoice.invoiceID}/`;
-            invoiceLink.className = 'btn-link';
-            invoiceLink.innerHTML = `
-                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                View Invoice
-            `;
-            linksContainer.appendChild(invoiceLink);
-            
-            // Add download button
-            const downloadBtn = document.createElement('a');
-            downloadBtn.href = `https://console.afrikbook.com/api/invoices/${firstInvoice.invoiceID}/download/`;
-            downloadBtn.className = 'btn btn-secondary';
-            downloadBtn.download = `invoice_${firstInvoice.invoiceID}.pdf`;
-            downloadBtn.innerHTML = `
-                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                Download PDF
-            `;
-            linksContainer.appendChild(downloadBtn);
-            
-            // If multiple invoices, show "View All" link
-            if (data.invoices.length > 1) {
-                const viewAllLink = document.createElement('a');
-                viewAllLink.href = `https://console.afrikbook.com/orders/${orderId}/invoices/`;
-                viewAllLink.className = 'btn-link';
-                viewAllLink.style.color = 'var(--ocean-teal)';
-                viewAllLink.innerHTML = `
-                    View All ${data.invoices.length} Invoices
-                    <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            const inv = data.invoices[0];
+            container.innerHTML = `
+                <a href="https://console.afrikbook.com/invoice/${inv.invoiceID}/" class="btn-invoice-link">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
-                `;
-                linksContainer.appendChild(viewAllLink);
-            }
+                    View Invoice
+                </a>
+                <a href="https://console.afrikbook.com/api/invoices/${inv.invoiceID}/download/"
+                   class="btn-invoice-download" download="invoice_${inv.invoiceID}.pdf">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    PDF
+                </a>
+                ${data.invoices.length > 1
+                    ? `<a href="https://console.afrikbook.com/orders/${orderId}/invoices/" class="btn-invoice-link" style="color:var(--amber)">
+                           +${data.invoices.length - 1} more
+                       </a>`
+                    : ''}
+            `;
         } else {
-            // No invoices found
-            linksContainer.innerHTML = `
-                <span class="btn-link" style="color: var(--neutral-400);">
-                    <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    Invoice Not Available
-                </span>
-            `;
+            container.innerHTML = `<span class="invoice-unavailable">No invoice yet</span>`;
         }
-    } catch (error) {
-        console.error('Error loading invoices:', error);
-        const linksContainer = document.querySelector(`.invoice-links-${orderId}`);
-        if (linksContainer) {
-            linksContainer.innerHTML = `
-                <span class="btn-link" style="color: var(--neutral-400);">
-                    <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                    </svg>
-                    Invoice Unavailable
-                </span>
-            `;
-        }
+    } catch {
+        container.innerHTML = `<span class="invoice-unavailable">Invoice unavailable</span>`;
     }
 }
 </script>
