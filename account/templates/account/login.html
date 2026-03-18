@@ -3,190 +3,418 @@
 {% block content %}
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-    
-    * {
-        font-family: 'Inter', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap');
+
     :root {
-        --forest-green: #059669;
-        --ocean-teal: #14b8a6;
-        --solar-amber: #fbbf24;
-        --neutral-50: #fafafa;
-        --neutral-100: #f5f5f5;
-        --neutral-200: #e5e5e5;
-        --neutral-300: #d4d4d4;
-        --neutral-700: #404040;
-        --neutral-800: #262626;
-        --neutral-900: #171717;
+        --ink:       #0c1a0f;
+        --ink-mid:   #1e3324;
+        --green:     #0a6640;
+        --green-sat: #0d8c55;
+        --amber:     #c8752e;
+        --rule:      #d6dfd9;
+        --surface:   #f4f7f5;
+        --white:     #ffffff;
+        --muted:     #607568;
+        --danger:    #c0392b;
+        --danger-lt: #fef2f2;
     }
-    
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-        color: var(--neutral-800);
-        letter-spacing: -0.01em;
+        font-family: 'Outfit', sans-serif;
+        color: var(--ink);
+        background: var(--surface);
+        -webkit-font-smoothing: antialiased;
+        min-height: 100vh;
     }
-    
-    .card-premium {
-        background: white;
-        border: 1px solid var(--neutral-200);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
-    
-    .btn-primary {
-        background: var(--forest-green);
-        color: white;
-        transition: all 0.2s ease;
+
+    /* ── PAGE LAYOUT ──────────────────────────── */
+    .login-page {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
     }
-    
-    .btn-primary:hover {
-        background: #047857;
-        box-shadow: 0 8px 20px -4px rgba(5, 150, 105, 0.4);
+
+    /* ── LEFT PANEL — dark ────────────────────── */
+    .login-left {
+        background: var(--ink);
+        position: relative; overflow: hidden;
+        display: flex; flex-direction: column;
+        justify-content: space-between;
+        padding: 60px;
     }
-    
-    .fade-in {
-        animation: fadeIn 0.5s ease-out forwards;
+
+    .left-grid {
+        position: absolute; inset: 0;
+        background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 80px);
+        pointer-events: none;
     }
-    
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+
+    .left-orb {
+        position: absolute; bottom: -120px; right: -80px;
+        width: 420px; height: 420px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(10,102,64,0.22) 0%, transparent 68%);
+        pointer-events: none;
+    }
+
+    .left-top { position: relative; }
+
+    .left-brand {
+        display: flex; align-items: center; gap: 12px;
+        text-decoration: none; margin-bottom: 60px;
+    }
+
+    .left-brand-logo {
+        height: 36px; width: auto; opacity: 0.9;
+    }
+
+    .left-brand-text {}
+    .left-brand-name {
+        font-family: 'Fraunces', serif;
+        font-size: 16px; font-weight: 400; color: var(--white);
+        letter-spacing: -0.01em; line-height: 1;
+    }
+    .left-brand-sub {
+        font-size: 10px; font-weight: 500; letter-spacing: 0.14em;
+        text-transform: uppercase; color: rgba(255,255,255,0.3);
+        margin-top: 2px;
+    }
+
+    .left-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .left-eyebrow-line { width: 24px; height: 1px; background: var(--amber); }
+    .left-eyebrow span {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.22em;
+        text-transform: uppercase; color: var(--amber);
+    }
+
+    .left-title {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(36px, 4vw, 56px); font-weight: 300;
+        color: var(--white); line-height: 1.0; letter-spacing: -0.03em;
+        margin-bottom: 20px;
+    }
+    .left-title em { font-style: italic; color: rgba(255,255,255,0.35); }
+
+    .left-desc {
+        font-size: 15px; font-weight: 300;
+        color: rgba(255,255,255,0.45); line-height: 1.8;
+        max-width: 380px;
+    }
+
+    /* Feature list */
+    .left-bottom { position: relative; }
+
+    .left-features {
+        border-top: 1px solid rgba(255,255,255,0.07);
+        padding-top: 32px;
+        display: flex; flex-direction: column; gap: 0;
+    }
+
+    .left-feature {
+        display: flex; gap: 14px; align-items: flex-start;
+        padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .left-feature:last-child { border-bottom: none; }
+
+    .left-feature-dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: var(--amber); flex-shrink: 0; margin-top: 6px;
+    }
+
+    .left-feature-text {
+        font-size: 13px; font-weight: 300;
+        color: rgba(255,255,255,0.4); line-height: 1.6;
+    }
+    .left-feature-text strong { font-weight: 600; color: rgba(255,255,255,0.65); display: block; margin-bottom: 2px; }
+
+    /* ── RIGHT PANEL — form ───────────────────── */
+    .login-right {
+        background: var(--white);
+        display: flex; align-items: center; justify-content: center;
+        padding: 60px 80px;
+        animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    .login-form-wrap { width: 100%; max-width: 420px; }
+
+    .form-header { margin-bottom: 40px; }
+
+    .form-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .form-eyebrow-line { width: 24px; height: 1px; background: var(--green); }
+    .form-eyebrow span {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+        text-transform: uppercase; color: var(--green);
+    }
+
+    .form-title {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(28px, 3vw, 38px); font-weight: 400;
+        color: var(--ink); line-height: 1.1; letter-spacing: -0.02em;
+        margin-bottom: 10px;
+    }
+
+    .form-subtitle {
+        font-size: 14px; font-weight: 300;
+        color: var(--muted); line-height: 1.7;
+    }
+
+    /* Messages */
+    .form-message {
+        display: flex; align-items: flex-start; gap: 12px;
+        padding: 14px 18px; margin-bottom: 28px;
+        border-left: 3px solid; font-size: 13px;
+    }
+    .form-message.error   { background: var(--danger-lt); border-color: var(--danger); color: var(--danger); }
+    .form-message.success { background: rgba(10,102,64,0.05); border-color: var(--green); color: var(--green); }
+    .form-message svg { flex-shrink: 0; margin-top: 1px; }
+
+    /* Fields */
+    .field { margin-bottom: 24px; }
+    .field:last-of-type { margin-bottom: 0; }
+
+    .field-top {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 8px;
+    }
+
+    .field-label {
+        font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+        text-transform: uppercase; color: var(--ink-mid);
+    }
+
+    .field-forgot {
+        font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+        color: var(--green); text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    .field-forgot:hover { color: var(--green-sat); }
+
+    .field-input {
+        width: 100%; background: var(--surface);
+        border: 1px solid var(--rule); padding: 14px 16px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 14px; font-weight: 400; color: var(--ink);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        outline: none; appearance: none;
+    }
+    .field-input:focus {
+        border-color: var(--green);
+        box-shadow: 0 0 0 3px rgba(10,102,64,0.08);
+        background: var(--white);
+    }
+    .field-input::placeholder { color: var(--muted); font-weight: 300; }
+
+    /* Remember me */
+    .remember-row {
+        display: flex; align-items: center; gap: 10px;
+        margin-bottom: 32px; margin-top: 8px;
+    }
+
+    .remember-row input[type="checkbox"] {
+        width: 16px; height: 16px;
+        accent-color: var(--green); cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .remember-label {
+        font-size: 13px; font-weight: 300; color: var(--muted);
+        cursor: pointer; user-select: none;
+    }
+
+    /* Submit button */
+    .btn-signin {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        width: 100%; padding: 17px 24px;
+        background: var(--ink); color: var(--white);
+        font-family: 'Outfit', sans-serif;
+        font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
+        text-transform: uppercase; border: 2px solid var(--ink);
+        cursor: pointer; transition: all 0.25s ease;
+    }
+    .btn-signin:hover { background: var(--green); border-color: var(--green); }
+    .btn-signin svg { transition: transform 0.2s ease; }
+    .btn-signin:hover svg { transform: translateX(3px); }
+
+    /* Register link */
+    .register-row {
+        margin-top: 28px; padding-top: 28px;
+        border-top: 1px solid var(--rule);
+        text-align: center;
+    }
+
+    .register-row p {
+        font-size: 13px; font-weight: 300; color: var(--muted);
+    }
+
+    .register-link {
+        font-size: 13px; font-weight: 600; color: var(--green);
+        text-decoration: none; transition: color 0.2s;
+    }
+    .register-link:hover { color: var(--green-sat); }
+
+    /* Terms note */
+    .terms-note {
+        margin-top: 16px; text-align: center;
+        font-size: 11px; font-weight: 300; color: var(--muted);
+        line-height: 1.6;
+    }
+    .terms-note a { color: var(--green); text-decoration: none; font-weight: 500; }
+    .terms-note a:hover { text-decoration: underline; }
+
+    /* ── RESPONSIVE ───────────────────────────── */
+    @media (max-width: 1024px) {
+        .login-page { grid-template-columns: 1fr; }
+        .login-left { display: none; }
+        .login-right { padding: 60px 32px; min-height: 100vh; }
+    }
+
+    @media (max-width: 480px) {
+        .login-right { padding: 40px 24px; }
     }
 </style>
 
-<!-- Login Section -->
-<section class="py-20 bg-neutral-50 min-h-screen flex items-center">
-    <div class="container mx-auto px-6">
-        <div class="max-w-2xl mx-auto">
-            <!-- Header -->
-            <div class="text-center mb-10 fade-in">
-                <span class="inline-block px-4 py-2 bg-emerald-50 text-forest-green rounded-full text-sm font-semibold mb-4 uppercase tracking-wider">
-                    Welcome Back
-                </span>
-                <h1 class="text-4xl lg:text-5xl font-bold text-neutral-900 mb-4 tracking-tight">
-                    Sign In to Your Account
-                </h1>
-                <p class="text-lg text-neutral-600 leading-relaxed font-light">
-                    Access your dashboard and manage your orders
-                </p>
+<div class="login-page">
+
+    <!-- Left Panel -->
+    <div class="login-left">
+        <div class="left-grid"></div>
+        <div class="left-orb"></div>
+
+        <div class="left-top">
+            <a href="/" class="left-brand">
+                <img src="{% static 'images/Emem4.png' %}" alt="Emem Energy" class="left-brand-logo">
+                <div class="left-brand-text">
+                    <div class="left-brand-name">Emem Energy</div>
+                    <div class="left-brand-sub">Innovation Ltd</div>
+                </div>
+            </a>
+
+            <div class="left-eyebrow">
+                <div class="left-eyebrow-line"></div>
+                <span>Welcome Back</span>
+            </div>
+
+            <h1 class="left-title">
+                Power your<br><em>energy future</em>
+            </h1>
+
+            <p class="left-desc">
+                Sign in to access your dashboard, track your orders, and manage your energy storage systems.
+            </p>
+        </div>
+
+        <div class="left-bottom">
+            <div class="left-features">
+                <div class="left-feature">
+                    <div class="left-feature-dot"></div>
+                    <div class="left-feature-text">
+                        <strong>Order Tracking</strong>
+                        Monitor your deliveries in real time
+                    </div>
+                </div>
+                <div class="left-feature">
+                    <div class="left-feature-dot"></div>
+                    <div class="left-feature-text">
+                        <strong>Role-Based Pricing</strong>
+                        Installer and distributor rates applied automatically
+                    </div>
+                </div>
+                <div class="left-feature">
+                    <div class="left-feature-dot"></div>
+                    <div class="left-feature-text">
+                        <strong>24/7 Support</strong>
+                        Expert assistance always available
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="login-right">
+        <div class="login-form-wrap">
+
+            <div class="form-header">
+                <div class="form-eyebrow">
+                    <div class="form-eyebrow-line"></div>
+                    <span>Sign In</span>
+                </div>
+                <h2 class="form-title">Access Your Account</h2>
+                <p class="form-subtitle">Enter your credentials to continue to your dashboard</p>
             </div>
 
             <!-- Messages -->
             {% if messages %}
                 {% for message in messages %}
-                <div class="mb-6 p-5 rounded-xl fade-in {% if message.tags == 'error' %}bg-red-50 text-red-800 border border-red-200{% else %}bg-emerald-50 text-emerald-800 border border-emerald-200{% endif %}">
-                    <div class="flex items-start">
-                        <svg class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            {% if message.tags == 'error' %}
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                            {% else %}
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                            {% endif %}
-                        </svg>
-                        <span class="font-medium">{{ message }}</span>
-                    </div>
+                <div class="form-message {% if message.tags == 'error' %}error{% else %}success{% endif %}">
+                    <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor">
+                        {% if message.tags == 'error' %}
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        {% else %}
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        {% endif %}
+                    </svg>
+                    {{ message }}
                 </div>
                 {% endfor %}
             {% endif %}
 
-            <!-- Login Form Card -->
-            <div class="card-premium rounded-2xl p-8 lg:p-10 fade-in" style="animation-delay: 0.1s;">
-                <form method="post" class="space-y-6">
-                    {% csrf_token %}
-                    
-                    <!-- Username -->
-                    <div>
-                        <label for="username" class="block text-sm font-semibold text-neutral-700 mb-2 uppercase tracking-wider">
-                            Username or Email
-                        </label>
-                        <input 
-                            type="text" 
-                            id="username" 
-                            name="username" 
-                            required
-                            autofocus
-                            class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-forest-green focus:border-transparent transition font-light"
-                            placeholder="Enter your username"
-                        >
-                    </div>
+            <form method="post">
+                {% csrf_token %}
 
-                    <!-- Password -->
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <label for="password" class="block text-sm font-semibold text-neutral-700 uppercase tracking-wider">
-                                Password
-                            </label>
-                            <a href="" class="text-sm text-ocean-teal hover:text-teal-700 font-medium transition-colors">
-                                Forgot password?
-                            </a>
-                        </div>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
-                            required
-                            class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-forest-green focus:border-transparent transition font-light"
-                            placeholder="Enter your password"
-                        >
-                    </div>
-
-                    <!-- Remember Me -->
-                    <div class="flex items-center">
-                        <input 
-                            type="checkbox" 
-                            id="remember_me" 
-                            name="remember_me"
-                            class="w-4 h-4 text-forest-green border-neutral-300 rounded focus:ring-forest-green"
-                        >
-                        <label for="remember_me" class="ml-2 text-sm text-neutral-700 font-light">
-                            Keep me signed in for 2 weeks
-                        </label>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="pt-4">
-                        <button 
-                            type="submit"
-                            class="btn-primary w-full px-6 py-4 rounded-lg font-semibold text-base uppercase tracking-wider flex items-center justify-center"
-                        >
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-                            </svg>
-                            Sign In
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Register Link -->
-                <div class="mt-8 pt-8 border-t border-neutral-200 text-center">
-                    <p class="text-neutral-700 font-light">
-                        Don't have an account? 
-                        <a href="{% url 'account:register' %}" class="text-forest-green hover:text-emerald-700 font-semibold transition-colors">
-                            Create one now
-                        </a>
-                    </p>
+                <div class="field">
+                    <div class="field-label">Username or Email</div>
+                    <input type="text" id="username" name="username"
+                        required autofocus
+                        class="field-input"
+                        placeholder="Enter your username">
                 </div>
-            </div>
 
-            <!-- Footer Note -->
-            <div class="mt-8 text-center fade-in" style="animation-delay: 0.2s;">
-                <p class="text-sm text-neutral-600 font-light leading-relaxed">
-                    By signing in, you agree to our 
-                    <a href="#" class="text-forest-green hover:text-emerald-700 font-medium">Terms of Service</a> 
-                    and 
-                    <a href="#" class="text-forest-green hover:text-emerald-700 font-medium">Privacy Policy</a>
+                <div class="field">
+                    <div class="field-top">
+                        <div class="field-label">Password</div>
+                        <a href="" class="field-forgot">Forgot password?</a>
+                    </div>
+                    <input type="password" id="password" name="password"
+                        required
+                        class="field-input"
+                        placeholder="Enter your password">
+                </div>
+
+                <label class="remember-row">
+                    <input type="checkbox" id="remember_me" name="remember_me">
+                    <span class="remember-label">Keep me signed in for 2 weeks</span>
+                </label>
+
+                <button type="submit" class="btn-signin">
+                    Sign In
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </form>
+
+            <div class="register-row">
+                <p>
+                    Don't have an account?
+                    <a href="{% url 'account:register' %}" class="register-link">Create one now</a>
                 </p>
             </div>
+
+            <p class="terms-note">
+                By signing in you agree to our
+                <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+            </p>
+
         </div>
     </div>
-</section>
+
+</div>
 
 {% endblock %}
