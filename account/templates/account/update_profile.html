@@ -1,406 +1,506 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Profile Settings - Solar Battery Store{% endblock %}
+{% block title %}Profile Settings - Emem Energy{% endblock %}
 
 {% block content %}
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-    
-    * { font-family: 'Inter', sans-serif; }
-    
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300&family=Outfit:wght@300;400;500;600&display=swap');
+
     :root {
-        --forest-green: #059669;
-        --forest-green-dark: #047857;
-        --neutral-50: #fafafa;
-        --neutral-100: #f5f5f5;
-        --neutral-200: #e5e7eb;
-        --neutral-300: #d1d5db;
-        --neutral-600: #4b5563;
-        --neutral-700: #374151;
-        --neutral-800: #1f2937;
-        --neutral-900: #111827;
+        --ink:       #0c1a0f;
+        --ink-mid:   #1e3324;
+        --green:     #0a6640;
+        --green-sat: #0d8c55;
+        --amber:     #c8752e;
+        --rule:      #d6dfd9;
+        --surface:   #f4f7f5;
+        --white:     #ffffff;
+        --muted:     #607568;
+        --danger:    #c0392b;
+        --danger-lt: #fef2f2;
     }
-    
-    body { background-color: var(--neutral-50); }
-    
-    .profile-card {
-        background: white;
-        border: 1px solid var(--neutral-200);
-        border-radius: 20px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: 'Outfit', sans-serif;
+        color: var(--ink);
+        background: var(--surface);
+        -webkit-font-smoothing: antialiased;
+        min-height: 100vh;
     }
-    
-    .form-label {
-        font-weight: 600;
-        font-size: 0.875rem;
-        color: var(--neutral-700);
-        margin-bottom: 0.5rem;
-        display: block;
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
-    
-    .form-input, .form-select {
-        width: 100%;
-        border: 2px solid var(--neutral-200);
-        border-radius: 12px;
-        padding: 0.875rem 1rem;
-        font-size: 0.95rem;
-        color: var(--neutral-900);
-        transition: all 0.2s ease;
-        background: white;
+
+    /* ── PAGE ─────────────────────────────────── */
+    .profile-page {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 0 60px 100px;
     }
-    
-    .form-input:focus, .form-select:focus {
-        border-color: var(--forest-green);
-        box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1);
-        outline: none;
+
+    /* ── HERO ─────────────────────────────────── */
+    .profile-hero {
+        background: var(--ink);
+        position: relative; overflow: hidden;
+        margin-bottom: 2px;
     }
-    
-    .form-input:disabled {
-        background: var(--neutral-100);
-        color: var(--neutral-600);
-        cursor: not-allowed;
+
+    .hero-bg {
+        position: absolute; inset: 0;
+        background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 80px);
+        pointer-events: none;
     }
-    
-    .btn-primary {
-        background: var(--forest-green);
-        color: white;
-        font-weight: 600;
-        padding: 0.875rem 2rem;
-        border-radius: 12px;
-        transition: all 0.2s ease;
-        border: none;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
+
+    .hero-orb {
+        position: absolute; bottom: -80px; right: -60px;
+        width: 300px; height: 300px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(10,102,64,0.18) 0%, transparent 70%);
+        pointer-events: none;
     }
-    
-    .btn-primary:hover {
-        background: var(--forest-green-dark);
-        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
-        transform: translateY(-1px);
+
+    .hero-inner {
+        position: relative; padding: 48px 60px;
+        display: flex; align-items: center;
+        justify-content: space-between; gap: 40px;
     }
-    
-    .btn-secondary {
-        background: white;
-        color: var(--neutral-700);
-        font-weight: 600;
-        padding: 0.875rem 2rem;
-        border-radius: 12px;
-        transition: all 0.2s ease;
-        border: 2px solid var(--neutral-300);
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
+
+    .hero-left {}
+
+    .breadcrumb {
+        display: flex; align-items: center; gap: 6px;
+        margin-bottom: 16px;
     }
-    
-    .btn-secondary:hover {
-        background: var(--neutral-100);
-        border-color: var(--neutral-400);
+    .breadcrumb a {
+        font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; color: rgba(255,255,255,0.3);
+        text-decoration: none; transition: color 0.2s;
     }
-    
-    .avatar-large {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--forest-green) 0%, #14b8a6 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: 700;
-        font-size: 2.5rem;
-        box-shadow: 0 8px 24px rgba(5, 150, 105, 0.3);
+    .breadcrumb a:hover { color: var(--amber); }
+    .breadcrumb-sep { color: rgba(255,255,255,0.18); font-size: 11px; }
+    .breadcrumb-curr {
+        font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; color: var(--amber);
     }
-    
-    .info-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.375rem;
-        padding: 0.375rem 0.875rem;
-        border-radius: 50px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+
+    .hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .hero-eyebrow-line { width: 24px; height: 1px; background: var(--amber); }
+    .hero-eyebrow span { font-size: 10px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--amber); }
+
+    .hero-title {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(28px, 3.5vw, 44px); font-weight: 300;
+        color: var(--white); line-height: 1.0; letter-spacing: -0.025em;
+        margin-bottom: 8px;
     }
-    
-    .info-badge.customer { background: #dbeafe; color: #1e40af; }
-    .info-badge.dealer { background: #d1fae5; color: #065f46; }
-    .info-badge.distributor { background: #fef3c7; color: #92400e; }
-    
-    .alert {
-        padding: 1rem 1.25rem;
-        border-radius: 12px;
-        display: flex;
-        align-items: flex-start;
-        gap: 0.75rem;
-        margin-bottom: 1.5rem;
+    .hero-title em { font-style: italic; color: rgba(255,255,255,0.35); }
+
+    .hero-sub { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.42); }
+
+    /* Avatar in hero */
+    .hero-avatar {
+        flex-shrink: 0;
+        display: flex; flex-direction: column; align-items: center; gap: 10px;
     }
-    
-    .alert-success {
-        background: #d1fae5;
-        border: 1px solid #a7f3d0;
-        color: #065f46;
+
+    .avatar-circle {
+        width: 72px; height: 72px;
+        background: rgba(10,102,64,0.25);
+        border: 1px solid rgba(10,102,64,0.4);
+        display: flex; align-items: center; justify-content: center;
+        font-family: 'Fraunces', serif;
+        font-size: 28px; font-weight: 400; color: var(--white);
+        letter-spacing: -0.02em;
     }
-    
-    .alert-error {
-        background: #fee2e2;
-        border: 1px solid #fecaca;
-        color: #991b1b;
+
+    .hero-user-name {
+        font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.6);
+        text-align: center; white-space: nowrap;
     }
-    
+
+    .hero-cat-badge {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 4px 10px; font-size: 10px; font-weight: 700;
+        letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .cat-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+    .cat-installer    { background: rgba(30,64,175,0.15); color: #93c5fd; }
+    .cat-distributor  { background: rgba(10,102,64,0.2); color: rgba(150,255,180,0.8); }
+    .cat-enduser      { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.45); }
+
+    /* ── CONTENT GRID ─────────────────────────── */
+    .content-grid {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 2px;
+        align-items: start;
+        animation: fadeUp 0.55s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    /* ── SIDEBAR NAV ──────────────────────────── */
+    .profile-sidebar {
+        background: var(--white);
+        border: 1px solid var(--rule);
+        position: sticky; top: 24px;
+    }
+
+    .sidebar-head {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--rule);
+    }
+    .sidebar-head-label {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+        text-transform: uppercase; color: var(--muted);
+        display: flex; align-items: center; gap: 8px;
+    }
+    .sidebar-head-label::before { content: ''; display: block; width: 14px; height: 1px; background: var(--green); }
+
+    .sidebar-nav { display: flex; flex-direction: column; gap: 0; }
+
     .sidebar-link {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.875rem 1rem;
-        border-radius: 12px;
-        color: var(--neutral-600);
-        font-weight: 500;
-        transition: all 0.15s ease;
+        display: flex; align-items: center; gap: 12px;
+        padding: 16px 24px; text-decoration: none;
+        color: var(--muted); font-size: 13px; font-weight: 400;
+        border-bottom: 1px solid var(--rule);
+        transition: background 0.2s ease, color 0.2s ease;
+        position: relative;
     }
-    
-    .sidebar-link:hover {
-        background: var(--neutral-100);
-        color: var(--neutral-900);
-    }
-    
+    .sidebar-link:last-child { border-bottom: none; }
+    .sidebar-link:hover { background: var(--surface); color: var(--ink); }
+
     .sidebar-link.active {
-        background: var(--forest-green);
-        color: white;
+        color: var(--green); font-weight: 600;
+        background: rgba(10,102,64,0.04);
     }
-    
-    .sidebar-icon {
-        width: 20px;
-        height: 20px;
-        opacity: 0.7;
+    .sidebar-link.active::before {
+        content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+        width: 2px; background: var(--green);
+    }
+    .sidebar-link svg { flex-shrink: 0; }
+
+    /* ── MAIN CONTENT ─────────────────────────── */
+    .profile-main { display: flex; flex-direction: column; gap: 2px; }
+
+    /* Messages */
+    .msg-bar {
+        display: flex; align-items: flex-start; gap: 12px;
+        padding: 14px 20px;
+        border-left: 3px solid; font-size: 13px;
+    }
+    .msg-bar.success { background: rgba(10,102,64,0.05); border-color: var(--green); color: var(--green); }
+    .msg-bar.error   { background: var(--danger-lt); border-color: var(--danger); color: var(--danger); }
+    .msg-bar svg { flex-shrink: 0; margin-top: 1px; }
+
+    /* Section cards */
+    .profile-section {
+        background: var(--white); border: 1px solid var(--rule);
+    }
+
+    .section-head {
+        padding: 24px 36px; border-bottom: 1px solid var(--rule);
+        display: flex; align-items: center; gap: 12px;
+    }
+
+    .section-label {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+        text-transform: uppercase; color: var(--muted);
+        display: flex; align-items: center; gap: 8px;
+    }
+    .section-label::before { content: ''; display: block; width: 16px; height: 1px; background: var(--green); }
+
+    .section-body { padding: 32px 36px; }
+
+    /* Fields */
+    .field { margin-bottom: 22px; }
+    .field:last-child { margin-bottom: 0; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 22px; }
+    .field-row:last-child { margin-bottom: 0; }
+
+    .field-label {
+        font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+        text-transform: uppercase; color: var(--ink-mid); margin-bottom: 7px;
+        display: flex; align-items: center; gap: 5px;
+    }
+    .field-req { font-size: 10px; color: var(--danger); }
+
+    .field-input,
+    .field-select {
+        width: 100%; background: var(--surface);
+        border: 1px solid var(--rule); padding: 13px 15px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 14px; font-weight: 400; color: var(--ink);
+        outline: none; appearance: none; -webkit-appearance: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .field-input:focus, .field-select:focus {
+        border-color: var(--green);
+        box-shadow: 0 0 0 3px rgba(10,102,64,0.08);
+        background: var(--white);
+    }
+    .field-input:disabled {
+        background: var(--surface); color: var(--muted); cursor: not-allowed;
+    }
+
+    .field-select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23607568' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 14px center;
+        padding-right: 36px; cursor: pointer;
+    }
+
+    .field-hint { font-size: 11px; font-weight: 300; color: var(--muted); margin-top: 6px; }
+
+    /* Read-only group */
+    .readonly-group {
+        background: var(--surface); border: 1px solid var(--rule);
+        padding: 20px 22px; margin-bottom: 28px;
+    }
+
+    .readonly-group-label {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+        text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+        display: flex; align-items: center; gap: 8px;
+    }
+    .readonly-group-label::before { content: ''; display: block; width: 14px; height: 1px; background: var(--rule); }
+
+    /* Info box */
+    .info-box {
+        display: flex; gap: 14px; align-items: flex-start;
+        padding: 16px 20px; margin-top: 20px;
+        background: rgba(10,102,64,0.04);
+        border: 1px solid rgba(10,102,64,0.15);
+        border-left: 3px solid var(--green);
+    }
+    .info-box svg { color: var(--green); flex-shrink: 0; margin-top: 1px; }
+    .info-box-title { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); margin-bottom: 4px; }
+    .info-box-body  { font-size: 13px; font-weight: 300; color: var(--ink-mid); line-height: 1.7; }
+
+    /* Form actions */
+    .form-actions {
+        padding: 24px 36px;
+        border-top: 1px solid var(--rule);
+        background: var(--surface);
+        display: flex; align-items: center;
+        justify-content: space-between; gap: 16px;
+    }
+
+    .btn-save {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: var(--ink); color: var(--white);
+        padding: 14px 32px; font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+        text-transform: uppercase; border: 2px solid var(--ink);
+        cursor: pointer; transition: all 0.25s ease;
+    }
+    .btn-save:hover { background: var(--green); border-color: var(--green); }
+
+    .btn-cancel {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: transparent; color: var(--muted);
+        padding: 14px 24px; font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+        text-transform: uppercase; text-decoration: none;
+        border: 1px solid var(--rule); transition: all 0.25s ease;
+    }
+    .btn-cancel:hover { border-color: var(--ink); color: var(--ink); }
+
+    /* ── RESPONSIVE ───────────────────────────── */
+    @media (max-width: 1100px) {
+        .profile-page { padding: 0 32px 80px; }
+        .hero-inner { padding: 40px 32px; flex-direction: column; align-items: flex-start; }
+        .hero-avatar { flex-direction: row; gap: 14px; align-items: center; }
+        .content-grid { grid-template-columns: 1fr; gap: 20px; }
+        .profile-sidebar { position: static; }
+        .sidebar-nav { flex-direction: row; flex-wrap: wrap; }
+        .sidebar-link { flex: 1; justify-content: center; min-width: 100px; }
+        .sidebar-link.active::before { width: 100%; height: 2px; top: 0; bottom: auto; }
+    }
+
+    @media (max-width: 640px) {
+        .field-row { grid-template-columns: 1fr; }
+        .section-head, .section-body, .form-actions { padding-left: 22px; padding-right: 22px; }
+        .form-actions { flex-direction: column; align-items: stretch; }
+        .btn-save, .btn-cancel { justify-content: center; }
     }
 </style>
 
-<section class="py-8 lg:py-12 min-h-screen">
-    <div class="container mx-auto px-4 lg:px-6">
-        <div class="max-w-5xl mx-auto">
-            
-            <!-- Breadcrumb -->
-            <nav class="mb-6">
-                <ol class="flex items-center gap-2 text-sm">
-                    <li>
-                        <a href="{% url 'main:customer_dashboard' %}" class="text-neutral-500 hover:text-forest-green transition-colors">Dashboard</a>
-                    </li>
-                    <li class="text-neutral-400">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                    </li>
-                    <li class="text-neutral-900 font-medium">Profile Settings</li>
-                </ol>
+<!-- Hero -->
+<div class="profile-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-orb"></div>
+    <div class="hero-inner">
+        <div class="hero-left">
+            <div class="breadcrumb">
+                <a href="{% url 'main:customer_dashboard' %}">Dashboard</a>
+                <span class="breadcrumb-sep">›</span>
+                <span class="breadcrumb-curr">Profile Settings</span>
+            </div>
+            <div class="hero-eyebrow">
+                <div class="hero-eyebrow-line"></div>
+                <span>Account</span>
+            </div>
+            <h1 class="hero-title">
+                Profile <em>Settings</em>
+            </h1>
+            <p class="hero-sub">Manage your personal information and preferences</p>
+        </div>
+
+        <div class="hero-avatar">
+            <div class="avatar-circle">
+                {{ user.first_name.0|default:user.username.0|upper }}
+            </div>
+            <div class="hero-user-name">{{ user.get_full_name|default:user.username }}</div>
+            {% if profile.category %}
+                {% if profile.category == 'Installer' %}
+                    <span class="hero-cat-badge cat-installer"><span class="cat-dot"></span>{{ profile.category }}</span>
+                {% elif profile.category == 'Distributor' %}
+                    <span class="hero-cat-badge cat-distributor"><span class="cat-dot"></span>{{ profile.category }}</span>
+                {% else %}
+                    <span class="hero-cat-badge cat-enduser"><span class="cat-dot"></span>{{ profile.category }}</span>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="profile-page">
+    <div class="content-grid">
+
+        <!-- Sidebar -->
+        <aside class="profile-sidebar">
+            <div class="sidebar-head">
+                <div class="sidebar-head-label">Navigation</div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{% url 'account:profile' %}" class="sidebar-link active">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"/>
+                    </svg>
+                    Profile
+                </a>
+                <a href="{% url 'main:my_orders' %}" class="sidebar-link">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    </svg>
+                    My Orders
+                </a>
+                <a href="#" class="sidebar-link">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Invoices
+                </a>
+                <a href="#" class="sidebar-link">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                    </svg>
+                    Security
+                </a>
             </nav>
+        </aside>
 
-            <div class="grid lg:grid-cols-4 gap-6">
-                
-                <!-- Sidebar -->
-                <div class="lg:col-span-1">
-                    <div class="profile-card p-4 sticky top-24">
-                        <nav class="space-y-1">
-                            <a href="{% url 'account:profile' %}" class="sidebar-link active">
-                                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                </svg>
-                                Profile
-                            </a>
-                            <a href="{% url 'main:my_orders' %}" class="sidebar-link">
-                                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                                </svg>
-                                My Orders
-                            </a>
-                            <a href="#" class="sidebar-link">
-                                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                                Invoices
-                            </a>
-                            <a href="#" class="sidebar-link">
-                                <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-                                </svg>
-                                Security
-                            </a>
-                        </nav>
-                    </div>
+        <!-- Main -->
+        <div class="profile-main">
+
+            <!-- Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                <div class="msg-bar {% if message.tags == 'success' %}success{% else %}error{% endif %}">
+                    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+                        {% if message.tags == 'success' %}
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        {% else %}
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        {% endif %}
+                    </svg>
+                    <strong>{% if message.tags == 'success' %}Saved — {% endif %}</strong>{{ message }}
                 </div>
+                {% endfor %}
+            {% endif %}
 
-                <!-- Main Content -->
-                <div class="lg:col-span-3">
-                    
-                    <!-- Page Header -->
-                    <div class="mb-8">
-                        <h1 class="text-2xl lg:text-3xl font-bold text-neutral-900 mb-2">Profile Settings</h1>
-                        <p class="text-neutral-600">Manage your personal information and preferences</p>
-                    </div>
-
-                    <!-- Messages -->
-                    {% if messages %}
-                        {% for message in messages %}
-                        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-error{% endif %}">
-                            <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                                {% if message.tags == 'success' %}
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                {% else %}
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                                {% endif %}
-                            </svg>
-                            <div>
-                                <p class="font-semibold">{% if message.tags == 'success' %}Success!{% else %}Error{% endif %}</p>
-                                <p class="text-sm">{{ message }}</p>
-                            </div>
+            <!-- Account Info (read-only) -->
+            <div class="profile-section">
+                <div class="section-head">
+                    <div class="section-label">Account Information</div>
+                </div>
+                <div class="section-body">
+                    <div class="field-row">
+                        <div>
+                            <div class="field-label">First Name</div>
+                            <input type="text" value="{{ user.first_name }}" disabled class="field-input">
                         </div>
-                        {% endfor %}
-                    {% endif %}
-
-                    <!-- Profile Header Card -->
-                    <div class="profile-card p-6 lg:p-8 mb-6">
-                        <div class="flex flex-col sm:flex-row items-center gap-6">
-                            <div class="avatar-large">
-                                {{ user.first_name.0|default:user.username.0|upper }}
-                            </div>
-                            <div class="text-center sm:text-left flex-1">
-                                <h2 class="text-xl font-bold text-neutral-900 mb-1">{{ user.get_full_name|default:user.username }}</h2>
-                                <p class="text-neutral-600 mb-3">{{ user.email }}</p>
-                                <div class="flex flex-wrap gap-2 justify-center sm:justify-start">
-                                    {% if profile.category %}
-                                    <span class="info-badge {% if profile.category == 'Dealer' %}dealer{% elif profile.category == 'Distributor' %}distributor{% else %}customer{% endif %}">
-                                        {{ profile.category }}
-                                    </span>
-                                    {% endif %}
-                                    <span class="info-badge customer">
-                                        Member since {{ user.date_joined|date:"M Y" }}
-                                    </span>
-                                </div>
-                            </div>
+                        <div>
+                            <div class="field-label">Last Name</div>
+                            <input type="text" value="{{ user.last_name }}" disabled class="field-input">
                         </div>
                     </div>
-
-                    <!-- Profile Form -->
-                    <div class="profile-card p-6 lg:p-8">
-                        <h3 class="text-lg font-bold text-neutral-900 mb-6 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-forest-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                            </svg>
-                            Edit Profile
-                        </h3>
-
-                        <form method="POST" class="space-y-6">
-                            {% csrf_token %}
-
-                            <!-- Account Information (Read-only) -->
-                            <div class="bg-neutral-50 rounded-xl p-5 border border-neutral-200">
-                                <h4 class="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-4">Account Information</h4>
-                                <div class="grid sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="form-label">First Name</label>
-                                        <input type="text" value="{{ user.first_name }}" disabled class="form-input">
-                                    </div>
-                                    <div>
-                                        <label class="form-label">Last Name</label>
-                                        <input type="text" value="{{ user.last_name }}" disabled class="form-input">
-                                    </div>
-                                    <div class="sm:col-span-2">
-                                        <label class="form-label">Email Address</label>
-                                        <input type="email" value="{{ user.email }}" disabled class="form-input">
-                                        <p class="text-xs text-neutral-500 mt-1">Contact support to change your email address</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Editable Fields -->
-                            <div>
-                                <h4 class="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-4">Contact Information</h4>
-                                <div class="grid sm:grid-cols-2 gap-6">
-                                    <div class="sm:col-span-2">
-                                        <label for="phone" class="form-label">
-                                            Phone Number <span class="text-red-500">*</span>
-                                        </label>
-                                        <div class="relative">
-                                            </div>
-                                            <input 
-                                                type="tel" 
-                                                id="phone" 
-                                                name="phone" 
-                                                value="{{ profile.phone }}" 
-                                                required 
-                                                class="form-input pl-12"
-                                                placeholder="+234 800 000 0000"
-                                            >
-                                        </div>
-                                    </div>
-
-                                    <div class="sm:col-span-2">
-                                        <label for="category" class="form-label">
-                                            Customer Category <span class="text-red-500">*</span>
-                                        </label>
-                                        <div class="relative">
-                                            <select 
-                                                id="category" 
-                                                name="category" 
-                                                required 
-                                                class="form-select pl-12 pr-10 appearance-none"
-                                            >
-                                                <option value="">Select your category</option>
-                                                <option value="End User" {% if profile.category == 'End User' %}selected{% endif %}>End User</option>
-                                                <option value="Distributor" {% if profile.category == 'Distributor' %}selected{% endif %}>Distributor</option>
-                                                <option value="Installer" {% if profile.category == 'Installer' %}selected{% endif %}>Installer</option>
-                                            </select>
-                                            <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-                                                <svg class="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <p class="text-xs text-neutral-500 mt-1">Your category determines your pricing tier</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Info Box -->
-                            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                                <div class="flex items-start gap-3">
-                                    <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    <div class="text-sm text-blue-800">
-                                        <p class="font-semibold mb-1">About Customer Categories</p>
-                                        <p>Dealers and Distributors receive special pricing on bulk orders. Verification may be required to upgrade your account category.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Form Actions -->
-                            <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-neutral-200">
-                                <button type="submit" class="btn-primary flex-1 sm:flex-none">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    Save Changes
-                                </button>
-                                <a href="{% url 'main:customer_dashboard' %}" class="btn-secondary flex-1 sm:flex-none text-center">
-                                    Cancel
-                                </a>
-                            </div>
-                        </form>
+                    <div class="field">
+                        <div class="field-label">Email Address</div>
+                        <input type="email" value="{{ user.email }}" disabled class="field-input">
+                        <p class="field-hint">Contact support to change your email address</p>
                     </div>
+                </div>
+            </div>
 
+            <!-- Editable fields -->
+            <div class="profile-section">
+                <div class="section-head">
+                    <div class="section-label">Contact & Category</div>
                 </div>
 
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="section-body">
+
+                        <div class="field">
+                            <div class="field-label">Phone Number <span class="field-req">*</span></div>
+                            <input type="tel" id="phone" name="phone"
+                                value="{{ profile.phone }}" required
+                                class="field-input" placeholder="+234 800 000 0000">
+                        </div>
+
+                        <div class="field">
+                            <div class="field-label">Customer Category <span class="field-req">*</span></div>
+                            <select id="category" name="category" required class="field-select">
+                                <option value="">— Select your category —</option>
+                                <option value="End User"    {% if profile.category == 'End User'    %}selected{% endif %}>End User</option>
+                                <option value="Distributor" {% if profile.category == 'Distributor' %}selected{% endif %}>Distributor</option>
+                                <option value="Installer"   {% if profile.category == 'Installer'   %}selected{% endif %}>Installer</option>
+                            </select>
+                            <p class="field-hint">Your category determines your pricing tier</p>
+                        </div>
+
+                        <div class="info-box">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
+                            </svg>
+                            <div>
+                                <div class="info-box-title">Category & Pricing</div>
+                                <p class="info-box-body">Installers and Distributors receive special pricing on orders. Verification may be required to upgrade your account category.</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="{% url 'main:customer_dashboard' %}" class="btn-cancel">
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn-save">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
             </div>
 
         </div>
     </div>
-</section>
+</div>
 
 {% endblock %}
