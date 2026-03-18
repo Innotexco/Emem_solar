@@ -3,335 +3,377 @@
 
 {% block content %}
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-    
-    * {
-        font-family: 'Inter', -apple-system, sans-serif;
-        box-sizing: border-box;
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300&family=Outfit:wght@300;400;500;600&display=swap');
+
+    :root {
+        --ink:       #0c1a0f;
+        --ink-mid:   #1e3324;
+        --green:     #0a6640;
+        --green-sat: #0d8c55;
+        --amber:     #c8752e;
+        --rule:      #d6dfd9;
+        --surface:   #f4f7f5;
+        --white:     #ffffff;
+        --muted:     #607568;
+        --danger:    #c0392b;
+        --danger-lt: #fef2f2;
     }
-    
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-        background: #fafafa;
-        color: #171717;
+        font-family: 'Outfit', sans-serif;
+        color: var(--ink);
+        background: var(--surface);
+        -webkit-font-smoothing: antialiased;
+        min-height: 100vh;
     }
-    
-    .container2 {
-        max-width: 1280px;
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── HERO ─────────────────────────────────── */
+    .verif-hero {
+        background: var(--ink);
+        position: relative; overflow: hidden;
+        margin-bottom: 2px;
+    }
+
+    .hero-bg {
+        position: absolute; inset: 0;
+        background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 80px);
+        pointer-events: none;
+    }
+
+    .hero-orb {
+        position: absolute; bottom: -80px; right: -60px;
+        width: 300px; height: 300px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(200,117,46,0.15) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .hero-inner {
+        position: relative; padding: 48px 60px;
+        display: flex; align-items: center;
+        justify-content: space-between; gap: 40px;
+    }
+
+    .hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .hero-eyebrow-line { width: 24px; height: 1px; background: var(--amber); }
+    .hero-eyebrow span { font-size: 10px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--amber); }
+
+    .hero-title {
+        font-family: 'Fraunces', serif;
+        font-size: clamp(28px, 3.5vw, 44px); font-weight: 300;
+        color: var(--white); line-height: 1.0; letter-spacing: -0.025em;
+        margin-bottom: 8px;
+    }
+    .hero-title em { font-style: italic; color: rgba(255,255,255,0.35); }
+
+    .hero-sub { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.42); }
+
+    .pending-count {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 10px 20px; flex-shrink: 0;
+        background: rgba(200,117,46,0.12);
+        border: 1px solid rgba(200,117,46,0.25);
+    }
+    .pending-count-num {
+        font-family: 'Fraunces', serif;
+        font-size: 28px; font-weight: 600; color: var(--amber); line-height: 1;
+    }
+    .pending-count-label {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.16em;
+        text-transform: uppercase; color: rgba(200,117,46,0.7);
+    }
+
+    /* ── PAGE ─────────────────────────────────── */
+    .verif-page {
+        max-width: 1320px;
         margin: 0 auto;
-        padding: 2rem 1rem;
+        padding: 0 60px 100px;
     }
-    
-    .header {
-        margin-bottom: 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 1rem;
+
+    /* ── MESSAGES ─────────────────────────────── */
+    .msg-bar {
+        display: flex; align-items: flex-start; gap: 12px;
+        padding: 14px 20px; margin-bottom: 2px;
+        border-left: 3px solid; font-size: 13px; font-weight: 400;
     }
-    
-    .title {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #171717;
-        margin: 0;
-    }
-    
-    .badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.5rem 1rem;
-        background: #fef3c7;
-        color: #92400e;
-        border-radius: 999px;
-        font-size: 0.875rem;
-        font-weight: 600;
-    }
-    
-    .message {
-        padding: 1rem 1.25rem;
-        border-radius: 10px;
-        margin-bottom: 1.5rem;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-    
-    .message-success {
-        background: #d1fae5;
-        color: #065f46;
-        border: 1px solid #a7f3d0;
-    }
-    
-    .message-error {
-        background: #fee2e2;
-        color: #991b1b;
-        border: 1px solid #fecaca;
-    }
-    
-    .message-warning {
-        background: #fef3c7;
-        color: #92400e;
-        border: 1px solid #fde68a;
-    }
-    
-    .empty-state {
-        background: white;
-        border: 1px solid #e5e5e5;
-        border-radius: 16px;
-        padding: 4rem 2rem;
-        text-align: center;
-    }
-    
-    .empty-icon {
-        width: 80px;
-        height: 80px;
-        margin: 0 auto 1.5rem;
-        background: #f5f5f5;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .profile-grid {
-        display: grid;
-        gap: 1.5rem;
-    }
-    
-    @media (min-width: 768px) {
-        .profile-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-    
-    @media (min-width: 1024px) {
-        .profile-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
-    
-    .profile-card {
-        background: white;
-        border: 1px solid #e5e5e5;
-        border-radius: 12px;
-        overflow: hidden;
-        transition: all 0.2s;
-    }
-    
-    .profile-card:hover {
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        border-color: #059669;
-    }
-    
-    .profile-header {
-        padding: 1.5rem;
-        border-bottom: 1px solid #e5e5e5;
-    }
-    
-    .profile-name {
-        font-size: 1.125rem;
-        font-weight: 700;
-        color: #171717;
-        margin-bottom: 0.5rem;
-    }
-    
-    .profile-meta {
-        font-size: 0.875rem;
-        color: #737373;
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-    }
-    
-    .category-badge {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
-        background: #dbeafe;
-        color: #1e40af;
-        border-radius: 999px;
-        font-size: 0.75rem;
-        font-weight: 600;
-        margin-top: 0.5rem;
-    }
-    
-    .image-preview {
-        padding: 1rem;
+    .msg-bar.success { background: rgba(10,102,64,0.05); border-color: var(--green); color: var(--green); }
+    .msg-bar.error   { background: var(--danger-lt); border-color: var(--danger); color: var(--danger); }
+    .msg-bar.warning { background: #fffbeb; border-color: var(--amber); color: var(--amber); }
+    .msg-bar svg { flex-shrink: 0; margin-top: 1px; }
+
+    /* ── PROFILES GRID ────────────────────────── */
+    .profiles-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 0.5rem;
+        gap: 2px;
+        animation: fadeUp 0.55s 0.05s cubic-bezier(0.16,1,0.3,1) both;
     }
-    
-    .preview-img {
+
+    .profile-card {
+        background: var(--white); border: 1px solid var(--rule);
+        display: flex; flex-direction: column;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        position: relative; overflow: hidden;
+    }
+
+    .profile-card-rule {
+        position: absolute; top: 0; left: 28px;
+        width: 32px; height: 2px; background: var(--amber);
+        transform: scaleX(0); transform-origin: left;
+        transition: transform 0.35s ease;
+    }
+    .profile-card:hover .profile-card-rule { transform: scaleX(1); }
+    .profile-card:hover { border-color: rgba(200,117,46,0.3); box-shadow: 0 2px 16px rgba(12,26,15,0.06); z-index: 1; }
+
+    /* Card header */
+    .card-head { padding: 28px 28px 20px; border-bottom: 1px solid var(--rule); }
+
+    .card-name {
+        font-family: 'Fraunces', serif;
+        font-size: 18px; font-weight: 400; color: var(--ink);
+        letter-spacing: -0.01em; margin-bottom: 12px;
+    }
+
+    .card-meta { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+
+    .card-meta-row {
+        display: flex; align-items: center; gap: 8px;
+        font-size: 12px; font-weight: 300; color: var(--muted);
+    }
+    .card-meta-row svg { color: var(--muted); flex-shrink: 0; }
+
+    /* Category badge */
+    .cat-badge {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 5px 12px; font-size: 10px; font-weight: 700;
+        letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .cat-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+    .cat-installer    { background: #eff6ff; color: #1e40af; }
+    .cat-distributor  { background: rgba(10,102,64,0.08); color: var(--green); }
+    .cat-default      { background: var(--surface); color: var(--muted); }
+
+    /* Date badge */
+    .card-date {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+        text-transform: uppercase; color: var(--muted);
+        display: flex; align-items: center; gap: 6px; margin-top: 10px;
+    }
+    .card-date::before { content: ''; display: block; width: 12px; height: 1px; background: var(--rule); }
+
+    /* Images */
+    .card-images {
+        padding: 16px 20px;
+        display: grid; grid-template-columns: repeat(3, 1fr);
+        gap: 4px; border-bottom: 1px solid var(--rule);
+        background: var(--surface);
+    }
+
+    .img-thumb {
+        aspect-ratio: 1; overflow: hidden;
+        border: 1px solid var(--rule); cursor: pointer;
+        transition: border-color 0.2s ease;
+        position: relative;
+    }
+    .img-thumb:hover { border-color: var(--amber); }
+    .img-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease; }
+    .img-thumb:hover img { transform: scale(1.06); }
+
+    .img-more {
+        display: flex; align-items: center; justify-content: center;
+        background: var(--ink); color: rgba(255,255,255,0.55);
+        font-family: 'Fraunces', serif;
+        font-size: 16px; font-weight: 400; letter-spacing: -0.01em;
         aspect-ratio: 1;
-        border-radius: 6px;
-        overflow: hidden;
-        border: 2px solid #e5e5e5;
-        cursor: pointer;
-        transition: all 0.2s;
     }
-    
-    .preview-img:hover {
-        border-color: #059669;
-        transform: scale(1.05);
+
+    /* Card footer */
+    .card-foot { padding: 20px 28px; margin-top: auto; }
+
+    .btn-review {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        width: 100%; padding: 14px 20px;
+        background: var(--ink); color: var(--white);
+        font-family: 'Outfit', sans-serif;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+        text-transform: uppercase; text-decoration: none;
+        border: 2px solid var(--ink); transition: all 0.25s ease;
     }
-    
-    .preview-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+    .btn-review:hover { background: var(--amber); border-color: var(--amber); }
+    .btn-review svg { transition: transform 0.2s ease; }
+    .btn-review:hover svg { transform: translateX(3px); }
+
+    /* ── EMPTY STATE ──────────────────────────── */
+    .verif-empty {
+        background: var(--white); border: 1px solid var(--rule);
+        padding: 100px 60px; text-align: center;
+        animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
     }
-    
-    .more-images {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #f5f5f5;
-        color: #737373;
-        font-size: 0.875rem;
-        font-weight: 600;
+
+    .empty-icon {
+        width: 60px; height: 60px; border: 1px solid var(--rule);
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 24px;
     }
-    
-    .profile-footer {
-        padding: 1rem 1.5rem;
-        background: #fafafa;
+    .empty-icon svg { color: var(--green); }
+
+    .empty-title {
+        font-family: 'Fraunces', serif;
+        font-size: 28px; font-weight: 400; color: var(--ink);
+        letter-spacing: -0.02em; margin-bottom: 10px;
     }
-    
-    .btn {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 0.875rem;
-        cursor: pointer;
-        border: none;
-        transition: all 0.2s;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
+
+    .empty-desc {
+        font-size: 14px; font-weight: 300;
+        color: var(--muted); line-height: 1.7;
     }
-    
-    .btn-primary {
-        background: #059669;
-        color: white;
+
+    /* ── RESPONSIVE ───────────────────────────── */
+    @media (max-width: 1100px) {
+        .verif-page { padding: 0 32px 80px; }
+        .hero-inner { padding: 40px 32px; flex-direction: column; align-items: flex-start; gap: 20px; }
+        .profiles-grid { grid-template-columns: repeat(2, 1fr); }
     }
-    
-    .btn-primary:hover {
-        background: #047857;
-        color: white;
-    }
-    
+
     @media (max-width: 640px) {
-        .container2 {
-            padding: 1rem;
-        }
-        
-        .title {
-            font-size: 1.5rem;
-        }
-        
-        .profile-grid {
-            grid-template-columns: 1fr;
-        }
+        .profiles-grid { grid-template-columns: 1fr; }
+        .card-images { grid-template-columns: repeat(3, 1fr); }
+        .verif-empty { padding: 60px 24px; }
     }
 </style>
 
-<div class="container2">
-    <!-- Header -->
-    <div class="header">
+<!-- Hero -->
+<div class="verif-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-orb"></div>
+    <div class="hero-inner">
         <div>
-            <h1 class="title">Pending Verifications</h1>
+            <div class="hero-eyebrow">
+                <div class="hero-eyebrow-line"></div>
+                <span>Admin</span>
+            </div>
+            <h1 class="hero-title">
+                Pending <em>Verifications</em>
+            </h1>
+            <p class="hero-sub">Review and approve customer account applications</p>
         </div>
-        <span class="badge">
-            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
-            </svg>
-            {{ pending_profiles.count }} Pending
-        </span>
+
+        <div class="pending-count">
+            <div>
+                <div class="pending-count-num">{{ pending_profiles.count }}</div>
+                <div class="pending-count-label">Awaiting Review</div>
+            </div>
+        </div>
     </div>
+</div>
+
+<div class="verif-page">
 
     <!-- Messages -->
     {% if messages %}
         {% for message in messages %}
-        <div class="message {% if message.tags == 'error' %}message-error{% elif message.tags == 'warning' %}message-warning{% else %}message-success{% endif %}">
-            <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <div class="msg-bar {% if message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% else %}success{% endif %}">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
                 {% if message.tags == 'error' or message.tags == 'warning' %}
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
                 {% else %}
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                 {% endif %}
             </svg>
-            <span>{{ message }}</span>
+            {{ message }}
         </div>
         {% endfor %}
     {% endif %}
 
-    <!-- Profiles Grid -->
     {% if pending_profiles %}
-    <div class="profile-grid">
+
+    <div class="profiles-grid">
         {% for profile in pending_profiles %}
         <div class="profile-card">
-            <div class="profile-header">
-                <div class="profile-name">{{ profile.user.get_full_name|default:profile.user.username }}</div>
-                <div class="profile-meta">
-                    <div>📧 {{ profile.user.email }}</div>
-                    <div>📱 {{ profile.phone }}</div>
-                    <div>📅 Submitted {{ profile.created_at|date:"M d, Y" }}</div>
+            <div class="profile-card-rule"></div>
+
+            <!-- Header -->
+            <div class="card-head">
+                <div class="card-name">{{ profile.user.get_full_name|default:profile.user.username }}</div>
+
+                <div class="card-meta">
+                    <div class="card-meta-row">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        {{ profile.user.email }}
+                    </div>
+                    <div class="card-meta-row">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                        </svg>
+                        {{ profile.phone }}
+                    </div>
                 </div>
-                <span class="category-badge">
+
+                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
                     {% if profile.chosen_category == 'Retail' %}
-                        🔧 Installer
+                        <span class="cat-badge cat-installer"><span class="cat-dot"></span>Installer</span>
                     {% elif profile.chosen_category == 'Whole Sale' %}
-                        🏢 Distributor
+                        <span class="cat-badge cat-distributor"><span class="cat-dot"></span>Distributor</span>
                     {% else %}
-                        👤 {{ profile.get_chosen_category_display }}
+                        <span class="cat-badge cat-default"><span class="cat-dot"></span>{{ profile.get_chosen_category_display }}</span>
                     {% endif %}
-                </span>
+
+                    <div class="card-date">{{ profile.created_at|date:"M d, Y" }}</div>
+                </div>
             </div>
-            
+
+            <!-- Images -->
             {% with images=profile.verification_images.all %}
             {% if images %}
-            <div class="image-preview">
+            <div class="card-images">
                 {% for image in images|slice:":5" %}
-                <div class="preview-img">
+                <div class="img-thumb">
                     <img src="{{ image.image.url }}" alt="{{ image.caption }}" title="{{ image.caption }}">
                 </div>
                 {% endfor %}
                 {% if images.count > 5 %}
-                <div class="preview-img more-images">
-                    +{{ images.count|add:"-5" }}
-                </div>
+                <div class="img-more">+{{ images.count|add:"-5" }}</div>
                 {% endif %}
             </div>
             {% endif %}
             {% endwith %}
-            
-            <div class="profile-footer">
-                <a href="{% url 'account:verify_profile' profile.id %}" class="btn btn-primary">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                    </svg>
+
+            <!-- Footer -->
+            <div class="card-foot">
+                <a href="{% url 'account:verify_profile' profile.id %}" class="btn-review">
                     Review Application
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
                 </a>
             </div>
         </div>
         {% endfor %}
     </div>
+
     {% else %}
+
     <!-- Empty State -->
-    <div class="empty-state">
+    <div class="verif-empty">
         <div class="empty-icon">
-            <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
         </div>
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; color: #171717;">All Caught Up!</h2>
-        <p style="color: #737373; font-size: 1rem;">There are no pending verifications at the moment.</p>
+        <div class="empty-title">All Caught Up</div>
+        <p class="empty-desc">There are no pending verifications at the moment.<br>New applications will appear here when submitted.</p>
     </div>
+
     {% endif %}
+
 </div>
 
 {% endblock %}
