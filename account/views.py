@@ -14,6 +14,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+
 
 logger = logging.getLogger(__name__)
 
@@ -509,3 +513,114 @@ def logout_user(request):
     logout(request)
     messages.success(request, 'You have been logged out successfully')
     return redirect('account:login')
+
+
+def forgot_password(request):
+    if request.user.is_authenticated:
+        return redirect('main:products')
+ 
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip().lower()
+ 
+        if not email:
+            messages.error(request, 'Please enter your email address.')
+            return render(request, 'account/forgot_password.html')
+ 
+        try:
+            user = User.objects.get(email__iexact=email)
+            uid   = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+ 
+            reset_url = request.build_absolute_uri(
+                f'/account/reset-password/{uid}/{token}/'
+            )
+ 
+            html_message = render_to_string('account/password_reset.html', {
+                'user':      user,
+                'reset_url': reset_url,
+            })
+ 
+            plain_message = (
+                f"Hi {user.first_name or user.username},\n\n"
+                f"Click the link below to reset your password:\n{reset_url}\n\n"
+                f"This link expires in 24 hours.\n\n"
+                f"If you didn't request this, ignore this email.\n\n"
+                f"— Emem Energy Team"
+            )
+ 
+            send_mail(
+                'Reset your Emem Energy password',
+                plain_message,
+                settings.DEFAULT_FROM_EMAIL,
+                [user.email],
+                html_message=html_message,
+                fail_silently=False,
+            )
+ 
+        except User.DoesNotExist:
+            pass  # Don't reveal whether email exists
+ 
+        # Always redirect — prevents email enumeration
+        return redirect('account:forgot_password_sent')
+ 
+    return render(request, 'account/forgot_password.html')
+ 
+ 
+# ── Step 2: Confirmation ─────────────────────────────────────
+ 
+def forgot_password_sent(request):
+    if request.user.is_authenticated:
+        return redirect('main:products')
+    return render(request, 'account/forgot_password_sent.html')
+ 
+ 
+# ── Step 3: Set new password ─────────────────────────────────
+ 
+def reset_password(request, uidb64, token):
+    if request.user.is_authenticated:
+        return redirect('main:products')
+ 
+    # Decode user
+    try:
+        uid  = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+ 
+    # Validate token
+    if user is None or not default_token_generator.check_token(user, token):
+        return render(request, 'account/reset_password_invalid.html', status=400)
+ 
+    if request.method == 'POST':
+        password1 = request.POST.get('password1', '')
+        password2 = request.POST.get('password2', '')
+ 
+        if not password1:
+            messages.error(request, 'Please enter a new password.')
+        elif len(password1) < 8:
+            messages.error(request, 'Password must be at least 8 characters.')
+        elif password1 != password2:
+            messages.error(request, 'Passwords do not match.')
+        else:
+            user.set_password(password1)
+            user.save()
+            return redirect('account:reset_password_done')
+ 
+        return render(request, 'account/reset_password.html', {
+            'uidb64': uidb64,
+            'token':  token,
+        })
+ 
+    return render(request, 'account/reset_password.html', {
+        'uidb64': uidb64,
+        'token':  token,
+    })
+ 
+ 
+# ── Step 4: Success ──────────────────────────────────────────
+ 
+def reset_password_done(request):
+    if request.user.is_authenticated:
+        return redirect('main:products')
+    return render(request, 'account/reset_password_done.html')
+ 
