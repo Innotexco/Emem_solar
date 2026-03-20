@@ -531,13 +531,13 @@ def checkout(request, item_id=None):
 @login_required(login_url='account:login')
 def payment_callback(request):
     """Handle Paystack payment callback"""
-    
+ 
     reference = request.GET.get('reference')
-    
+ 
     if not reference:
         messages.error(request, 'Invalid payment reference')
         return redirect('main:checkout')
-    
+ 
     try:
         # Verify payment with Paystack
         verify_response = requests.get(
@@ -547,44 +547,76 @@ def payment_callback(request):
             },
             timeout=10
         )
-        
+ 
         if verify_response.status_code == 200:
             payment_data = verify_response.json()
-            
+ 
             if payment_data.get('status') and payment_data['data']['status'] == 'success':
                 # Get order
-                order_id = payment_data['data']['metadata']['order_id']
-                order = Order.objects.get(id=order_id)
-                
+                order_id    = payment_data['data']['metadata']['order_id']
+                order       = Order.objects.get(id=order_id)
+                order_items = OrderItem.objects.filter(order=order)
+ 
                 # Update order payment status
                 order.payment_status = 'paid'
-                order.status = 'success'
+                order.status         = 'success'
                 order.save()
-                
-                # Now create invoice via Sales Invoice API
-                # invoice_created = create_sales_invoice_from_order(order, customer=order.customer_id)
+ 
+                # Create invoice via Sales Invoice API
                 invoice_created = create_sales_invoice_from_order(request, order, customer=order.customer_id)
-                
+ 
                 if invoice_created:
-                    # Clear cart if it was a cart checkout
+                    # Clear cart
                     request.session['cart'] = {}
                     request.session.modified = True
-                    
+ 
+                    # ── Send order confirmation email ──────────────────────
+                    try:
+                        send_mail(
+                            subject=f'Order Confirmed – #{order.id} | Emem Energy',
+                            message=(
+                                f"Hi {request.user.first_name or request.user.username},\n\n"
+                                f"Your payment was successful and your order #{order.id} is now being processed.\n\n"
+                                f"Total: ₦{order.total_amount:,.0f}\n"
+                                f"Delivery: {'Home Delivery' if order.delivery_method == 'home' else 'Pickup Station'}\n\n"
+                                f"View your order: https://ememenergy.com/orders/{order.id}/\n\n"
+                                f"Thank you for shopping with Emem Energy.\n\n"
+                                f"— Emem Energy Team"
+                            ),
+                            from_email=settings.DEFAULT_FROM_EMAIL,
+                            recipient_list=[request.user.email],
+                            html_message=render_to_string(
+                                'main/order_confirmed.html',
+                                {
+                                    'user':        request.user,
+                                    'order':       order,
+                                    'order_items': order_items,
+                                }
+                            ),
+                            fail_silently=True,  # Don't crash if email fails
+                        )
+                    except Exception as e:
+                        # Log but don't block the success flow
+                        print(f'Order confirmation email failed for order #{order.id}: {e}')
+                    # ──────────────────────────────────────────────────────
+ 
                     messages.success(request, 'Payment successful! Your order is being processed.')
                     return redirect('main:products')
+ 
                 else:
                     messages.warning(request, 'Payment received but invoice creation failed. Our team will contact you.')
                     return redirect('main:products')
+ 
             else:
                 messages.error(request, 'Payment verification failed')
         else:
             messages.error(request, 'Unable to verify payment')
-    
+ 
     except Order.DoesNotExist:
         messages.error(request, 'Order not found')
     except Exception as e:
         messages.error(request, f'Error processing payment: {str(e)}')
-    
+ 
     return redirect('main:products')
 
 
