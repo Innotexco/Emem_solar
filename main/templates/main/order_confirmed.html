@@ -1,0 +1,131 @@
+{# main/templates/main/order_confirmed.html #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Confirmed</title>
+</head>
+<body style="margin:0; padding:0; background:#f4f7f5; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; -webkit-font-smoothing:antialiased;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f7f5; padding:40px 20px;">
+  <tr>
+    <td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff; border:1px solid #d6dfd9; max-width:560px; width:100%;">
+
+        <!-- Header -->
+        <tr>
+          <td style="background:#0c1a0f; padding:40px 48px;">
+            <p style="margin:0 0 6px; font-size:10px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#c8752e;">Emem Energy Innovation Ltd</p>
+            <h1 style="margin:0; font-family:Georgia,serif; font-size:26px; font-weight:400; color:#ffffff; letter-spacing:-0.02em; line-height:1.1;">Order Confirmed ✓</h1>
+          </td>
+        </tr>
+        <tr><td style="height:3px; background:#0a6640;"></td></tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="padding:40px 48px;">
+
+            <p style="margin:0 0 20px; font-size:14px; color:#0c1a0f; line-height:1.7;">
+              Hi <strong>{{ user.first_name|default:user.username }}</strong>,
+            </p>
+
+            <p style="margin:0 0 28px; font-size:14px; font-weight:300; color:#607568; line-height:1.8;">
+              Your payment was successful and your order is now being processed. Here's a summary of what you ordered:
+            </p>
+
+            <!-- Order ID badge -->
+            <table cellpadding="0" cellspacing="0" style="margin:0 0 28px; width:100%;">
+              <tr>
+                <td style="padding:14px 20px; background:#f4f7f5; border:1px solid #d6dfd9; border-left:3px solid #0a6640;">
+                  <p style="margin:0 0 3px; font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#607568;">Order Reference</p>
+                  <p style="margin:0; font-size:18px; font-weight:600; color:#0c1a0f; font-family:Georgia,serif; letter-spacing:-0.01em;">#{{ order.id }}</p>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Order items table -->
+            <table cellpadding="0" cellspacing="0" style="margin:0 0 28px; width:100%; border:1px solid #d6dfd9;">
+              <!-- Table header -->
+              <tr style="background:#0c1a0f;">
+                <td style="padding:12px 16px; font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.45);">Item</td>
+                <td style="padding:12px 16px; font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.45); text-align:center;">Qty</td>
+                <td style="padding:12px 16px; font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.45); text-align:right;">Amount</td>
+              </tr>
+              <!-- Items -->
+              {% for item in order_items %}
+              <tr style="border-top:1px solid #d6dfd9;">
+                <td style="padding:14px 16px; font-size:13px; color:#0c1a0f; font-weight:500;">{{ item.item_name }}</td>
+                <td style="padding:14px 16px; font-size:13px; color:#607568; text-align:center;">{{ item.quantity }}</td>
+                <td style="padding:14px 16px; font-size:13px; color:#0c1a0f; font-weight:600; text-align:right;">₦{{ item.price|floatformat:0 }}</td>
+              </tr>
+              {% endfor %}
+              <!-- Total row -->
+              <tr style="background:#f4f7f5; border-top:1px solid #d6dfd9;">
+                <td colspan="2" style="padding:16px; font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#607568;">Total Amount</td>
+                <td style="padding:16px; font-size:20px; font-weight:600; color:#0c1a0f; text-align:right; font-family:Georgia,serif; letter-spacing:-0.01em;">₦{{ order.total_amount|floatformat:0 }}</td>
+              </tr>
+            </table>
+
+            <!-- Delivery info -->
+            <table cellpadding="0" cellspacing="0" style="margin:0 0 32px; width:100%; border:1px solid #d6dfd9;">
+              <tr>
+                <td style="padding:14px 16px; background:#f4f7f5; border-bottom:1px solid #d6dfd9;">
+                  <p style="margin:0 0 3px; font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#607568;">Delivery Method</p>
+                  <p style="margin:0; font-size:13px; color:#0c1a0f;">{% if order.delivery_method == 'home' %}Home Delivery{% else %}Pickup Station{% endif %}</p>
+                </td>
+              </tr>
+              {% if order.delivery_method == 'home' and order.shipping_address %}
+              <tr>
+                <td style="padding:14px 16px; background:#f4f7f5;">
+                  <p style="margin:0 0 3px; font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#607568;">Shipping Address</p>
+                  <p style="margin:0; font-size:13px; color:#0c1a0f;">{{ order.shipping_address }}</p>
+                </td>
+              </tr>
+              {% endif %}
+              {% if order.delivery_method == 'pickup' and order.pickup_station %}
+              <tr>
+                <td style="padding:14px 16px; background:#f4f7f5;">
+                  <p style="margin:0 0 3px; font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#607568;">Pickup Location</p>
+                  <p style="margin:0; font-size:13px; color:#0c1a0f;">{{ order.pickup_station.name }} — {{ order.pickup_station.address }}, {{ order.pickup_station.city }}</p>
+                </td>
+              </tr>
+              {% endif %}
+            </table>
+
+            <!-- CTA -->
+            <table cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
+              <tr>
+                <td style="background:#0a6640;">
+                  <a href="https://ememenergy.com/orders/{{ order.id }}/" style="display:inline-block; padding:16px 36px; font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#ffffff; text-decoration:none;">
+                    View Order Details →
+                  </a>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:0; font-size:13px; font-weight:300; color:#607568; line-height:1.7;">
+              Questions about your order? Contact us at <a href="mailto:support@ememenergy.com" style="color:#0a6640; text-decoration:none;">support@ememenergy.com</a>
+            </p>
+
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="padding:24px 48px; background:#f4f7f5; border-top:1px solid #d6dfd9;">
+            <p style="margin:0; font-size:12px; font-weight:300; color:#607568; line-height:1.7;">
+              <strong style="color:#0c1a0f;">Emem Energy Innovation Ltd</strong><br>
+              14 Dennis Osadebe Way, Asaba, Delta State, Nigeria<br>
+              <a href="mailto:info@ememenergy.com" style="color:#0a6640; text-decoration:none;">info@ememenergy.com</a>
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
