@@ -12,6 +12,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 logger = logging.getLogger(__name__)
 
@@ -239,8 +241,36 @@ def verify_profile(request, profile_id):
             profile.save()
             messages.success(request, f'{profile.user.username} has been verified as {profile.category}.')
             
-            # TODO: Send email notification to user
-            
+            # Send approval email
+            try:
+                subject = 'Your Emem Energy account has been verified'
+                
+                html_message = render_to_string('account/emails/verification_approved.html', {
+                    'user':     profile.user,
+                    'category': profile.category,
+                })
+                
+                plain_message = (
+                    f"Hi {profile.user.first_name or profile.user.username},\n\n"
+                    f"Great news — your Emem Energy account has been verified!\n\n"
+                    f"Your account category: {profile.category}\n\n"
+                    f"You now have full access to all features and your special pricing tier is active.\n\n"
+                    f"Sign in at: https://ememenergy.com/account/login/\n\n"
+                    f"— Emem Energy Team"
+                )
+                
+                send_mail(
+                    subject,
+                    plain_message,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [profile.user.email],
+                    html_message=html_message,
+                    fail_silently=False,
+                )
+            except Exception as e:
+                # Don't block the approval if email fails — just log it
+                messages.warning(request, f'Account approved but email notification failed: {e}')
+                
         elif action == 'reject':
             reason = request.POST.get('reason')
             if not reason:
@@ -252,15 +282,45 @@ def verify_profile(request, profile_id):
             profile.save()
             messages.warning(request, f'{profile.user.username} has been rejected.')
             
-            # TODO: Send email notification to user with reason
+            # Send rejection email
+            try:
+                subject = 'Update on your Emem Energy verification request'
+                
+                html_message = render_to_string('account/emails/verification_rejected.html', {
+                    'user':   profile.user,
+                    'reason': reason,
+                })
+                
+                plain_message = (
+                    f"Hi {profile.user.first_name or profile.user.username},\n\n"
+                    f"Thank you for submitting your verification request.\n\n"
+                    f"Unfortunately, we were unable to approve your request at this time.\n\n"
+                    f"Reason: {reason}\n\n"
+                    f"Please review the reason above and resubmit with the correct documents.\n\n"
+                    f"Upload new images at: https://ememenergy.com/account/upload-verification/\n\n"
+                    f"If you have any questions, contact us at info@ememenergy.com\n\n"
+                    f"— Emem Energy Team"
+                )
+                
+                send_mail(
+                    subject,
+                    plain_message,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [profile.user.email],
+                    html_message=html_message,
+                    fail_silently=False,
+                )
+            except Exception as e:
+                messages.warning(request, f'Account rejected but email notification failed: {e}')
         
         return redirect('account:pending_verifications')
     
     context = {
         'profile': profile,
-        'images': profile.verification_images.all()
+        'images':  profile.verification_images.all()
     }
     return render(request, 'account/verify_profile.html', context)
+ 
 
 
 @login_required
