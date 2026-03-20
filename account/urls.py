@@ -14,8 +14,8 @@ urlpatterns = [
     path('pending_verifications/', views.pending_verifications, name='pending_verifications'),
     path('verify_profile/<int:profile_id>/', views.verify_profile, name='verify_profile'),
 
-    path('forgot-password/',             views.forgot_password,       name='forgot_password'),
-    path('forgot-password/sent/',                     views.forgot_password_sent,  name='forgot_password_sent'),
-    path('reset-password/<uidb64>/<token>/',          views.reset_password,        name='reset_password'),
-    path('reset-password/done/',                      views.reset_password_done,   name='reset_password_done'),
+    path('forgot-password/', views.forgot_password, name='forgot_password'),
+    path('forgot-password/sent/', views.forgot_password_sent, name='forgot_password_sent'),
+    path('reset-password/<uidb64>/<token>/', views.reset_password, name='reset_password'),
+    path('reset-password/done/', views.reset_password_done, name='reset_password_done'),
 ]
