@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Contact Form Message</title>
+</head>
+<body style="margin:0; padding:0; background:#f4f7f5; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f7f5; padding:40px 20px;">
+  <tr>
+    <td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff; border:1px solid #d6dfd9; max-width:560px; width:100%;">
+
+        <!-- Header -->
+        <tr>
+          <td style="background:#0c1a0f; padding:36px 48px;">
+            <p style="margin:0 0 6px; font-size:10px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#c8752e;">Emem Energy — Website</p>
+            <h1 style="margin:0; font-family:Georgia,serif; font-size:24px; font-weight:400; color:#ffffff; letter-spacing:-0.02em; line-height:1.2;">New Contact Form Message</h1>
+          </td>
+        </tr>
+        <tr><td style="height:3px; background:#c8752e;"></td></tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="padding:36px 48px;">
+
+            <p style="margin:0 0 24px; font-size:13px; font-weight:300; color:#607568; line-height:1.7;">
+              Someone submitted the contact form on ememenergy.com. Details below:
+            </p>
+
+            <!-- Sender details -->
+            <table cellpadding="0" cellspacing="0" style="width:100%; border:1px solid #d6dfd9; margin-bottom:28px;">
+              <tr style="border-bottom:1px solid #d6dfd9;">
+                <td style="padding:13px 16px; background:#f4f7f5; width:30%;">
+                  <p style="margin:0; font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#607568;">Name</p>
+                </td>
+                <td style="padding:13px 16px; background:#ffffff;">
+                  <p style="margin:0; font-size:14px; font-weight:500; color:#0c1a0f;">{{ full_name }}</p>
+                </td>
+              </tr>
+              <tr style="border-bottom:1px solid #d6dfd9;">
+                <td style="padding:13px 16px; background:#f4f7f5;">
+                  <p style="margin:0; font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#607568;">Email</p>
+                </td>
+                <td style="padding:13px 16px; background:#ffffff;">
+                  <p style="margin:0; font-size:14px; color:#0a6640;">
+                    <a href="mailto:{{ email }}" style="color:#0a6640; text-decoration:none;">{{ email }}</a>
+                  </p>
+                </td>
+              </tr>
+              <tr style="border-bottom:1px solid #d6dfd9;">
+                <td style="padding:13px 16px; background:#f4f7f5;">
+                  <p style="margin:0; font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#607568;">Phone</p>
+                </td>
+                <td style="padding:13px 16px; background:#ffffff;">
+                  <p style="margin:0; font-size:14px; color:#0c1a0f;">
+                    <a href="tel:{{ phone }}" style="color:#0c1a0f; text-decoration:none;">{{ phone }}</a>
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:13px 16px; background:#f4f7f5;">
+                  <p style="margin:0; font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#607568;">Subject</p>
+                </td>
+                <td style="padding:13px 16px; background:#ffffff;">
+                  <p style="margin:0; font-size:14px; font-weight:500; color:#0c1a0f;">{{ subject }}</p>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Message -->
+            <p style="margin:0 0 10px; font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#607568;">Message</p>
+            <table cellpadding="0" cellspacing="0" style="width:100%; margin-bottom:32px;">
+              <tr>
+                <td style="padding:18px 20px; background:#f4f7f5; border:1px solid #d6dfd9; border-left:3px solid #c8752e;">
+                  <p style="margin:0; font-size:14px; font-weight:300; color:#1e3324; line-height:1.8; white-space:pre-line;">{{ message }}</p>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Reply CTA -->
+            <table cellpadding="0" cellspacing="0" style="margin:0 0 16px;">
+              <tr>
+                <td style="background:#0a6640;">
+                  <a href="mailto:{{ email }}" style="display:inline-block; padding:14px 32px; font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#ffffff; text-decoration:none;">
+                    Reply to {{ full_name }} →
+                  </a>
+                </td>
+              </tr>
+            </table>
+
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="padding:20px 48px; background:#f4f7f5; border-top:1px solid #d6dfd9;">
+            <p style="margin:0; font-size:11px; font-weight:300; color:#607568;">
+              This message was submitted via the contact form at <a href="https://ememenergy.com/contact/" style="color:#0a6640; text-decoration:none;">ememenergy.com/contact/</a>
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
