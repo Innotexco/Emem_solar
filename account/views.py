@@ -245,7 +245,7 @@ def verify_profile(request, profile_id):
             try:
                 subject = 'Your Emem Energy account has been verified'
                 
-                html_message = render_to_string('account/emails/verification_approved.html', {
+                html_message = render_to_string('account/verification_approved.html', {
                     'user':     profile.user,
                     'category': profile.category,
                 })
@@ -286,7 +286,7 @@ def verify_profile(request, profile_id):
             try:
                 subject = 'Update on your Emem Energy verification request'
                 
-                html_message = render_to_string('account/emails/verification_rejected.html', {
+                html_message = render_to_string('account/verification_rejected.html', {
                     'user':   profile.user,
                     'reason': reason,
                 })
