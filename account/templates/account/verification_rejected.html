@@ -1,0 +1,92 @@
+{# account/templates/account/verification_rejected.html #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verification Update</title>
+</head>
+<body style="margin:0; padding:0; background:#f4f7f5; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f7f5; padding:40px 20px;">
+  <tr>
+    <td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff; border:1px solid #d6dfd9; max-width:560px; width:100%;">
+
+        <!-- Header -->
+        <tr>
+          <td style="background:#0c1a0f; padding:40px 48px;">
+            <p style="margin:0 0 6px; font-size:10px; font-weight:700; letter-spacing:0.22em; text-transform:uppercase; color:#c8752e;">Emem Energy Innovation Ltd</p>
+            <h1 style="margin:0; font-family:Georgia,serif; font-size:26px; font-weight:400; color:#ffffff; letter-spacing:-0.02em; line-height:1.1;">Verification Update</h1>
+          </td>
+        </tr>
+        <tr><td style="height:3px; background:#c8752e;"></td></tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="padding:40px 48px;">
+
+            <p style="margin:0 0 20px; font-size:14px; color:#0c1a0f; line-height:1.7;">
+              Hi <strong>{{ user.first_name|default:user.username }}</strong>,
+            </p>
+
+            <p style="margin:0 0 24px; font-size:14px; font-weight:300; color:#607568; line-height:1.8;">
+              Thank you for submitting your verification request. Unfortunately, we were unable to approve it at this time.
+            </p>
+
+            <!-- Reason box -->
+            <table cellpadding="0" cellspacing="0" style="margin:0 0 32px; width:100%; border-left:3px solid #c0392b;">
+              <tr>
+                <td style="padding:18px 20px; background:#fef2f2;">
+                  <p style="margin:0 0 6px; font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#c0392b;">Reason for Rejection</p>
+                  <p style="margin:0; font-size:14px; font-weight:400; color:#0c1a0f; line-height:1.7;">{{ reason }}</p>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Next steps -->
+            <table cellpadding="0" cellspacing="0" style="margin:0 0 32px; border:1px solid #d6dfd9; width:100%;">
+              <tr>
+                <td style="padding:18px 20px; background:#f4f7f5;">
+                  <p style="margin:0 0 4px; font-size:10px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:#607568;">Next Steps</p>
+                  <p style="margin:0; font-size:13px; font-weight:300; color:#607568; line-height:1.6;">Please review the reason above, gather the correct documents, and resubmit your verification images.</p>
+                </td>
+              </tr>
+            </table>
+
+            <!-- CTA -->
+            <table cellpadding="0" cellspacing="0" style="margin:0 0 32px;">
+              <tr>
+                <td style="background:#0c1a0f;">
+                  <a href="https://ememenergy.com/account/upload-verification/" style="display:inline-block; padding:16px 36px; font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#ffffff; text-decoration:none;">
+                    Resubmit Documents →
+                  </a>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:0; font-size:13px; font-weight:300; color:#607568; line-height:1.7;">
+              If you believe this is a mistake or need help, contact us at <a href="mailto:info@ememenergy.com" style="color:#0a6640;">info@ememenergy.com</a>
+            </p>
+
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="padding:24px 48px; background:#f4f7f5; border-top:1px solid #d6dfd9;">
+            <p style="margin:0; font-size:12px; font-weight:300; color:#607568; line-height:1.7;">
+              <strong style="color:#0c1a0f;">Emem Energy Innovation Ltd</strong><br>
+              14 Dennis Osadebe Way, Asaba, Delta State, Nigeria<br>
+              <a href="mailto:info@ememenergy.com" style="color:#0a6640; text-decoration:none;">info@ememenergy.com</a>
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
