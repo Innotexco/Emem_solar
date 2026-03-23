@@ -18,6 +18,8 @@ from django.conf import settings
 from decimal import Decimal, ROUND_HALF_UP
 from datetime import datetime
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core.mail import send_mail, mail_managers
+from django.template.loader import render_to_string
 
 # Create your views here.
 def home(request):
