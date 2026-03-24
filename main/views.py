@@ -8,15 +8,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from account.models import  Profile
-from django.contrib.admin.views.decorators import staff_member_required
 from .models import PickupStation, StockAlert, Order, OrderItem
 from django.db.models import Count, Q, Sum
 from datetime import datetime, timedelta
 import os
-import requests
-from django.conf import settings
 from decimal import Decimal, ROUND_HALF_UP
-from datetime import datetime
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.mail import send_mail, mail_managers
 from django.template.loader import render_to_string
