@@ -64,13 +64,13 @@ def contact(request):
                 ),
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=['info@ememenergy.com'],
-                html_message=render_to_string('main/contact_notification.html', {
-                    'full_name': full_name,
-                    'email':     email,
-                    'phone':     phone,
-                    'subject':   subject,
-                    'user_message':   message,
-                }),
+                # html_message=render_to_string('main/contact_notification.html', {
+                #     'full_name': full_name,
+                #     'email':     email,
+                #     'phone':     phone,
+                #     'subject':   subject,
+                #     'user_message':   message,
+                # }),
                 fail_silently=False,
             )
         except Exception as e:
