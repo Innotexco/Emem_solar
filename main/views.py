@@ -74,7 +74,7 @@ def contact(request):
                 fail_silently=False,
             )
         except Exception as e:
-            print(f'Contact notification email failed: {e}')
+           messages.error(request, f'Email error: {e}')
  
         # 2. Send auto-reply to the person who submitted the form
         try:
@@ -97,7 +97,7 @@ def contact(request):
                 fail_silently=True,  # Don't block if this one fails
             )
         except Exception as e:
-            print(f'Contact auto-reply email failed: {e}')
+            messages.error(request, f'Email error: {e}')
  
         messages.success(request, 'Your message has been sent. We will get back to you within 24 hours.')
         return redirect('main:contact')
