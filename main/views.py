@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 import os
 from decimal import Decimal, ROUND_HALF_UP
 from django.contrib.admin.views.decorators import staff_member_required
-from django.core.mail import send_mail, mail_managers
+from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
 # Create your views here.
@@ -38,70 +38,65 @@ def contact(request):
         phone     = request.POST.get('phone', '').strip()
         subject   = request.POST.get('subject', '').strip()
         message   = request.POST.get('message', '').strip()
- 
-        # Basic validation
+
         if not all([full_name, email, phone, subject, message]):
             messages.error(request, 'Please fill in all required fields.')
             return render(request, 'main/contact.html', {
                 'full_name': full_name,
-                'email':     email,
-                'phone':     phone,
-                'subject':   subject,
-                'user_message':   message,
+                'email': email,
+                'phone': phone,
+                'subject': subject,
+                'user_message': message,
             })
- 
-        # 1. Notify the Emem Energy team (sent to info@ememenergy.com)
+
+        # =========================
+        # 1. EMAIL TO ADMIN
+        # =========================
         try:
-            send_mail(
+            html_content = render_to_string('main/contact_notification.html', {
+                'full_name': full_name,
+                'email': email,
+                'phone': phone,
+                'subject': subject,
+                'user_message': message,
+            })
+
+            email_msg = EmailMessage(
                 subject=f'New Contact Form Message – {subject}',
-                message=(
-                    f"New message from the website contact form.\n\n"
-                    f"Name:    {full_name}\n"
-                    f"Email:   {email}\n"
-                    f"Phone:   {phone}\n"
-                    f"Subject: {subject}\n\n"
-                    f"Message:\n{message}"
-                ),
+                body=html_content,
                 from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=['info@ememenergy.com'],
-                html_message=render_to_string('main/contact_notification.html', {
-                    'full_name': full_name,
-                    'email':     email,
-                    'phone':     phone,
-                    'subject':   subject,
-                    'user_message':   message,
-                }),
-                fail_silently=False,
+                to=['info@ememenergy.com'],
             )
+            email_msg.content_subtype = 'html'  # 🔥 IMPORTANT
+            email_msg.send()
+
         except Exception as e:
-           messages.error(request, f'Email error: {e}')
- 
-        # 2. Send auto-reply to the person who submitted the form
+            messages.error(request, f'Admin email error: {e}')
+
+        # =========================
+        # 2. AUTO REPLY
+        # =========================
         try:
-            send_mail(
+            html_content = render_to_string('main/contact_autoreply.html', {
+                'full_name': full_name,
+                'user_message': message,
+            })
+
+            auto_reply = EmailMessage(
                 subject='We received your message – Emem Energy',
-                message=(
-                    f"Hi {full_name},\n\n"
-                    f"Thank you for reaching out to Emem Energy. We have received your message "
-                    f"and will get back to you within 24 hours.\n\n"
-                    f"Your message:\n{message}\n\n"
-                    f"— Emem Energy Team\n"
-                    f"info@ememenergy.com"
-                ),
+                body=html_content,
                 from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[email],
-                html_message=render_to_string('main/contact_autoreply.html', {
-                    'full_name': full_name,
-                    'user_message':   message,
-                }),
-                fail_silently=True,  # Don't block if this one fails
+                to=[email],
             )
+            auto_reply.content_subtype = 'html'  # 🔥 IMPORTANT
+            auto_reply.send()
+
         except Exception as e:
-            messages.error(request, f'Email error: {e}')
- 
-        messages.success(request, 'Your message has been sent. We will get back to you within 24 hours.')
+            messages.error(request, f'Auto-reply error: {e}')
+
+        messages.success(request, 'Your message has been sent.')
         return redirect('main:contact')
- 
+
     return render(request, 'main/contact.html')
 
 
