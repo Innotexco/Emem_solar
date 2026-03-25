@@ -92,7 +92,7 @@ def contact(request):
                 recipient_list=[email],
                 html_message=render_to_string('main/contact_autoreply.html', {
                     'full_name': full_name,
-                    'message':   message,
+                    'user_message':   message,
                 }),
                 fail_silently=True,  # Don't block if this one fails
             )
