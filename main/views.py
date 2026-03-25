@@ -90,10 +90,10 @@ def contact(request):
                 ),
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[email],
-                html_message=render_to_string('main/contact_autoreply.html', {
-                    'full_name': full_name,
-                    'user_message':   message,
-                }),
+                # html_message=render_to_string('main/contact_autoreply.html', {
+                #     'full_name': full_name,
+                #     'user_message':   message,
+                # }),
                 fail_silently=True,  # Don't block if this one fails
             )
         except Exception as e:
