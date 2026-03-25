@@ -627,23 +627,47 @@
 </section>
 
 <script>
-    const form         = document.getElementById('contact-form');
-    const submitBtn    = document.getElementById('submit-button');
-    const formMessage  = document.getElementById('form-message');
+    const form = document.getElementById('contact-form');
+    const submitBtn = document.getElementById('submit-button');
+    const formMessage = document.getElementById('form-message');
 
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        if (!form.checkValidity()) { showMsg('Please fill out all required fields.', 'error'); return; }
+
+        if (!form.checkValidity()) {
+            showMsg('Please fill out all required fields.', 'error');
+            return;
+        }
 
         submitBtn.disabled = true;
         submitBtn.innerHTML = `Sending… <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
 
-        setTimeout(() => {
-            showMsg('Message sent — we\'ll be in touch within 24 hours.', 'success');
-            form.reset();
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(form.action || window.location.href, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            const html = await response.text();
+
+            // Simple check - if Django redirected or showed success message
+            if (response.ok && (html.includes('success') || response.redirected)) {
+                showMsg("Message sent — we'll be in touch within 24 hours.", 'success');
+                form.reset();
+            } else {
+                showMsg('Something went wrong. Please try again.', 'error');
+            }
+        } catch (err) {
+            showMsg('Network error. Please check your connection.', 'error');
+        } finally {
             submitBtn.disabled = false;
             submitBtn.innerHTML = `Send Message <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
-        }, 1500);
+        }
     });
 
     function showMsg(text, type) {
