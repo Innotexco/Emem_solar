@@ -47,7 +47,7 @@ def contact(request):
                 'email':     email,
                 'phone':     phone,
                 'subject':   subject,
-                'user_message':   message,
+                'message':   message,
             })
  
         # 1. Notify the Emem Energy team (sent to info@ememenergy.com)
