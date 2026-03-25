@@ -66,9 +66,10 @@ def contact(request):
                 body=html_content,
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 to=['info@ememenergy.com'],
+                reply_to=[email],
             )
             email_msg.content_subtype = 'html'  
-            email_msg.send()
+            email_msg.send(fail_silently=False)
 
         except Exception as e:
             messages.error(request, f'Admin email error: {e}')
