@@ -67,7 +67,7 @@ def contact(request):
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 to=['info@ememenergy.com'],
             )
-            email_msg.content_subtype = 'html'  # 🔥 IMPORTANT
+            email_msg.content_subtype = 'html'  
             email_msg.send()
 
         except Exception as e:
@@ -88,7 +88,7 @@ def contact(request):
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 to=[email],
             )
-            auto_reply.content_subtype = 'html'  # 🔥 IMPORTANT
+            auto_reply.content_subtype = 'html'  
             auto_reply.send()
 
         except Exception as e:
