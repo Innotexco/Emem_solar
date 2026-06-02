@@ -602,12 +602,11 @@ def reset_password(request, uidb64, token):
         elif password1 != password2:
             messages.error(request, 'Passwords do not match.')
         else:
+            # Re-fetch fresh from DB — avoids stale object cache
+            user = User.objects.get(pk=user.pk)
             user.set_password(password1)
             user.save()
-
-            # ✅ Flush any stale session data so old credentials can't persist
             request.session.flush()
-
             return redirect('account:reset_password_done')
 
         return render(request, 'account/reset_password.html', {
