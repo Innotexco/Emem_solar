@@ -447,44 +447,48 @@ def create_customer_via_api(user, phone, category):
 
 
 def login_user(request):
-    # Redirect if already logged in
     if request.user.is_authenticated:
         if request.user.is_staff or request.user.is_superuser:
             return redirect('main:dashboard')
-        else:
-            return redirect('main:products')
-    
+        return redirect('main:products')
+
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username_or_email = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
         remember_me = request.POST.get('remember_me')
 
-        # Validation
-        if not all([username, password]):
-            messages.error(request, 'Please provide both username and password')
+        if not all([username_or_email, password]):
+            messages.error(request, 'Please provide both username and password.')
             return render(request, 'account/login.html')
 
-        # Authenticate user
+        # If input looks like an email, resolve it to a username
+        if '@' in username_or_email:
+            try:
+                username = User.objects.get(email__iexact=username_or_email).username
+            except User.DoesNotExist:
+                messages.error(request, 'Invalid username or password.')
+                return render(request, 'account/login.html')
+        else:
+            username = username_or_email
+
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
-            
-            # Handle "Remember Me"
+
             if not remember_me:
-                request.session.set_expiry(0)  # Session expires on browser close
+                request.session.set_expiry(0)
             else:
                 request.session.set_expiry(1209600)  # 2 weeks
-            
+
             messages.success(request, f'Welcome back, {user.first_name or user.username}!')
-            
-            if request.user.is_staff or request.user.is_superuser:
+
+            if user.is_staff or user.is_superuser:
                 return redirect('main:dashboard')
-            else:
-                return redirect('main:products')
+            return redirect('main:products')
 
         else:
-            messages.error(request, 'Invalid username or password')
+            messages.error(request, 'Invalid username or password.')
             return render(request, 'account/login.html')
 
     return render(request, 'account/login.html')
