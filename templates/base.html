@@ -2,18 +2,64 @@
 {% load tailwind_tags %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Affordable Residential Energy Storage Systems | Emem Energy Technology Ltd</title>
-    <meta name="description" content="Leading manufacturer of affordable residential and commercial energy storage systems in Nigeria. 5-year warranty, 24/7 support, competitive pricing on lithium battery solutions.">
-  
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    {% tailwind_css %}
-    {% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
+    <meta name="description" content="Leading manufacturer of affordable residential and commercial energy storage systems in Nigeria. 5-year warranty, 24/7 support, competitive pricing on lithium battery solutions." />
 
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+    <link href="https://googleapis.com" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    {% tailwind_css %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{% static 'js/tailwind.js' %}"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0a6640',
+                        primary: {
+                            50: '#eefff6',
+                            100: '#d7ffec',
+                            200: '#b1ffdb',
+                            300: '#74ffc1',
+                            400: '#31f79f',
+                            500: '#06e180',
+                            600: '#00bb69',
+                            700: '#039254',
+                            800: '#087345',
+                            900: '#0a6640',
+                            950: '#003520',
+                        },
+                        ochre: {
+                            50: '#fcf7ee',
+                            100: '#f5e8d0',
+                            200: '#eace9d',
+                            300: '#e0b169',
+                            400: '#d89847',
+                            500: '#c7752e',
+                            600: '#b75d28',
+                            700: '#984425',
+                            800: '#7d3623',
+                            900: '#672e20',
+                            950: '#3a160e',
+                        },
+                        primaryLight: '#0d8c55',
+                        accent: '#c8752e'
+                    },
+
+                    fontFamily: {
+                        brand: ['Fraunces', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}" />
 
     {% csrf_token %}
     <script>
@@ -32,10 +78,10 @@
             return cookieValue;
         }
     </script>
-  
+
     <style>
         .gradient-bg {
-        background: linear-gradient(135deg, #065F46 0%, #10B981 50%, #0EA5E9 100%);
+            background: linear-gradient(135deg, #065F46 0%, #10B981 50%, #0EA5E9 100%);
         }
         .hero-pattern {
         background-image: 
@@ -97,44 +143,43 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-     {% comment %} <script src="{% static 'js/home.js' %}"></script> {% endcomment %}
-    {% comment %} <script src="{% static 'js/jquery.js' %}"></script> {% endcomment %} 
-    
-    {% comment %} <link rel="stylesheet" href="{% static 'css/main.css' %}">  {% endcomment %}
-</head>
-<body class=" scroll-smooth">
- 
+    <script src="{% static 'js/index.js' %}"></script>
+    {% comment %} <script src="{% static 'js/home.js' %}"></script> {% endcomment %}
+    {% comment %} <script src="{% static 'js/jquery.js' %}"></script> {% endcomment %}
 
+    {% comment %} <link rel="stylesheet" href="{% static 'css/main.css' %}" /> {% endcomment %}
+  </head>
+  <body class="scroll-smooth">
+    {% include 'navbar.html' %}
 
-     {% include "navbar.html" %}
-     
-   
-{% if messages %}
-    <div class="fixed top-5 right-5 z-[9999] space-y-4 max-w-sm">
+    {% if messages %}
+      <div class="fixed top-5 right-5 z-[9999] space-y-4 max-w-sm">
         {% for message in messages %}
-            <div class="bg-white border-l-4 p-4 shadow-md rounded-md w-full flex items-start 
-                {% if 'success' in message.tags %}border-green-500{% elif 'error' in message.tags %}border-red-500{% endif %}">
-                <div class="mr-2">
-                    {% if 'success' in message.tags %}
-                        <svg class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    {% elif 'error' in message.tags %}
-                        <svg class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    {% endif %}
-                </div>
-                <div class="flex-1">
-                    <p class="text-sm text-gray-800">{{ message }}</p>
-                </div>
+          <div class="bg-white border-l-4 p-4 shadow-md rounded-md w-full flex items-start 
+                {% if 'success' in message.tags %}
+              border-green-500
+            {% elif 'error' in message.tags %}
+              border-red-500
+            {% endif %}">
+            <div class="mr-2">
+              {% if 'success' in message.tags %}
+                <svg class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              {% elif 'error' in message.tags %}
+                <svg class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              {% endif %}
             </div>
+            <div class="flex-1">
+              <p class="text-sm text-gray-800">{{ message }}</p>
+            </div>
+          </div>
         {% endfor %}
-    </div>
+      </div>
 
-    <script>
+      <script>
         setTimeout(function () {
             const messages = document.querySelectorAll('.shadow-md');
             messages.forEach(function (message) {
@@ -146,20 +191,21 @@
             });
         }, 5000);
     </script>
+    {% endif %}
 
-    
-{% endif %}
-
-    
-    
     {% block content %}
 
-    {% endblock content%}
-    
-     {% include "footer.html" %}  
+    {% endblock %}
 
+    {% include 'footer.html' %}
 
-    
-    
-</body>
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            //easing: 'ease-in-out',
+            once: true,
+        });
+    </script>
+  </body>
 </html>

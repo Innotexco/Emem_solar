@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 import os
 from decimal import Decimal, ROUND_HALF_UP
 from django.contrib.admin.views.decorators import staff_member_required
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, send_mail
 from django.template.loader import render_to_string
 
 # Create your views here.
@@ -24,9 +24,81 @@ def home(request):
 def about(request):
     return render(request, 'main/about.html')
 
+
 def products(request):
     stock_date = StockAlert.objects.first()
     return render(request, 'main/products.html', {'stock_date': stock_date})
+
+def inverter_products(request):
+    return render(request, 'main/products/inverter.html')
+
+# Residental HI SL Series
+
+def residential_HI_3_6k_SL(request):
+    return render(request, 'main/products/inverter_details/HI-3~6K-SL.html')
+
+def residential_HI_8k_SL(request):
+    return render(request, 'main/products/inverter_details/HI-8K-SL.html')
+
+def residential_HI_12k_SL(request):
+    return render(request, 'main/products/inverter_details/HI-12K-SL.html')
+
+# Residental HI TL Series
+
+def residential_HI_12k_TL(request):
+    return render(request, 'main/products/inverter_details/HI-12K-TL.html')
+
+def residential_HI_15k_TL(request):
+    return render(request, 'main/products/inverter_details/HI-15K-TL.html')
+
+def residential_HI_20k_TL(request):
+    return render(request, 'main/products/inverter_details/HI-20K-TL.html')
+
+
+# Residental HI OFF-GRID Series
+
+def residential_HI_4k_SL(request):
+    return render(request, 'main/products/inverter_details/Emem_off-grid/Emem-HI-4K-SL.html')
+
+def residential_HI_6k_SL(request):
+    return render(request, 'main/products/inverter_details/Emem_off-grid/Emem-HI-6K-SL.html')
+
+def residential_HI_8k_SL_OG(request):
+    return render(request, 'main/products/inverter_details/Emem_off-grid/Emem-HI-8K-SL.html')
+
+def residential_HI_10k_SL(request):
+    return render(request, 'main/products/inverter_details/Emem_off-grid/Emem-HI-10K-SL.html')
+
+# Commercial HI TH Series
+def commercial_HI_15_25k_TH(request):
+    return render(request, 'main/products/inverter_details/HI-15-25K-TH.html')
+
+def commercial_HI_29_60k_TH(request):
+    return render(request, 'main/products/inverter_details/HI-29-60K-TH.html')
+
+def commercial_HI_80_125k_TH(request):
+    return render(request, 'main/products/inverter_details/HI-80-125K-TH.html')
+
+
+
+
+def battery_products(request):
+    return render(request, 'main/products/battery.html')
+
+# Lithum Battery 8.8Kwh
+def lithium_battery_8kwh(request):
+    return render(request, 'main/products/battery_details/lithium_battery_8kwh.html')
+
+# Lithum Battery 14.5Kwh
+def lithium_battery_16kwh(request):
+    return render(request, 'main/products/battery_details/lithium_battery_16kwh.html')
+
+# Lithum Battery 17.5Kwh
+def lithium_battery_17_5kwh(request):
+    return render(request, 'main/products/battery_details/lithium_battery_17_5kwh.html')
+
+def solarPanels_products(request):
+    return render(request, 'main/products/panels.html')
 
 # def contact(request):
 #     return render(request, 'main/contact.html')
@@ -84,7 +156,7 @@ def contact(request):
             })
 
             auto_reply = EmailMessage(
-                subject='We received your message – Emem Energy',
+                subject='We received your message - Emem Energy',
                 body=html_content,
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 to=[email],
@@ -640,7 +712,7 @@ def payment_callback(request):
                     # ── Send order confirmation email ──────────────────────
                     try:
                         send_mail(
-                            subject=f'Order Confirmed – #{order.id} | Emem Energy',
+                            subject=f'Order Confirmed - #{order.id} | Emem Energy',
                             message=(
                                 f"Hi {request.user.first_name or request.user.username},\n\n"
                                 f"Your payment was successful and your order #{order.id} is now being processed.\n\n"

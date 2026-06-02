@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        
+        {
+            "type": "chrome",
+            "name": "http://127.0.0.1:3000/c:/Users/obiaj/Documents/HI-8K-SL.html",
+            "request": "launch",
+            "url": "http://127.0.0.1:3000/c:/Users/obiaj/Documents/HI-8K-SL.html"
+        }
+    ]
+}

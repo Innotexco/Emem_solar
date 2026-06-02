@@ -1,0 +1,386 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <main class="bg-white text-slate-900">
+    <section class="relative overflow-hidden bg-[#0c1a0f] text-white">
+      <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(115deg,_rgba(200,117,46,0.2),_transparent_28%,_rgba(13,140,85,0.16)_72%,_transparent)]"></div>
+      <div class="pointer-events-none absolute inset-0 opacity-[0.14] [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:72px_72px]"></div>
+      <div class="pointer-events-none absolute left-0 top-0 h-full w-1 bg-[#c8752e]"></div>
+      <div class="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#07110a] to-transparent"></div>
+      <div class="pointer-events-none absolute bottom-8 right-6 select-none text-[5rem] font-black uppercase leading-none tracking-[0.18em] text-white/[0.035] sm:text-[8rem] lg:text-[11rem]">16kWh</div>
+
+      <div class="relative mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-6 lg:grid-cols-[1fr_0.95fr] lg:px-8 lg:py-20">
+        <div class="relative flex min-h-[420px] items-center justify-center lg:min-h-[560px]">
+          <div class="absolute inset-x-8 bottom-6 h-24 bg-black/30 blur-2xl"></div>
+          <div class="relative z-10 flex h-[420px] w-full max-w-[640px] items-center justify-center sm:h-[500px] lg:h-[560px]">
+            <img src="{% static 'images/EmemBattery17_5kwh.png' %}" alt="LiFePO4 battery energy storage" class="h-full w-full object-contain drop-shadow-[0_35px_55px_rgba(0,0,0,0.38)]" />
+          </div>
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-[#c8752e]">Lithium Iron Phosphate Battery</p>
+          <h1 class="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">ELFP-51V314Ah</h1>
+          <p class="mt-3 text-xl font-medium text-white/70">16 kWh Capacity · Long Life Residential Storage</p>
+          <p class="mt-7 max-w-2xl text-base leading-8 text-white/70">High-performance LiFePO₄ battery with integrated BMS, flexible parallel scaling, and dependable backup energy for homes and off-grid installations.</p>
+
+          <div class="mt-8 grid gap-3 sm:grid-cols-3">
+            <div class="border border-white/10 bg-white/10 p-5 backdrop-blur">
+              <div class="text-3xl font-semibold text-white">16kWh</div>
+              <div class="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-white/50">Max Energy</div>
+            </div>
+            <div class="border border-white/10 bg-white/10 p-5 backdrop-blur">
+              <div class="text-3xl font-semibold text-white">51.2V</div>
+              <div class="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-white/50">Nominal Voltage</div>
+            </div>
+            <div class="border border-white/10 bg-white/10 p-5 backdrop-blur">
+              <div class="text-3xl font-semibold text-white">16</div>
+              <div class="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-white/50">Units Parallel</div>
+            </div>
+          </div>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="{% url 'main:contact' %}" target="_blank" class="inline-flex items-center justify-center bg-[#c8752e] px-7 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-white transition hover:bg-[#b5661f]">Contact Us</a>
+            <a href="#technical" class="inline-flex items-center justify-center border border-white/25 px-7 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-white transition hover:border-white hover:bg-white/10">View Specs</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="border-y border-slate-200 bg-white">
+      <div class="mx-auto grid max-w-7xl gap-0 px-5 sm:px-6 md:grid-cols-3 lg:px-8">
+        <div class="flex items-center gap-4 border-b border-slate-200 py-7 md:border-b-0 md:border-r md:pr-8">
+          <span class="flex h-12 w-12 items-center justify-center rounded-full bg-primary-900/10 text-primary-900">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M12 2l8 4v6c0 5-3.8 9.4-8 10-4.2-.6-8-5-8-10V6l8-4z" />
+            </svg>
+          </span>
+          <div>
+            <h2 class="font-semibold text-slate-950">Integrated BMS</h2>
+            <p class="mt-1 text-sm text-slate-500">Built-in battery management for safe charging, balancing, and protection.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-4 border-b border-slate-200 py-7 md:border-b-0 md:border-r md:px-8">
+          <span class="flex h-12 w-12 items-center justify-center rounded-full bg-primary-900/10 text-primary-900">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M13 2L4 14h7l-1 8 10-13h-7l1-7z" />
+            </svg>
+          </span>
+          <div>
+            <h2 class="font-semibold text-slate-950">Parallel Ready</h2>
+            <p class="mt-1 text-sm text-slate-500">Supports expansion with up to 16 parallel units for greater capacity.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-4 py-7 md:pl-8">
+          <span class="flex h-12 w-12 items-center justify-center rounded-full bg-primary-900/10 text-primary-900">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+              <path d="M8 6v12M16 6v12" />
+            </svg>
+          </span>
+          <div>
+            <h2 class="font-semibold text-slate-950">Long Service Life</h2>
+            <p class="mt-1 text-sm text-slate-500">Designed for 15–20 years of reliable operation with high cycle durability.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white py-16 lg:py-24">
+      <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mb-14">
+          <h2 class="text-4xl font-bold text-gray-900 font-brand">Product Advantages</h2>
+          <div class="w-16 h-1 bg-primary-900 mt-4"></div>
+          <p class="mt-6 text-gray-600 leading-7">The ELFP-51V314Ah battery delivers stable LiFePO₄ storage for residential and off-grid systems, with robust protection and flexible expandability.</p>
+        </div>
+
+        <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <article class="border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center bg-primary-900/10 text-primary-900">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M4 7h16M4 12h16M4 17h10" />
+                <path d="M18 15l2 2-2 2" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-slate-950">Safe LiFePO₄ Chemistry</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Non-flammable, stable cells deliver dependable performance and safer operation than other lithium technologies.</p>
+          </article>
+          <article class="border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center bg-primary-900/10 text-primary-900">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M12 2l8 4v6c0 5-3.8 9.4-8 10-4.2-.6-8-5-8-10V6l8-4z" />
+                <path d="M9 12l2 2 4-5" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-slate-950">Robust Protection</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Built-in overcharge, over-discharge, over-current, short-circuit and temperature protection.</p>
+          </article>
+          <article class="border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center bg-primary-900/10 text-primary-900">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M4 5h6v6H4zM14 5h6v6h-6zM4 15h6v4H4zM14 15h6v4h-6z" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-slate-950">Flexible System Scaling</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Connect up to 16 units in parallel for larger energy capacity and extended backup time.</p>
+          </article>
+          <article class="border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center bg-primary-900/10 text-primary-900">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M13 2L4 14h7l-1 8 10-13h-7l1-7z" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-slate-950">Fast Charge Support</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">125A charging and discharging current supports fast energy replenishment and strong load delivery.</p>
+          </article>
+          <article class="border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center bg-primary-900/10 text-primary-900">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 3" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-slate-950">Durable Cycle Life</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">More than 6,000 cycles normally and over 8,000 cycles at 70% depth of discharge.</p>
+          </article>
+          <article class="border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center bg-primary-900/10 text-primary-900">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M4 14a8 8 0 0116 0" />
+                <path d="M7 14a5 5 0 0110 0" />
+                <path d="M10 14a2 2 0 014 0" />
+                <path d="M4 18h16" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-slate-950">Stable Operating Range</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Wide temperature and humidity tolerance for dependable energy storage in real environments.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="technical" class="bg-[#f6f8f7] py-16 lg:py-24">
+      <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div class="mb-14 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+          <div class="max-w-3xl">
+            <h2 class="text-4xl font-bold text-gray-900 font-brand">Technical Parameters</h2>
+            <div class="w-16 h-1 bg-primary-900 mt-4"></div>
+            <p class="mt-6 text-gray-600 leading-7">Key electrical, environmental, and protection specifications for the ELFP-51V314Ah 16kWh LiFePO₄ battery.</p>
+          </div>
+          <a href="{% static 'images/pdf/Emem LiFePO4 16kWh Battery.pdf' %}" target="_blank" class="inline-flex w-fit items-center justify-center border border-primary-900 px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-primary-900 transition hover:bg-primary-900 hover:text-white">View Full Specs</a>
+        </div>
+
+        <div class="overflow-x-auto border border-slate-200 bg-white shadow-sm">
+          <table class="min-w-[980px] w-full border-collapse text-sm">
+            <thead>
+              <tr class="bg-slate-950 text-white">
+                <th class="w-[38%] px-5 py-4 text-left font-semibold uppercase tracking-[0.12em]">Item</th>
+                <th class="border-l border-white/10 px-5 py-4 text-center font-semibold">Parameter</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-slate-900 [&_td:not(:first-child)]:text-center [&_td:not(:first-child)]:font-medium [&_tr:not(.table-section):nth-child(even)]:bg-slate-50/70">
+              <tr class="table-section bg-[#eef3f0]">
+                <td colspan="2" class="border-l-4 border-primary-900 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-primary-900">Battery</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Model</td>
+                <td class="px-5 py-3">ELFP-51V314Ah</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Battery type</td>
+                <td class="px-5 py-3">Lithium Iron Phosphate (LiFePO₄)</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Nominal voltage</td>
+                <td class="px-5 py-3">51.2V</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Nominal capacity</td>
+                <td class="px-5 py-3">314Ah</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Maximum capacity</td>
+                <td class="px-5 py-3">314Ah</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Nominal energy</td>
+                <td class="px-5 py-3">16kWh</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Maximum energy</td>
+                <td class="px-5 py-3">16kWh</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Cycle life (80% DOD)</td>
+                <td class="px-5 py-3">≥ 6000 cycles</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Cycle life (70% DOD)</td>
+                <td class="px-5 py-3">≥ 8000 cycles</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Charge voltage</td>
+                <td class="px-5 py-3">55.2 ± 0.2V</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Discharge cut-off voltage</td>
+                <td class="px-5 py-3">46.4 ± 0.2V</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Standard charge current</td>
+                <td class="px-5 py-3">125A</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Continuous discharge current</td>
+                <td class="px-5 py-3">125A</td>
+              </tr>
+
+              <tr class="table-section bg-[#eef3f0]">
+                <td colspan="2" class="border-l-4 border-primary-900 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-primary-900">Environmental Parameters</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Charge temperature</td>
+                <td class="px-5 py-3">0 ~ 55°C</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Discharge temperature</td>
+                <td class="px-5 py-3">-20 ~ 60°C</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Storage temperature</td>
+                <td class="px-5 py-3">-10 ~ 55°C</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Humidity</td>
+                <td class="px-5 py-3">≤ 85% RH</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-10 grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+          <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm sm:p-10">
+            <h3 class="text-2xl font-semibold text-slate-950">Protection & Features</h3>
+            <ul class="mt-6 space-y-4 text-slate-600">
+              <li>• Built-in Battery Management System (BMS)</li>
+              <li>• Overcharge protection</li>
+              <li>• Over-discharge protection</li>
+              <li>• Over-current and short-circuit protection</li>
+              <li>• Temperature protection</li>
+              <li>• Supports Parallel Connection (up to 16 units)</li>
+              <li>• RS485 / CAN communication interface / WiFi / Bluetooth</li>
+              <li>• Long service life (15–20 years typical)</li>
+            </ul>
+          </div>
+          <div class="rounded-3xl border border-rose-500/20 bg-rose-50/80 p-8 shadow-sm sm:p-10">
+            <h3 class="text-2xl font-semibold text-rose-900">Safety Warning</h3>
+            <ul class="mt-6 space-y-3 text-rose-900">
+              <li>• Do not short-circuit the battery terminals.</li>
+              <li>• Do not expose the battery to fire or high temperatures.</li>
+              <li>• Do not puncture, crush, or disassemble the battery.</li>
+              <li>• Do not use if the battery is swollen, leaking, or damaged.</li>
+              <li>• Keep away from children.</li>
+              <li>• Charge only with a compatible, approved charger.</li>
+              <li>• Do not immerse in water or allow moisture to enter.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white py-16 lg:py-24">
+      <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mb-14">
+          <h2 class="text-4xl font-bold text-gray-900 font-brand">System Configuration</h2>
+          <div class="w-16 h-1 bg-primary-900 mt-4"></div>
+          <p class="mt-6 text-gray-600 leading-7">Pair this battery with compatible hybrid inverters, solar PV arrays, and backup loads to create a durable residential energy storage solution.</p>
+        </div>
+
+        <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
+          <div class="border border-slate-200 bg-[#f6f8f7] p-6 sm:p-8">
+            <div class="grid gap-4">
+              <div class="flex items-start gap-4 border border-slate-200 bg-white p-5 shadow-sm">
+                <span class="flex h-11 w-11 shrink-0 items-center justify-center bg-primary-900/10 text-primary-900">
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="4" />
+                    <path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l-1.4-1.4M20.4 20.4L19 19M19 5l1.4-1.4M3.6 20.4L5 19" />
+                  </svg>
+                </span>
+                <div>
+                  <h3 class="font-semibold text-slate-950">Solar Charging</h3>
+                  <p class="mt-2 text-sm leading-6 text-slate-600">Store daytime PV energy in the battery for night use and backup during outages.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4 border border-slate-200 bg-white p-5 shadow-sm">
+                <span class="flex h-11 w-11 shrink-0 items-center justify-center bg-primary-900/10 text-primary-900">
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <rect x="3" y="7" width="16" height="10" rx="2" />
+                    <path d="M21 11v2M7 11h3" />
+                  </svg>
+                </span>
+                <div>
+                  <h3 class="font-semibold text-slate-950">Battery Communication</h3>
+                  <p class="mt-2 text-sm leading-6 text-slate-600">RS485, CAN, WiFi and Bluetooth options enable monitoring and inverter integration.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4 border border-slate-200 bg-white p-5 shadow-sm">
+                <span class="flex h-11 w-11 shrink-0 items-center justify-center bg-primary-900/10 text-primary-900">
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path d="M3 12h7l2-7 2 14 2-7h5" />
+                  </svg>
+                </span>
+                <div>
+                  <h3 class="font-semibold text-slate-950">Backup Readiness</h3>
+                  <p class="mt-2 text-sm leading-6 text-slate-600">Supports critical loads in off-grid and backup power applications.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative overflow-hidden border border-slate-200 bg-slate-950 min-h-[420px]">
+            <img src="{% static 'images/ess2.jpg' %}" alt="Residential battery storage system" class="absolute inset-0 h-full w-full object-cover opacity-45" />
+            <div class="absolute inset-0 bg-[linear-gradient(90deg,_rgba(12,26,15,0.9),_rgba(12,26,15,0.35))]"></div>
+            <div class="relative z-10 grid h-full content-center gap-5 p-7 sm:p-10">
+              <div class="max-w-lg">
+                <h3 class="text-2xl font-semibold tracking-tight text-white">Reliable storage for every household.</h3>
+                <p class="mt-4 leading-8 text-white/70">The ELFP battery is engineered to store more solar energy, provide safer operation, and keep essential loads powered when needed most.</p>
+              </div>
+              <div class="grid gap-3 sm:grid-cols-3">
+                <div class="border border-white/10 bg-white/10 p-4">
+                  <div class="text-2xl font-semibold text-white">125A</div>
+                  <div class="mt-1 text-xs uppercase tracking-[0.14em] text-white/50">Charge/Discharge</div>
+                </div>
+                <div class="border border-white/10 bg-white/10 p-4">
+                  <div class="text-2xl font-semibold text-white">51.2V</div>
+                  <div class="mt-1 text-xs uppercase tracking-[0.14em] text-white/50">Norminal Voltage</div>
+                </div>
+                <div class="border border-white/10 bg-white/10 p-4">
+                  <div class="text-2xl font-semibold text-white">15-20y</div>
+                  <div class="mt-1 text-xs uppercase tracking-[0.14em] text-white/50">Service Life</div>
+                </div>
+              </div>
+              <a href="{% url 'main:contact' %}" class="mt-2 inline-flex w-fit items-center justify-center bg-[#c8752e] px-7 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-white transition hover:bg-[#b5661f]">Plan a System</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[#0c1a0f] py-16 text-white">
+      <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div class="grid gap-8 lg:grid-cols-[0.7fr_1fr] lg:items-center">
+          <div class="max-w-3xl">
+            <h2 class="text-4xl font-bold font-brand text-white">Related Solutions</h2>
+            <div class="w-16 h-1 bg-[#c8752e] mt-4"></div>
+            <p class="mt-6 text-white/65 leading-7">Energy storage solutions designed for everyday residential backup, solar self-use, and dependable home power.</p>
+          </div>
+          <div class="border border-white/10 bg-white/5 p-6 sm:p-8">
+            <h3 class="text-xl font-semibold">Residential Energy Storage Solution</h3>
+            <p class="mt-4 leading-8 text-white/70">Solar panels create power during the day, batteries store the excess, and the hybrid inverter keeps your essential loads running when the grid is unavailable.</p>
+            <a href="{% url 'main:products' %}" class="mt-6 inline-flex text-sm font-semibold uppercase tracking-[0.14em] text-[#c8752e] hover:text-white">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+{% endblock %}

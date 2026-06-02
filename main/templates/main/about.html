@@ -483,7 +483,8 @@
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
             </a>
-            <a href="{% url 'main:products' %}" class="btn-secondary">
+            {% comment %} <a href="{% url 'main:products' %}" class="btn-secondary"> {% endcomment %}
+            <a href="{% url 'main:home' %}#products" class="btn-secondary">
                 Explore Products
             </a>
         </div>

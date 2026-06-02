@@ -1,0 +1,509 @@
+﻿{% extends "base.html" %}
+{% load static %}
+{% block content %} 
+
+<main class="bg-white text-slate-900">
+    <section class="relative overflow-hidden bg-[#0c1a0f] text-white">
+      <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(115deg,_rgba(200,117,46,0.2),_transparent_28%,_rgba(13,140,85,0.16)_72%,_transparent)]"></div>
+      <div class="pointer-events-none absolute inset-0 opacity-[0.14] [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:72px_72px]"></div>
+      <div class="pointer-events-none absolute left-0 top-0 h-full w-1 bg-[#c8752e]"></div>
+      <div class="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#07110a] to-transparent"></div>
+      <div class="pointer-events-none absolute bottom-8 right-6 select-none text-[5rem] font-black uppercase leading-none tracking-[0.18em] text-white/[0.035] sm:text-[8rem] lg:text-[11rem]">HI-10K-SL</div>
+
+      <div class="relative mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-6 lg:grid-cols-[1fr_0.95fr] lg:px-8 lg:py-20">
+        <div class="relative flex min-h-[420px] items-center justify-center lg:min-h-[560px]">
+          <div class="absolute inset-x-8 bottom-6 h-24 bg-black/30 blur-2xl"></div>
+          <div class="relative z-10 flex h-[420px] w-full max-w-[640px] items-center justify-center sm:h-[500px] lg:h-[560px]">
+            <img src="{% static 'images/Emem10Kv1.png' %}" alt="HI-10K-SL Solar Storage Inverter" class="h-full w-full object-contain drop-shadow-[0_35px_55px_rgba(0,0,0,0.38)]" />
+          </div>
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-[#c8752e]">Solar Storage Inverter</p>
+          <h1 class="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">HI-10K-SL</h1>
+          <p class="mt-3 text-xl font-medium text-white/70">48V • 10000W • 50/60Hz</p>
+          <p class="mt-7 max-w-2xl text-base leading-8 text-white/70">48V 10kW hybrid solar inverter with dual AC outputs, two MPPT trackers, 12kW PV support, and high-power charging for reliable home backup and storage.</p>
+
+          <div class="mt-8 grid gap-3 sm:grid-cols-3">
+            <div class="border border-white/10 bg-white/10 p-5 backdrop-blur">
+              <div class="text-3xl font-semibold text-white">10000W</div>
+              <div class="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-white/50">Rated Power</div>
+            </div>
+            <div class="border border-white/10 bg-white/10 p-5 backdrop-blur">
+              <div class="text-3xl font-semibold text-white">48V</div>
+              <div class="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-white/50">Nominal Battery</div>
+            </div>
+            <div class="border border-white/10 bg-white/10 p-5 backdrop-blur">
+              <div class="text-3xl font-semibold text-white">50/60Hz</div>
+              <div class="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-white/50">AC Outputs</div>
+            </div>
+          </div>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="{% url 'main:contact' %}" target="_blank" class="inline-flex items-center justify-center bg-[#c8752e] px-7 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-white transition hover:bg-[#b5661f]">Contact Us</a>
+            <a href="#technical" class="inline-flex items-center justify-center border border-white/25 px-7 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-white transition hover:border-white hover:bg-white/10">Datasheet</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="border-y border-slate-200 bg-white">
+      <div class="mx-auto grid max-w-7xl gap-0 px-5 sm:px-6 md:grid-cols-3 lg:px-8">
+        <div class="flex items-center gap-4 border-b border-slate-200 py-7 md:border-b-0 md:border-r md:pr-8">
+          <span class="flex h-12 w-12 items-center justify-center rounded-full bg-primary-900/10 text-primary-900">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M12 2l8 4v6c0 5-3.8 9.4-8 10-4.2-.6-8-5-8-10V6l8-4z" />
+            </svg>
+          </span>
+          <div>
+            <h2 class="font-semibold text-slate-950">Dual AC Outputs</h2>
+            <p class="mt-1 text-sm text-slate-500">Separate main and secondary outputs for critical and heavy loads.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-4 border-b border-slate-200 py-7 md:border-b-0 md:border-r md:px-8">
+          <span class="flex h-12 w-12 items-center justify-center rounded-full bg-primary-900/10 text-primary-900">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M13 2L4 14h7l-1 8 10-13h-7l1-7z" />
+            </svg>
+          </span>
+          <div>
+            <h2 class="font-semibold text-slate-950">Wide PV Range</h2>
+            <p class="mt-1 text-sm text-slate-500">60Vdc–500Vdc PV input supports large rooftop array configurations.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-4 py-7 md:pl-8">
+          <span class="flex h-12 w-12 items-center justify-center rounded-full bg-primary-900/10 text-primary-900">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+              <path d="M8 6v12M16 6v12" />
+            </svg>
+          </span>
+          <div>
+            <h2 class="font-semibold text-slate-950">150A Solar Charge</h2>
+            <p class="mt-1 text-sm text-slate-500">High solar charging current speeds battery recovery.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white py-16 lg:py-24">
+      <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mb-14">
+          <h2 class="text-4xl font-bold text-gray-900 font-brand">Product Advantages</h2>
+          <div class="w-16 h-1 bg-primary-900 mt-4"></div>
+          <p class="mt-6 text-gray-600 leading-7">The HI-10K-SL delivers strong solar self-consumption, robust backup power, and flexible battery support for residential energy storage systems.</p>
+        </div>
+
+        <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <article class="border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center bg-primary-900/10 text-primary-900">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M4 7h16M4 12h16M4 17h10" />
+                <path d="M18 15l2 2-2 2" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-slate-950">High Output Power</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">10kW continuous output with dual 43.5A ports and strong surge capacity.</p>
+          </article>
+          <article class="border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center bg-primary-900/10 text-primary-900">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M12 2l8 4v6c0 5-3.8 9.4-8 10-4.2-.6-8-5-8-10V6l8-4z" />
+                <path d="M9 12l2 2 4-5" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-slate-950">Dual MPPT</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Two independent MPPT trackers support varied panel strings and up to 12kW of PV power.</p>
+          </article>
+          <article class="border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center bg-primary-900/10 text-primary-900">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M4 5h6v6H4zM14 5h6v6h-6zM4 15h6v4H4zM14 15h6v4h-6z" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-slate-950">Flexible Battery Support</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Compatible with lithium, lead-acid and flooded battery banks with user-defined charging profiles.</p>
+          </article>
+          <article class="border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center bg-primary-900/10 text-primary-900">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M13 2L4 14h7l-1 8 10-13h-7l1-7z" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-slate-950">Backup & Self-Use</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Fast transfer and dual outputs keep essential circuits running during grid outages.</p>
+          </article>
+          <article class="border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center bg-primary-900/10 text-primary-900">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 3" />
+            </div>
+            <h3 class="font-semibold text-slate-950">Fast Charging</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">150A hybrid charging plus 120A AC charging helps batteries recover quickly.</p>
+          </article>
+          <article class="border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center bg-primary-900/10 text-primary-900">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M4 14a8 8 0 0116 0" />
+                <path d="M7 14a5 5 0 0110 0" />
+                <path d="M10 14a2 2 0 014 0" />
+                <path d="M4 18h16" />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-slate-950">BMS & Monitoring</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Supports battery BMS via RS485 and optional WiFi/Bluetooth dongle monitoring.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="technical" class="bg-[#f6f8f7] py-16 lg:py-24">
+      <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div class="mb-14 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+          <div class="max-w-3xl">
+            <h2 class="text-4xl font-bold text-gray-900 font-brand">Technical Parameters</h2>
+            <div class="w-16 h-1 bg-primary-900 mt-4"></div>
+            <p class="mt-6 text-gray-600 leading-7">HI-10K-SL 48V 10000W solar storage inverter technical specifications.</p>
+          </div>
+          <a href="{% static 'images/pdf/Emem HI-10000-SL Hybrid Inverter.pdf' %}" target="_blank" class="inline-flex w-fit items-center justify-center border border-primary-900 px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-primary-900 transition hover:bg-primary-900 hover:text-white">Download Datasheet</a>
+        </div>
+
+        <div class="overflow-x-auto border border-slate-200 bg-white shadow-sm p-6">
+          <table class="min-w-[800px] w-full border-collapse text-sm spec-table">
+            <thead>
+              <tr class="bg-slate-950 text-white">
+                <th class="w-[35%] px-5 py-4 text-left font-semibold uppercase tracking-[0.12em]">Technical Data</th>
+                <th class="border-l border-white/10 px-5 py-4 text-center font-semibold">HI-10K-SL</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-slate-900">
+              <tr class="table-section bg-[#eef3f0]">
+                <td colspan="2" class="border-l-4 border-primary-900 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-primary-900">Model & Battery</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Nominal Battery Voltage</td>
+                <td class="px-5 py-3 text-center">48Vdc</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Battery Type</td>
+                <td class="px-5 py-3 text-center">Lithium LiFePO4 / Lead-Acid / Flooded / User Defined</td>
+              </tr>
+
+              <tr class="table-section bg-[#eef3f0]">
+                <td colspan="2" class="border-l-4 border-primary-900 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-primary-900">AC INPUT</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Nominal AC Input Voltage/Waveform</td>
+                <td class="px-5 py-3 text-center">230Vac / Sinusoidal (Utility or Generator)</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">AC Input Range</td>
+                <td class="px-5 py-3 text-center">90~280Vac (Appliances); 170Vac~280Vac (UPS)</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Nominal Input Frequency</td>
+                <td class="px-5 py-3 text-center">50/60Hz (Auto Detection)</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">AC Input Frequency Range</td>
+                <td class="px-5 py-3 text-center">40~65±1Hz; (&gt;42 or &lt;63±1Hz Comeback)</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Max. Bypass Current</td>
+                <td class="px-5 py-3 text-center">60Amp</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Output Short Circuit Protection</td>
+                <td class="px-5 py-3 text-center">Circuit Breaker</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Transfer Time</td>
+                <td class="px-5 py-3 text-center">15ms Typical (UPS); 25ms Typical (Appliances)</td>
+              </tr>
+
+              <tr class="table-section bg-[#eef3f0]">
+                <td colspan="2" class="border-l-4 border-primary-900 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-primary-900">AC CHARGER</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Charging Algorithm</td>
+                <td class="px-5 py-3 text-center">3-Step</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Max. AC Charging Current</td>
+                <td class="px-5 py-3 text-center">120Amp (@VI/P=230Vac)</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Bulk Charging Voltage</td>
+                <td class="px-5 py-3 text-center">54Vdc</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Floating Charging Voltage</td>
+                <td class="px-5 py-3 text-center">56.4Vdc (AGM/Gel); 58.4Vdc (Flooded)</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Max. Hybrid Charging Current (Solar & Utility)</td>
+                <td class="px-5 py-3 text-center">150Amp</td>
+              </tr>
+
+              <tr class="table-section bg-[#eef3f0]">
+                <td colspan="2" class="border-l-4 border-primary-900 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-primary-900">PV INPUT</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Num. of Independent MPPT Tracker</td>
+                <td class="px-5 py-3 text-center">2</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">MPPT Input Current</td>
+                <td class="px-5 py-3 text-center">2*22Amp</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Max. PV Array Power</td>
+                <td class="px-5 py-3 text-center">12000W</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Max. Solar Charge Current</td>
+                <td class="px-5 py-3 text-center">150Amp</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">PV Array MPPT Voltage Range</td>
+                <td class="px-5 py-3 text-center">60~450Vdc</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Max. PV Array Open Circuit Voltage</td>
+                <td class="px-5 py-3 text-center">500Vdc</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">MPPT Tracking Efficiency</td>
+                <td class="px-5 py-3 text-center">99.9%</td>
+              </tr>
+
+              <tr class="table-section bg-[#eef3f0]">
+                <td colspan="2" class="border-l-4 border-primary-900 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-primary-900">INVERTER OUTPUT</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Num. of Output Ports (Main & Second Output)</td>
+                <td class="px-5 py-3 text-center">2</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Rated Output Power of Main/Second Output</td>
+                <td class="px-5 py-3 text-center">10000W / 10000W</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Max. Output Current of Main/Second Output</td>
+                <td class="px-5 py-3 text-center">43.5A / 43.5A</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Surge Capacity</td>
+                <td class="px-5 py-3 text-center">20000VA / 20000W for 5 Seconds</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Output Voltage Waveform</td>
+                <td class="px-5 py-3 text-center">Pure Sine Wave</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Overload Protection</td>
+                <td class="px-5 py-3 text-center">5s@150% Load; 10s@110%~150% Load</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Output Voltage</td>
+                <td class="px-5 py-3 text-center">220/230/240 Vac ± 5%</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Output Frequency</td>
+                <td class="px-5 py-3 text-center">50/60Hz ±1Hz</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Peak Efficiency</td>
+                <td class="px-5 py-3 text-center">94%</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Low Voltage Cut-off Voltage</td>
+                <td class="px-5 py-3 text-center">42Vdc</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">High Voltage Cut-off Voltage</td>
+                <td class="px-5 py-3 text-center">63Vdc</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Cold Start Voltage (When Only Connect with Battery)</td>
+                <td class="px-5 py-3 text-center">46Vdc</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">No Load Power Consumption</td>
+                <td class="px-5 py-3 text-center">&lt;70W @48Vdc</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Parallel Capacity</td>
+                <td class="px-5 py-3 text-center">NO</td>
+              </tr>
+
+              <tr class="table-section bg-[#eef3f0]">
+                <td colspan="2" class="border-l-4 border-primary-900 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-primary-900">GENERAL</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Operating Temperature Range</td>
+                <td class="px-5 py-3 text-center">-10°C ~ 50°C</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Storage Temperature</td>
+                <td class="px-5 py-3 text-center">-15°C ~ 60°C</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Humidity</td>
+                <td class="px-5 py-3 text-center">5% to 95% Relative Humidity (Non-Condensing)</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Altitude</td>
+                <td class="px-5 py-3 text-center">&lt;2000m</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Noise</td>
+                <td class="px-5 py-3 text-center">≤60dB</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Protection Degree</td>
+                <td class="px-5 py-3 text-center">IP21, Indoor Only</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Cooling Method</td>
+                <td class="px-5 py-3 text-center">Intelligent Fan</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Dimension (H×W×D)</td>
+                <td class="px-5 py-3 text-center">605×440×143 mm</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Weight</td>
+                <td class="px-5 py-3 text-center">17.5 KG</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Warranty</td>
+                <td class="px-5 py-3 text-center">2 Years</td>
+              </tr>
+
+              <tr class="table-section bg-[#eef3f0]">
+                <td colspan="2" class="border-l-4 border-primary-900 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-primary-900">COMMUNICATION</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Embedded Interface</td>
+                <td class="px-5 py-3 text-center">RS232*1 / RS485*2 / Dry Contact</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Work with WiFi & Bluetooth Monitoring Dongle</td>
+                <td class="px-5 py-3 text-center">YES, by RS232</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Work with Lithium Battery BMS</td>
+                <td class="px-5 py-3 text-center">YES, by RS485</td>
+              </tr>
+
+              <tr class="table-section bg-[#eef3f0]">
+                <td colspan="2" class="border-l-4 border-primary-900 px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-primary-900">CERTIFICATION</td>
+              </tr>
+              <tr>
+                <td class="px-5 py-3 text-left font-medium text-slate-500">Certification / Standard</td>
+                <td class="px-5 py-3 text-center">CE(IEC61000, IEC62109); IEC61683; IEC60068; RoHS</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white py-16 lg:py-24">
+      <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mb-14">
+          <h2 class="text-4xl font-bold text-gray-900 font-brand">System Configuration</h2>
+          <div class="w-16 h-1 bg-primary-900 mt-4"></div>
+          <p class="mt-6 text-gray-600 leading-7">A practical residential setup connecting solar panels, low-voltage battery storage, grid supply, backup loads, and optional generator support through one hybrid inverter.</p>
+        </div>
+
+        <div class="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
+          <div class="border border-slate-200 bg-[#f6f8f7] p-6 sm:p-8">
+            <div class="grid gap-4">
+              <div class="flex items-start gap-4 border border-slate-200 bg-white p-5 shadow-sm">
+                <span class="flex h-11 w-11 shrink-0 items-center justify-center bg-primary-900/10 text-primary-900">
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="4" />
+                    <path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l-1.4-1.4M20.4 20.4L19 19M19 5l1.4-1.4M3.6 20.4L5 19" />
+                  </svg>
+                </span>
+                <div>
+                  <h3 class="font-semibold text-slate-950">PV Input</h3>
+                  <p class="mt-2 text-sm leading-6 text-slate-600">Dual MPPT channels help harvest solar energy from separate roof strings.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4 border border-slate-200 bg-white p-5 shadow-sm">
+                <span class="flex h-11 w-11 shrink-0 items-center justify-center bg-primary-900/10 text-primary-900">
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <rect x="3" y="7" width="16" height="10" rx="2" />
+                    <path d="M21 11v2M7 11h3" />
+                  </svg>
+                </span>
+                <div>
+                  <h3 class="font-semibold text-slate-950">Battery Storage</h3>
+                  <p class="mt-2 text-sm leading-6 text-slate-600">Supports 48V battery banks and intelligent charging with optional BMS integration.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4 border border-slate-200 bg-white p-5 shadow-sm">
+                <span class="flex h-11 w-11 shrink-0 items-center justify-center bg-primary-900/10 text-primary-900">
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                    <path d="M3 12h7l2-7 2 14 2-7h5" />
+                  </svg>
+                </span>
+                <div>
+                  <h3 class="font-semibold text-slate-950">Backup Loads</h3>
+                  <p class="mt-2 text-sm leading-6 text-slate-600">Fast transfer keeps essential circuits powered when the grid is unavailable.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative overflow-hidden border border-slate-200 bg-slate-950 min-h-[420px]">
+            <img src="{% static 'images/ess2.jpg' %}" alt="Residential solar energy storage installation" class="absolute inset-0 h-full w-full object-cover opacity-45" />
+            <div class="absolute inset-0 bg-[linear-gradient(90deg,_rgba(12,26,15,0.9),_rgba(12,26,15,0.35))]"></div>
+            <div class="relative z-10 grid h-full content-center gap-5 p-7 sm:p-10">
+              <div class="max-w-lg">
+                <h3 class="text-2xl font-semibold tracking-tight text-white">Built for real home energy flow.</h3>
+                <p class="mt-4 leading-8 text-white/70">The inverter manages solar charging, grid interaction, battery backup, and load priority from a compact wall-mounted unit.</p>
+              </div>
+              <div class="grid gap-3 sm:grid-cols-3">
+                <div class="border border-white/10 bg-white/10 p-4">
+                  <div class="text-2xl font-semibold text-white">&lt;10ms</div>
+                  <div class="mt-1 text-xs uppercase tracking-[0.14em] text-white/50">Switch Time</div>
+                </div>
+                <div class="border border-white/10 bg-white/10 p-4">
+                  <div class="text-2xl font-semibold text-white">Dual</div>
+                  <div class="mt-1 text-xs uppercase tracking-[0.14em] text-white/50">MPPT</div>
+                </div>
+                <div class="border border-white/10 bg-white/10 p-4">
+                  <div class="text-2xl font-semibold text-white">20kW</div>
+                  <div class="mt-1 text-xs uppercase tracking-[0.14em] text-white/50">Surge</div>
+                </div>
+              </div>
+              <a href="{% url 'main:contact' %}" class="mt-2 inline-flex w-fit items-center justify-center bg-[#c8752e] px-7 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-white transition hover:bg-[#b5661f]">Plan a System</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[#0c1a0f] py-16 text-white">
+      <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div class="grid gap-8 lg:grid-cols-[0.7fr_1fr] lg:items-center">
+          <div class="max-w-3xl">
+            <h2 class="text-4xl font-bold font-brand text-white">Related Solutions</h2>
+            <div class="w-16 h-1 bg-[#c8752e] mt-4"></div>
+            <p class="mt-6 text-white/65 leading-7">Energy storage solutions designed for everyday residential backup, solar self-use, and dependable home power.</p>
+          </div>
+          <div class="border border-white/10 bg-white/5 p-6 sm:p-8">
+            <h3 class="text-xl font-semibold">Residential Energy Storage Solution</h3>
+            <p class="mt-4 leading-8 text-white/70">Solar panels create power during the day, batteries store the excess, and the hybrid inverter keeps your essential loads running when the grid is unavailable.</p>
+            <a href="{% url 'main:products' %}" class="mt-6 inline-flex text-sm font-semibold uppercase tracking-[0.14em] text-[#c8752e] hover:text-white">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+{% endblock content %}

@@ -18,6 +18,7 @@ SECRET_KEY = 'django-insecure-6ev(jo3hq!912f&3rwt(!@5xq5zb182#x7d0ymm0=0eepx+-9%
 DEBUG = False
 
 ALLOWED_HOSTS = ['69.10.53.253', 'ememenergy.com', 'www.ememenergy.com']
+#ALLOWED_HOSTS = ['*'] # 4 local testing only, change in production #python -m waitress --host=0.0.0.0 --port=8000 yourproject.wsgi:application
 
 
 # Application definition
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'main',
     'account',
     'tailwind',
@@ -78,6 +80,8 @@ WSGI_APPLICATION = 'Emem_solar.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
+
 
 # DATABASES = {
 #     'default': {
