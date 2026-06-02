@@ -466,9 +466,9 @@
                             <div class="field-label">Customer Category <span class="field-req">*</span></div>
                             <select id="category" name="category" required class="field-select">
                                 <option value="">— Select your category —</option>
-                                <option value="End User"    {% if profile.category == 'End User'    %}selected{% endif %}>End User</option>
-                                <option value="Distributor" {% if profile.category == 'Distributor' %}selected{% endif %}>Distributor</option>
-                                <option value="Installer"   {% if profile.category == 'Installer'   %}selected{% endif %}>Installer</option>
+                                <option value="End User"   {% if profile.get_actual_category == 'End User'   %}selected{% endif %}>End User</option>
+                                <option value="Whole Sale" {% if profile.get_actual_category == 'Whole Sale' %}selected{% endif %}>Distributor</option>
+                                <option value="Retail"     {% if profile.get_actual_category == 'Retail'     %}selected{% endif %}>Installer</option>
                             </select>
                             <p class="field-hint">Your category determines your pricing tier</p>
                         </div>
