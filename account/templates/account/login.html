@@ -178,6 +178,22 @@
     .field { margin-bottom: 24px; }
     .field:last-of-type { margin-bottom: 0; }
 
+    .field-input-wrap {
+        position: relative;
+    }
+    .toggle-pw {
+        position: absolute; top: 50%; right: 14px;
+        transform: translateY(-50%);
+        background: none; border: none; cursor: pointer;
+        padding: 4px; color: var(--muted);
+        transition: color 0.2s; display: flex; align-items: center;
+    }
+    .toggle-pw:hover { color: var(--green); }
+
+    /* Add this to your existing .field-input rule */
+    .field-input { padding-right: 48px; }
+
+
     .field-top {
         display: flex; align-items: center; justify-content: space-between;
         margin-bottom: 8px;
@@ -376,21 +392,27 @@
                         placeholder="Enter your username or email address">
                 </div>
 
-                <div class="field">
+                <div class="field">  {# ← removed the stray dot #}
                     <div class="field-top">
                         <div class="field-label">Password</div>
                         <a href="{% url 'account:forgot_password' %}" class="field-forgot">Forgot password?</a>
                     </div>
-                    <input type="password" id="password" name="password"
-                        required
-                        class="field-input"
-                        placeholder="Enter your password">
 
-                    <button type="button" class="toggle-pw" onclick="togglePw('password', this)" tabindex="-1">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-                        </svg>
-                    </button>
+                    <div class="field-input-wrap" style="position:relative;">
+                        <input type="password" id="password" name="password"
+                            required
+                            class="field-input"
+                            style="padding-right:48px;"
+                            placeholder="Enter your password">
+
+                        <button type="button" class="toggle-pw"
+                            onclick="togglePw('password', this)" tabindex="-1"
+                            title="Show/Hide Password" >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 <label class="remember-row">
