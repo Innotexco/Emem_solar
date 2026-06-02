@@ -849,6 +849,19 @@
           </div>
         </div>
 
+        <a href="{% url 'main:products' %}" class="nav-cart" title="Shop Now">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+
+            <!-- Cart handle and basket -->
+            <polyline points="3,4 5,4 7,14 18,14 20,7 6,7" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- Wheels -->
+            <circle cx="9" cy="18" r="1.5"/>
+            <circle cx="17" cy="18" r="1.5"/>
+
+          </svg>
+        </a>
+
       {% else %}
         <a href="{% url 'account:login' %}" class="btn-nav-ghost">Sign In</a>
         <a href="{% url 'account:register' %}" class="btn-nav-solid">Get Started</a>
