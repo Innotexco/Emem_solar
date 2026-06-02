@@ -360,7 +360,7 @@ def update_profile(request):
             return redirect('account:upload_verification_images')
         
         messages.success(request, 'Your profile has been updated successfully!')
-        return redirect('account:update_profile')
+        return redirect('account:profile')
     
     context = {'profile': profile}
     return render(request, 'account/update_profile.html', context)
