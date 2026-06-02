@@ -385,6 +385,12 @@
                         required
                         class="field-input"
                         placeholder="Enter your password">
+
+                    <button type="button" class="toggle-pw" onclick="togglePw('password', this)" tabindex="-1">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
                 </div>
 
                 <label class="remember-row">
@@ -416,5 +422,14 @@
     </div>
 
 </div>
+
+<script>
+    function togglePw(fieldId, btn) {
+        const input = document.getElementById(fieldId);
+        const isText = input.type === 'text';
+        input.type = isText ? 'password' : 'text';
+        btn.querySelector('svg').style.opacity = isText ? '1' : '0.4';
+    }
+</script>
 
 {% endblock %}
