@@ -579,22 +579,22 @@ def forgot_password_sent(request):
 def reset_password(request, uidb64, token):
     if request.user.is_authenticated:
         return redirect('main:products')
- 
+
     # Decode user
     try:
         uid  = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
- 
+
     # Validate token
     if user is None or not default_token_generator.check_token(user, token):
         return render(request, 'account/reset_password_invalid.html', status=400)
- 
+
     if request.method == 'POST':
         password1 = request.POST.get('password1', '')
         password2 = request.POST.get('password2', '')
- 
+
         if not password1:
             messages.error(request, 'Please enter a new password.')
         elif len(password1) < 8:
@@ -604,18 +604,21 @@ def reset_password(request, uidb64, token):
         else:
             user.set_password(password1)
             user.save()
+
+            # ✅ Flush any stale session data so old credentials can't persist
+            request.session.flush()
+
             return redirect('account:reset_password_done')
- 
+
         return render(request, 'account/reset_password.html', {
             'uidb64': uidb64,
             'token':  token,
         })
- 
+
     return render(request, 'account/reset_password.html', {
         'uidb64': uidb64,
         'token':  token,
     })
- 
  
 # ── Step 4: Success ──────────────────────────────────────────
  
