@@ -535,7 +535,7 @@ def forgot_password(request):
                 f'/account/reset-password/{uid}/{token}/'
             )
  
-            html_message = render_to_string('account/password_reset.html', {
+            html_message = render_to_string('account/reset_password.html', {
                 'user':      user,
                 'reset_url': reset_url,
             })
