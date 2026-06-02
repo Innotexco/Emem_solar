@@ -15,7 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-6ev(jo3hq!912f&3rwt(!@5xq5zb182#x7d0ymm0=0eepx+-9%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['69.10.53.253', 'ememenergy.com', 'www.ememenergy.com']
 #ALLOWED_HOSTS = ['*'] # 4 local testing only, change in production #python -m waitress --host=0.0.0.0 --port=8000 yourproject.wsgi:application
