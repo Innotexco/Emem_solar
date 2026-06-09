@@ -14,6 +14,7 @@
       --surface: #f4f7f5;
       --white: #ffffff;
       --muted: #607568;
+      --hero-bg: url('{% static "images/background_image.jpg" %}');
     }
     
     *,
@@ -46,7 +47,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background-image: url('{% static "images/background_image.jpg" %}');
+      background-image: var(--hero-bg);
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
@@ -55,6 +56,59 @@
       /*transform: scale(1.03);*/
       pointer-events: none;
       z-index: 0;
+    }
+
+    /* ── Slider controls (hidden by default, shown only when active) ── */
+    .hero-slider-controls {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;                     /* hidden on large screens */
+      align-items: center;
+      gap: 16px;
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    /* Show controls only when the slider is active */
+    .home-hero.slider-active .hero-slider-controls {
+      display: flex;
+    }
+
+    .hero-slider-controls button {
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      transition: background 0.2s;
+    }
+    .hero-slider-controls button:hover {
+      background: rgba(0,0,0,0.65);
+    }
+
+    .hero-slide-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .hero-slide-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .hero-slide-dot.active {
+      background: var(--amber);
     }
     
     .hero-grid-bg {
@@ -376,14 +430,7 @@
     .sec-desc.light {
       color: rgba(255, 255, 255, 0.42);
     }
-    
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-      border: 1px solid var(--rule);
-    }
-    
+
     .product-category-section {
       background: var(--white);
       padding: 100px 60px;
@@ -397,10 +444,10 @@
     .product-category-card {
       cursor: pointer;
       border: 1px solid var(--rule);
-      border-radius: 32px;
+      border-radius: 0px;
       overflow: hidden;
-      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.06);
-      background: var(--white);
+      /*box-shadow: 0 32px 80px rgba(0, 0, 0, 0.06);*/
+      /*background: var(--white);*/
     }
     .product-category-card-inner {
       display: grid;
@@ -505,9 +552,17 @@
       }
     }
     
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--rule);
+    }
+    
     .benefit-item {
-      padding: 44px 38px;
-      border-right: 1px solid var(--rule);
+      padding: 32px 28px;   /* was 44px 38px */
+      /* border-right: 1px solid var(--rule); */
+      border: 1px solid var(--rule);
       position: relative;
       overflow: hidden;
       transition: background 0.3s ease;
@@ -887,11 +942,16 @@
     
     /* ── RESPONSIVE ───────────────────────────── */
     @media (max-width: 1100px) {
-      .hero-inner,
-      .about-grid {
+      .hero-inner {
         grid-template-columns: 1fr;
         gap: 60px;
         padding: 80px 32px;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 60px;
+        /* no padding here – section padding is enough */
       }
       .stats-row {
         grid-template-columns: repeat(2, 1fr);
@@ -924,6 +984,27 @@
       .full-rule {
         display: none;
       }
+
+      /* Make the product section tighter on tablets & medium screens */
+      .product-category-section {
+        padding: 60px 20px;
+      }
+
+      .product-category-content {
+        padding: 30px 24px;
+      }
+
+      .product-category-img-wrap {
+        min-height: 260px;
+      }
+
+      .product-category-title {
+        font-size: 28px;         /* slight reduction */
+      }
+
+      .product-category-copy {
+        font-size: 14px;
+      }
     }
     
     @media (max-width: 640px) {
@@ -932,9 +1013,133 @@
       }
       .about-features {
         grid-template-columns: 1fr;
+        margin-top: 24px;
       }
       .hero-actions {
         flex-direction: column;
+      }
+
+      /* ── New mobile‑first adjustments ── */
+      .hero-inner {
+        padding: 60px 16px;
+        gap: 40px;
+      }
+      .hero-title {
+        font-size: clamp(36px, 10vw, 52px);
+      }
+      .hero-sub {
+        font-size: 14px;
+      }
+      .stat-block {
+        padding: 24px 16px;
+      }
+      .stat-num {
+        font-size: 36px;
+      }
+      .benefits-section {
+        padding: 60px 16px;
+      }
+      .benefit-item {
+        padding: 32px 20px;
+      }
+      .sec-title {
+        font-size: clamp(26px, 8vw, 42px);
+      }
+      .sec-desc {
+        font-size: 13px;
+      }
+      .about-section {
+        padding: 60px 16px;
+      }
+      /* Remove the double padding and reduce the gap */
+      .about-grid {
+        padding: 0 !important;   /* override the 80px 32px from the 1100px query */
+        gap: 28px;
+      }
+      .about-image-wrap img {
+        height: 380px;
+      }
+      .about-feat {
+        padding: 12px 14px;
+      }
+      .contact-section {
+        padding: 60px 16px;
+      }
+      .contact-card {
+        padding: 32px 20px;
+      }
+      .cc-num {
+        font-size: 42px;
+      }
+      .cta-section {
+        padding: 60px 16px;
+        gap: 32px;
+      }
+      .cta-title {
+        font-size: clamp(28px, 8vw, 46px);
+      }
+
+      /* Mobile optimisation – fill the screen */
+      .product-category-section {
+        padding: 40px 16px;
+      }
+
+      .product-category-content {
+        padding: 24px 16px;
+      }
+
+      .product-category-img-wrap {
+        min-height: 200px;
+      }
+
+      .product-category-title {
+        font-size: 24px;
+      }
+
+      .product-category-copy {
+        font-size: 13px;
+      }
+
+      /* Reduce card border-radius for a cleaner edge-to-edge feel */
+      .product-category-card {
+        border-radius: 0px;
+      }
+
+      /* Shrink the detail list spacing */
+      .product-detail-list {
+        gap: 8px;
+        font-size: 13px;
+      }
+
+      .product-detail-item {
+        gap: 8px;
+      }
+
+      .product-detail-item strong {
+        min-width: 100px;
+      }
+
+    }
+
+    @media (max-width: 480px) {
+     .product-category-section {
+        padding: 32px 12px;
+      }
+      .product-category-content {
+        padding: 20px 12px;
+      }
+      .product-category-img-wrap {
+        min-height: 180px;
+      }
+    }
+
+    @media (max-width: 1100px) and (min-width: 641px) {
+      .benefits-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      /* remove right border on every 2nd item */
+      .benefit-item:nth-child(2n) {
+        border-right: none;
       }
     }
   </style>
@@ -942,7 +1147,7 @@
   <!-- ── HERO ──────────────────────────────────────────── -->
   <section class="home-hero">
     <div class="hero-grid-bg"></div>
-    <div class="hero-accent-bar"></div>
+    {% comment %} <div class="hero-accent-bar"></div> {% endcomment %}
     <div class="hero-orb-1"></div>
     <div class="hero-orb-2"></div>
     {% comment %} <div class="hero-ghost">ESS</div> {% endcomment %}
@@ -964,99 +1169,12 @@
           <a href="{% url 'main:contact' %}" class="btn-hero-ghost">Find Distributor</a>
         </div>
       </div>
-
-      {% comment %} <div class="hero-image-panel fade-up d2">
-        <img src="{% static 'images/ess1.jpg' %}" alt="Energy Storage System" />
-        <div class="hero-image-badge">
-          <div class="hib-num">500+</div>
-          <div class="hib-label">Systems Deployed</div>
-        </div>
-      </div> {% endcomment %}
     </div>
   </section>
-
-  <!-- ── STATS ─────────────────────────────────────────── -->
-  <div class="stats-row">
-    <div class="stat-block">
-      <div class="stat-num">
-        500<span>+</span>
-      </div>
-      <div class="stat-label">Systems Installed</div>
-    </div>
-    <div class="stat-block">
-      <div class="stat-num">
-        10<span>yr</span>
-      </div>
-      <div class="stat-label">Warranty</div>
-    </div>
-    <div class="stat-block">
-      <div class="stat-num">
-        24<span>/7</span>
-      </div>
-      <div class="stat-label">Support</div>
-    </div>
-    <div class="stat-block">
-      <div class="stat-num">
-        99<span>%</span>
-      </div>
-      <div class="stat-label">Satisfaction</div>
-    </div>
-  </div>
 
   <div class="full-rule"></div>
 
-  <!-- ── BENEFITS ──────────────────────────────────────── -->
-  <section class="benefits-section">
-    <div class="benefits-inner">
-      <div class="benefits-header">
-        <div>
-          <div class="sec-eyebrow">
-            <div class="sec-eyebrow-line"></div>
-            <span>Why Choose Us</span>
-          </div>
-          <h2 class="sec-title">Why Choose Emem<br />Energy Solutions?</h2>
-        </div>
-        <p class="sec-desc" style="max-width:420px;">Industry-leading energy storage systems delivering quality, reliability, and exceptional support for every customer.</p>
-      </div>
-
-      <div class="benefits-grid">
-        <div class="benefit-item">
-          <div class="benefit-num">01</div>
-          <div class="benefit-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-            </svg>
-          </div>
-          <div class="benefit-title">Competitive Pricing</div>
-          <p class="benefit-body">Premium quality energy storage at competitive prices — no compromise on performance or reliability.</p>
-        </div>
-
-        <div class="benefit-item">
-          <div class="benefit-num">02</div>
-          <div class="benefit-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-          </div>
-          <div class="benefit-title">7–10 Year Warranty</div>
-          <p class="benefit-body">Comprehensive warranty on every system. We stand behind our quality with industry-leading protection.</p>
-        </div>
-
-        <div class="benefit-item">
-          <div class="benefit-num">03</div>
-          <div class="benefit-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <div class="benefit-title">24/7 Support</div>
-          <p class="benefit-body">Round-the-clock technical support with every product. Expert assistance whenever you need it.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRODUCTS _____________________________________________ -->
+    <!-- PRODUCTS _____________________________________________ -->
   <section class="product-category-section" id="products">
     <div class="product-category-inner">
       <div class="benefits-header" style="margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid var(--rule);">
@@ -1069,6 +1187,7 @@
         </div>
         <p class="sec-desc" style="max-width:520px;">Explore our range of inverters, battery systems and solar modules — engineered for reliability, efficiency and easy integration.</p>
       </div>
+      
       <div class="product-category-card" onclick="window.location.href='{% url 'main:inverter_products' %}'">
         <div class="product-category-card-inner">
           <div class="product-category-img-wrap">
@@ -1115,7 +1234,7 @@
                 <strong>Battery Type</strong><span>Li-ion / LFP</span>
               </div>
               <div class="product-detail-item">
-                <strong>Voltage</strong><span>200V – 800V</span>
+                <strong>Voltage</strong><span>51.2V – 800V</span>
               </div>
               <div class="product-detail-item">
                 <strong>Current</strong><span>Up to 250A</span>
@@ -1133,38 +1252,96 @@
         </div>
       </div>
 
-      {% comment %} <div class="product-category-card" onclick="window.location.href='{% url 'main:panel_products' %}'">
-        <div class="product-category-card-inner">
-          <div class="product-category-img-wrap">
-            <img src="{% static 'images/inverter3.png' %}" alt="Solar Panel Installation" />
-          </div>
-          <div class="product-category-content">
-            <div class="product-category-label">Solar Panels</div>
-            <h2 class="product-category-title">Solar panels designed for strong yield</h2>
-            <p class="product-category-copy">Choose efficient solar modules engineered to capture maximum sunlight and feed stable DC power into your inverter and battery system.</p>
-            <div class="product-detail-list">
-              <div class="product-detail-item">
-                <strong>Panel Type</strong><span>Monocrystalline</span>
-              </div>
-              <div class="product-detail-item">
-                <strong>Power Output</strong><span>330W – 540W</span>
-              </div>
-              <div class="product-detail-item">
-                <strong>Efficiency</strong><span>Up to 21.5%</span>
-              </div>
-              <div class="product-detail-item">
-                <strong>Use Case</strong><span>Residential and commercial PV</span>
-              </div>
-            </div>
-            <a href="{% url 'main:panel_products' %}" class="product-category-link">
-              Know more about solar panels<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div> {% endcomment %}
+    </div>
+  </section>
 
+
+  <!-- ── BENEFITS ──────────────────────────────────────── -->
+  <section class="benefits-section">
+    <div class="benefits-inner">
+      <div class="benefits-header">
+        <div>
+          <div class="sec-eyebrow">
+            <div class="sec-eyebrow-line"></div>
+            <span>Why Choose Us</span>
+          </div>
+          <h2 class="sec-title">Why Choose Emem<br />Energy Solutions?</h2>
+        </div>
+        <p class="sec-desc" style="max-width:420px;">Industry-leading energy storage systems delivering quality, reliability, and exceptional support for every customer.</p>
+      </div>
+
+      <div class="benefits-grid">
+        <!-- 1. Locally Manufactured -->
+        <div class="benefit-item">
+          <div class="benefit-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 3v18M3 12h18M8 8l4-4 4 4M8 16l4 4 4-4" />
+            </svg>
+          </div>
+          <div class="benefit-title">Modular & Scalable</div>
+          <p class="benefit-body">
+            Start small and expand as your energy needs grow — our systems adapt seamlessly from homes to commercial and industrial sites.
+          </p>
+        </div>
+
+        <!-- 2. Up to 10-Year Warranty -->
+        <div class="benefit-item">
+          <div class="benefit-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <div class="benefit-title">Up to 10-Year Warranty</div>
+          <p class="benefit-body">Industry‑leading warranty – we stand behind every battery and inverter with comprehensive coverage you can trust.</p>
+        </div>
+
+        <!-- 3. Nationwide Distribution -->
+        <div class="benefit-item">
+          <div class="benefit-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+          </div>
+          <div class="benefit-title">Nationwide Distribution</div>
+          <p class="benefit-body">Authorised partners in all 36 states – get local service, fast delivery, and installation support wherever you are.</p>
+        </div>
+
+        <!-- 4. Nigerian Power Expertise -->
+        <div class="benefit-item">
+          <div class="benefit-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <div class="benefit-title">Nigerian Power Expertise</div>
+          <p class="benefit-body">Systems engineered for our unique grid challenges: frequent outages, voltage fluctuations, and surge protection.</p>
+        </div>
+
+        <!-- 5. Premium Component Quality -->
+        <div class="benefit-item">
+          <div class="benefit-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+          </div>
+          <div class="benefit-title">Premium Component Quality</div>
+          <p class="benefit-body">We use only A‑grade lithium cells and industrial‑grade electronics – built to last, not to cut corners.</p>
+        </div>
+
+        <!-- 6. Direct Manufacturer Support -->
+        <div class="benefit-item">
+          <div class="benefit-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="6" width="20" height="12" rx="2" />
+              <line x1="6" y1="12" x2="18" y2="12" />
+              <line x1="12" y1="8" x2="12" y2="16" />
+            </svg>
+          </div>
+          <div class="benefit-title">Moveable & Simple Design</div>
+          <p class="benefit-body">Our battery units are compact and portable — easily moved between locations or rooms without heavy lifting gear.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1244,7 +1421,6 @@
       <div class="contact-grid">
         <div class="contact-card">
           <div class="cc-rule"></div>
-          <div class="cc-num">01</div>
           <div class="cc-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -1256,20 +1432,17 @@
 
         <div class="contact-card">
           <div class="cc-rule"></div>
-          <div class="cc-num">02</div>
           <div class="cc-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-              <circle cx="12" cy="10" r="3" />
+              <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
             </svg>
           </div>
-          <div class="cc-title">National Coverage</div>
-          <p class="cc-body">Find authorised distributors across all 36 states for local service and fast delivery.</p>
+          <div class="cc-title">Site Assessment</div>
+          <p class="cc-body">Our engineers will evaluate your location and energy needs at no cost to recommend the ideal system.</p>
         </div>
 
         <div class="contact-card">
           <div class="cc-rule"></div>
-          <div class="cc-num">03</div>
           <div class="cc-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -1301,4 +1474,147 @@
       </div>
     </div>
   </section>
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const hero = document.querySelector('.home-hero');
+      if (!hero) return;
+
+      // ── CONFIG ────────────────────────────────
+      const SMALL_SCREEN_MAX = 640;
+      const slides = [
+        "{% static 'images/background_mobile1.png' %}",
+        "{% static 'images/background_mobile2.png' %}",
+      ];
+      const intervalTime = 4000;                // 4 seconds
+      // ──────────────────────────────────────────
+
+      let currentSlide = 0;
+      let autoInterval = null;
+      let controlsEl = null;
+      let dots = [];
+
+      // Helper to set the background image via CSS custom property
+      function setBackground(url) {
+        hero.style.setProperty('--hero-bg', `url(${url})`);
+      }
+
+      // Inject the style that makes ::before use the custom property
+      const styleId = 'hero-slider-style';
+      if (!document.getElementById(styleId)) {
+        const style = document.createElement('style');
+        style.id = styleId;
+        style.textContent = `
+          .home-hero.slider-active::before {
+            background-image: var(--hero-bg) !important;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+
+      function activateSlider() {
+        if (hero.classList.contains('slider-active')) return; // already active
+        hero.classList.add('slider-active');
+        setBackground(slides[currentSlide]);
+
+        // Create controls if not present
+        if (!controlsEl) {
+          controlsEl = document.createElement('div');
+          controlsEl.className = 'hero-slider-controls';
+          controlsEl.innerHTML = `
+            <button class="hero-slide-prev" aria-label="Previous slide">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <div class="hero-slide-dots"></div>
+            <button class="hero-slide-next" aria-label="Next slide">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          `;
+          hero.appendChild(controlsEl);
+
+          // Create dots
+          const dotsContainer = controlsEl.querySelector('.hero-slide-dots');
+          slides.forEach((_, i) => {
+            const dot = document.createElement('span');
+            dot.className = 'hero-slide-dot';
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+            dots.push(dot);
+          });
+
+          // Navigation listeners
+          controlsEl.querySelector('.hero-slide-prev').addEventListener('click', () => {
+            goToSlide((currentSlide - 1 + slides.length) % slides.length);
+          });
+          controlsEl.querySelector('.hero-slide-next').addEventListener('click', () => {
+            goToSlide((currentSlide + 1) % slides.length);
+          });
+        }
+
+        updateDots();
+        startAuto();
+      }
+
+      function deactivateSlider() {
+        if (!hero.classList.contains('slider-active')) return;
+        hero.classList.remove('slider-active');
+        if (controlsEl) {
+          controlsEl.remove();
+          controlsEl = null;
+          dots = [];
+        }
+        stopAuto();
+        hero.style.removeProperty('--hero-bg');
+      }
+
+      function goToSlide(index) {
+        currentSlide = index;
+        setBackground(slides[currentSlide]);
+        updateDots();
+        resetAuto();
+      }
+
+      function updateDots() {
+        if (!dots.length) return;
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
+      }
+
+      function startAuto() {
+        stopAuto();
+        autoInterval = setInterval(() => {
+          currentSlide = (currentSlide + 1) % slides.length;
+          setBackground(slides[currentSlide]);
+          updateDots();
+        }, intervalTime);
+      }
+
+      function stopAuto() {
+        if (autoInterval) {
+          clearInterval(autoInterval);
+          autoInterval = null;
+        }
+      }
+
+      function resetAuto() {
+        stopAuto();
+        startAuto();
+      }
+
+      function handleResize() {
+        if (window.innerWidth <= SMALL_SCREEN_MAX) {
+          activateSlider();
+        } else {
+          deactivateSlider();
+        }
+      }
+
+      // Initial check
+      handleResize();
+
+      // React to window resize
+      window.addEventListener('resize', handleResize);
+    });
+  </script>
 {% endblock %}

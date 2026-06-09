@@ -170,7 +170,8 @@
 
     /* ── RESPONSIVE ───────────────────────────── */
     @media (max-width: 1100px) {
-        .hero-inner, .story-section, .quality-inner { grid-template-columns: 1fr; gap: 60px; padding: 80px 32px; }
+        .hero-inner, .story-section{ grid-template-columns: 1fr; gap: 60px; padding: 80px 32px; }
+        .quality-inner { grid-template-columns: 1fr; gap: 60px; }
         .principles-header, .features-header, .stats-header { grid-template-columns: 1fr; gap: 28px; }
         .cta-section { grid-template-columns: 1fr; padding: 80px 32px; }
         .principles-grid, .features-grid { grid-template-columns: 1fr; }
@@ -186,6 +187,321 @@
     @media (max-width: 640px) {
         .stats-grid { grid-template-columns: 1fr 1fr; }
         .hero-stats  { grid-template-columns: 1fr 1fr; }
+
+        /* ── Better small‑screen spacing for the About page ── */
+        .hero-inner {
+            padding: 50px 16px;
+            gap: 30px;
+        }
+        .hero-title {
+            font-size: clamp(34px, 12vw, 54px);
+        }
+        .hero-sub {
+            font-size: 14px;
+        }
+
+        .story-section {
+            padding: 60px 16px;
+            gap: 40px;
+        }
+        .story-body p {
+            font-size: 14px;
+        }
+        .story-image-wrap img {
+            height: 380px;
+        }
+        .story-badge {
+            right: 0;
+            bottom: -12px;
+            padding: 16px 20px;
+        }
+        .story-badge-num {
+            font-size: 30px;
+        }
+
+        .principles-section,
+        .features-section,
+        .quality-section,
+        .stats-section {
+            padding: 60px 16px;
+        }
+        .principles-header,
+        .features-header,
+        .stats-header {
+            gap: 24px;
+            margin-bottom: 40px;
+            padding-bottom: 32px;
+        }
+        .principles-grid,
+        .features-grid {
+            grid-template-columns: 1fr;
+        }
+        .principle-card {
+            padding: 32px 20px;
+        }
+        .p-num {
+            font-size: 44px;
+        }
+        .p-title {
+            font-size: 15px;
+        }
+        .p-body {
+            font-size: 12px;
+        }
+
+        .feature-item {
+            padding: 28px 20px;
+        }
+        .feature-item:nth-child(n) {
+            border-right: none;
+        }
+        .feature-item:nth-last-child(-n+3) {
+            border-bottom: 1px solid var(--rule);
+        }
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+        /* Quality section mobile */
+        .quality-section {
+            padding: 60px 16px;
+        }
+        .quality-inner {
+            gap: 40px;
+        }
+        .quality-image img {
+            height: 380px;
+        }
+        .quality-check {
+            padding: 20px 0;
+        }
+        .check-title {
+            font-size: 13px;
+        }
+        .check-body {
+            font-size: 12px;
+        }
+
+        .stat-card {
+            padding: 30px 16px;
+        }
+        .stat-num {
+            font-size: 42px;
+        }
+
+        .cta-section {
+            padding: 60px 16px;
+            gap: 30px;
+        }
+        .cta-title {
+            font-size: clamp(28px, 8vw, 46px);
+        }
+        .cta-buttons {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .full-rule {
+            margin: 0 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        /* ── global helpers ── */
+        .full-rule {
+            margin: 0 12px;
+        }
+
+        /* ── hero / about-hero ── */
+        .hero-inner {
+            padding: 40px 12px;
+            gap: 24px;
+        }
+        .hero-title {
+            font-size: clamp(30px, 12vw, 44px);
+        }
+        .hero-sub {
+            font-size: 13px;
+        }
+        .hero-stats {
+            gap: 0;
+        }
+        .hero-stat {
+            padding: 24px 14px;
+        }
+        .hero-stat-num {
+            font-size: 38px;
+        }
+
+        /* ── story ── */
+        .story-section {
+            padding: 48px 12px;
+            gap: 32px;
+        }
+        .story-body p {
+            font-size: 13px;
+        }
+        .story-image-wrap img {
+            height: 280px;
+        }
+        .story-badge {
+            padding: 12px 16px;
+        }
+        .story-badge-num {
+            font-size: 26px;
+        }
+
+        /* ── principles / features / quality / stats ── */
+        .principles-section,
+        .features-section,
+        .quality-section,
+        .stats-section {
+            padding: 48px 12px;
+        }
+        .principles-header,
+        .features-header,
+        .stats-header {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+        }
+        .principle-card {
+            padding: 28px 16px;
+        }
+        .p-num {
+            font-size: 40px;
+        }
+        .p-title {
+            font-size: 14px;
+        }
+        .p-body {
+            font-size: 11px;
+        }
+
+        .feature-item {
+            padding: 22px 16px;
+        }
+        .feat-title {
+            font-size: 14px;
+        }
+        .feat-body {
+            font-size: 12px;
+        }
+
+        .quality-inner {
+            gap: 32px;
+        }
+        .quality-image img {
+            height: 280px;
+        }
+        .quality-check {
+            padding: 16px 0;
+        }
+
+        .stat-card {
+            padding: 24px 12px;
+        }
+        .stat-num {
+            font-size: 34px;
+        }
+
+        /* ── CTA ── */
+        .cta-section {
+            padding: 48px 12px;
+            gap: 24px;
+        }
+        .cta-title {
+            font-size: clamp(24px, 8vw, 38px);
+        }
+
+        /* ── home‑page specific ── (benefits, about‑home, contact, etc.) */
+        .benefits-section,
+        .about-section,
+        .contact-section {
+            padding: 48px 12px;
+        }
+        .benefit-item,
+        .contact-card {
+            padding: 24px 16px;
+        }
+        .about-image-wrap img {
+            height: 280px;
+        }
+        .cta-section {
+            gap: 20px;
+        }
+        .btn-primary,
+        .btn-secondary,
+        .btn-hero-primary,
+        .btn-hero-ghost,
+        .hero-cta {
+            padding: 14px 24px;
+            font-size: 11px;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .hero-inner {
+            padding: 32px 8px;
+        }
+        .hero-title {
+            font-size: 28px;
+        }
+        .hero-sub {
+            font-size: 12px;
+        }
+        .hero-stats {
+            grid-template-columns: 1fr;   /* stack stat cards vertically if needed */
+        }
+        .hero-stat {
+            padding: 20px 10px;
+        }
+        .hero-stat-num {
+            font-size: 32px;
+        }
+        .story-section,
+        .benefits-section,
+        .about-section,
+        .contact-section,
+        .principles-section,
+        .features-section,
+        .quality-section,
+        .stats-section {
+            padding: 40px 8px;
+        }
+        .story-image-wrap img,
+        .about-image-wrap img,
+        .quality-image img {
+            height: 220px;
+        }
+        .feature-item,
+        .benefit-item,
+        .contact-card,
+        .principle-card {
+            padding: 20px 12px;
+        }
+        .stat-card {
+            padding: 20px 10px;
+        }
+        .stat-num {
+            font-size: 30px;
+        }
+        .cta-section {
+            padding: 40px 8px;
+        }
+        .cta-title {
+            font-size: 22px;
+        }
+        .btn-primary,
+        .btn-secondary,
+        .btn-hero-primary,
+        .btn-hero-ghost,
+        .hero-cta {
+            padding: 12px 20px;
+            font-size: 10px;
+            letter-spacing: 0.05em;
+        }
+        .full-rule {
+            margin: 0 8px;
+        }
     }
 </style>
 
@@ -282,7 +598,7 @@
         <div class="principles-grid">
             <div class="principle-card">
                 <div class="p-rule"></div>
-                <div class="p-num">01</div>
+                {% comment %} <div class="p-num">01</div> {% endcomment %}
                 <div class="p-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
@@ -293,7 +609,6 @@
             </div>
             <div class="principle-card">
                 <div class="p-rule"></div>
-                <div class="p-num">02</div>
                 <div class="p-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -305,7 +620,6 @@
             </div>
             <div class="principle-card">
                 <div class="p-rule"></div>
-                <div class="p-num">03</div>
                 <div class="p-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
@@ -334,32 +648,27 @@
 
         <div class="features-grid">
             <div class="feature-item">
-                <div class="feat-num">01</div>
+                {% comment %} <div class="feat-num">01</div> {% endcomment %}
                 <div class="feat-title">Superior Quality</div>
                 <p class="feat-body">Built with premium lithium cells and advanced BMS for unmatched performance and safety standards.</p>
             </div>
             <div class="feature-item">
-                <div class="feat-num">02</div>
                 <div class="feat-title">Affordable Pricing</div>
                 <p class="feat-body">Local production eliminates import costs, delivering better value without compromising on quality.</p>
             </div>
             <div class="feature-item">
-                <div class="feat-num">03</div>
                 <div class="feat-title">7-Year Warranty</div>
                 <p class="feat-body">Comprehensive coverage gives you complete confidence and peace of mind in your investment.</p>
             </div>
             <div class="feature-item">
-                <div class="feat-num">04</div>
                 <div class="feat-title">24/7 Support</div>
                 <p class="feat-body">Expert local technicians available around the clock for rapid-response assistance anywhere in Nigeria.</p>
             </div>
             <div class="feature-item">
-                <div class="feat-num">05</div>
                 <div class="feat-title">Nationwide Reach</div>
                 <p class="feat-body">A robust distribution network ensures faster delivery and installation across all 36 states.</p>
             </div>
             <div class="feature-item">
-                <div class="feat-num">06</div>
                 <div class="feat-title">Proven Reliability</div>
                 <p class="feat-body">Hundreds of satisfied customers and years of field-proven performance across Nigeria.</p>
             </div>

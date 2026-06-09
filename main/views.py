@@ -87,9 +87,14 @@ def battery_products(request):
 
 # Lithum Battery 8.8Kwh
 def lithium_battery_8kwh(request):
-    return render(request, 'main/products/battery_details/lithium_battery_8kwh.html')
+    context = dict(images = [ 'images/EmemBattery8_8kwh1.png','images/EmemBattery8_8kwhTop.png'])
+    return render(request, 'main/products/battery_details/lithium_battery_8kwh.html', context)
 
-# Lithum Battery 14.5Kwh
+# Lithum Battery 14.3Kwh
+def lithium_battery_14_3kwh(request):
+    return render(request, 'main/products/battery_details/lithium_battery_14_3kwh.html')
+
+# Lithum Battery 16Kwh
 def lithium_battery_16kwh(request):
     return render(request, 'main/products/battery_details/lithium_battery_16kwh.html')
 

@@ -29,8 +29,10 @@ urlpatterns = [
     path("products/inverter/hi-29-60k-th/", views.commercial_HI_29_60k_TH, name="commercial_HI_29_60k_TH"),
     path("products/inverter/hi-80-125k-th/", views.commercial_HI_80_125k_TH, name="commercial_HI_80_125k_TH"),
 
+    # battery
     path("products/battery/", views.battery_products, name="battery_products"),
     path("products/battery/lithium-8kwh/", views.lithium_battery_8kwh, name="lithium_battery_8kwh"),
+    path("products/battery/lithium-14-3kwh/", views.lithium_battery_14_3kwh, name="lithium_battery_14_3kwh"),
     path("products/battery/lithium-16kwh/", views.lithium_battery_16kwh, name="lithium_battery_16kwh"),
     path("products/battery/lithium-17-5kwh/", views.lithium_battery_17_5kwh, name="lithium_battery_17_5kwh"),
     

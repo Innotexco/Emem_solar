@@ -381,6 +381,222 @@
         .field-row { grid-template-columns: 1fr; }
         .hero-contact-panel { grid-template-columns: 1fr; }
     }
+
+    @media (max-width: 480px) {
+        /* ── HERO ── */
+        .hero-inner {
+            padding: 40px 12px;
+            gap: 32px;
+        }
+        .hero-title {
+            font-size: clamp(30px, 12vw, 44px);
+        }
+        .hero-sub {
+            font-size: 13px;
+        }
+        .hero-contact-item {
+            padding: 20px 16px;
+        }
+        .hci-value {
+            font-size: 17px;
+        }
+        .hci-note {
+            font-size: 11px;
+        }
+
+        /* ── CONTACT BODY ── */
+        .contact-body {
+            padding: 40px 12px;
+            gap: 32px;
+        }
+        .section-title {
+            font-size: clamp(24px, 8vw, 36px);
+        }
+        .section-desc {
+            font-size: 13px;
+            margin-bottom: 28px;
+        }
+        .field {
+            margin-bottom: 18px;
+        }
+        .field-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+            margin-bottom: 0;
+        }
+        .field-row .field {
+            margin-bottom: 18px;
+        }
+        .field-label {
+            font-size: 10px;
+            letter-spacing: 0.1em;
+        }
+        .field-input,
+        .field-select,
+        .field-textarea {
+            padding: 12px 14px;
+            font-size: 13px;
+        }
+        .field-textarea {
+            min-height: 120px;
+        }
+
+        /* Sidebar */
+        .sidebar-channel {
+            padding: 22px 16px;
+        }
+        .sc-value {
+            font-size: 15px;
+        }
+        .sc-title {
+            font-size: 14px;
+        }
+        .sc-note {
+            font-size: 11px;
+        }
+
+        /* ── FAQ ── */
+        .faq-section {
+            padding: 48px 12px;
+        }
+        .faq-header {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            gap: 16px;
+        }
+        .faq-title {
+            font-size: clamp(26px, 8vw, 38px);
+        }
+        .faq-desc {
+            font-size: 13px;
+        }
+        .faq-item {
+            padding: 28px 16px;
+        }
+        .faq-rule {
+            left: 16px;
+        }
+        .faq-q {
+            font-size: 14px;
+        }
+        .faq-a {
+            font-size: 12px;
+        }
+
+        /* ── CTA ── */
+        .cta-section {
+            padding: 48px 12px;
+            gap: 24px;
+        }
+        .cta-title {
+            font-size: clamp(24px, 8vw, 38px);
+        }
+        .cta-sub {
+            font-size: 13px;
+        }
+
+        /* ── BUTTONS ── */
+        .btn-primary,
+        .btn-secondary,
+        .btn-submit {
+            padding: 14px 20px;
+            font-size: 11px;
+        }
+
+        /* ── RULE ── */
+        .full-rule {
+            margin: 0 12px;
+        }
+    }
+
+    @media (max-width: 360px) {
+        /* ── HERO ── */
+        .hero-inner {
+            padding: 32px 8px;
+            gap: 24px;
+        }
+        .hero-title {
+            font-size: 28px;
+        }
+        .hero-sub {
+            font-size: 12px;
+        }
+        .hero-contact-item {
+            padding: 16px 12px;
+        }
+        .hci-value {
+            font-size: 15px;
+        }
+        .hero-tag span {
+            font-size: 10px;
+        }
+
+        /* ── CONTACT BODY ── */
+        .contact-body {
+            padding: 32px 8px;
+            gap: 24px;
+        }
+        .section-title {
+            font-size: 22px;
+        }
+        .field-input,
+        .field-select,
+        .field-textarea {
+            padding: 10px 12px;
+            font-size: 12px;
+        }
+        .field-label {
+            font-size: 9px;
+        }
+
+        /* Sidebar */
+        .sidebar-channel {
+            padding: 18px 12px;
+        }
+        .sc-value {
+            font-size: 14px;
+        }
+
+        /* ── FAQ ── */
+        .faq-section {
+            padding: 40px 8px;
+        }
+        .faq-item {
+            padding: 22px 12px;
+        }
+        .faq-rule {
+            left: 12px;
+        }
+        .faq-q {
+            font-size: 13px;
+        }
+        .faq-a {
+            font-size: 11px;
+        }
+
+        /* ── CTA ── */
+        .cta-section {
+            padding: 40px 8px;
+            gap: 20px;
+        }
+        .cta-title {
+            font-size: 22px;
+        }
+
+        /* ── BUTTONS ── */
+        .btn-primary,
+        .btn-secondary,
+        .btn-submit {
+            padding: 12px 16px;
+            font-size: 10px;
+            letter-spacing: 0.05em;
+        }
+
+        /* ── RULE ── */
+        .full-rule {
+            margin: 0 8px;
+        }
+    }
 </style>
 
 <!-- ── HERO ──────────────────────────────────────────── -->
@@ -509,7 +725,7 @@
     <!-- Sidebar channels -->
     <div class="contact-sidebar">
         <a href="tel:+2348001234567" class="sidebar-channel">
-            <div class="sc-num">01</div>
+            {% comment %} <div class="sc-num">01</div> {% endcomment %}
             <div class="sc-icon">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
@@ -521,7 +737,6 @@
         </a>
 
         <a href="mailto:info@ememenergy.com" class="sidebar-channel">
-            <div class="sc-num">02</div>
             <div class="sc-icon">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
@@ -533,7 +748,6 @@
         </a>
 
         <div class="sidebar-channel">
-            <div class="sc-num">03</div>
             <div class="sc-icon">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>

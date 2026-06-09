@@ -1,11 +1,11 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
   <!-- HERO SECTION -->
   <section class="relative overflow-hidden bg-[#0c1a0f] text-white">
-    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,_rgba(16,185,129,0.12)_0%,_transparent_40%)]"></div>
+    <div class="hidden xl:block pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,_rgba(16,185,129,0.12)_0%,_transparent_40%)]"></div>
 
     <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,_rgba(255,255,255,0.1)_0%,_transparent_70%)]"></div>
 
-    <div class="pointer-events-none absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-transparent via-[#c8752e] to-transparent"></div>
+    <div class="hidden xl:block pointer-events-none absolute left-0 top-0 h-full w-1.5 bg-gradient-to-b from-transparent via-[#c8752e] to-transparent"></div>
 
     <div class="pointer-events-none absolute top-10 right-[-4rem] h-72 w-72 rounded-full bg-[radial-gradient(circle,_rgba(255,255,255,0.15)_0%,_transparent_70%)]"></div>
 
@@ -15,7 +15,7 @@
       <span class="select-none text-[10rem] font-brand font-black uppercase tracking-[0.2em]">ESS</span>
     </div>
 
-    <div class="relative max-w-7xl mx-auto px-6 py-20 lg:py-24 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] items-center">
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-20 lg:py-24 gap-6 sm:gap-12 grid lg:grid-cols-[1.1fr_0.9fr] items-center">
       <!-- LHS -->
       <div class="space-y-8">
         <div class="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-white/90">
@@ -23,7 +23,7 @@
           Inverter Power Systems
         </div>
 
-        <h1 class="text-5xl sm:text-6xl font-brand font-light leading-tight tracking-tight">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-brand font-light leading-tight tracking-tight">
           Power Your<br />
           Future with<br />
           <em class="font-normal not-italic text-[#c8752e]">Advanced Inverters</em>
@@ -66,8 +66,8 @@
   </section>
 
   <!-- PRODUCT SECTION -->
-  <section class="bg-white py-24" id="product">
-    <div class="max-w-7xl mx-auto px-6">
+  <section class="bg-white py-12 md:py-24" id="product">
+    <div class="max-w-7xl mx-auto px-4 md:px-6">
       <!-- Header -->
       <div class="max-w-3xl mb-16">
         <h2 class="text-4xl font-bold text-gray-900 font-brand">Our Inverter Series</h2>
@@ -76,31 +76,33 @@
       </div>
 
       <!-- ACCORDION NAVIGATION -->
-      <div class="mb-12 space-y-4">
+      <div class="mb-12 space-y-3 sm:space-y-4">
         <!-- Residential Hybrid Accordion -->
         <div class="border border-gray-200 rounded-xl overflow-hidden">
-          <button onclick="toggleMainAccordion('res-hybrid')" class="w-full flex items-center justify-between px-6 py-4 bg-white hover:bg-gray-50 transition text-left border-b border-gray-100">
+          <button onclick="toggleMainAccordion('res-hybrid')" class="w-full flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 bg-white hover:bg-gray-50 transition text-left border-b border-gray-100">
             <h3 class="text-xl font-semibold text-gray-900">Residential Hybrid Inverter (Off-grid / On-grid)</h3>
             <svg class="w-6 h-6 text-gray-500 transform transition-transform" id="res-hybrid-main-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path d="M6 9l6 6 6-6" />
             </svg>
           </button>
+
           <div id="res-hybrid-main-content">
             <!-- Sub-accordion: Single Phase Low Voltage -->
             <div class="border-b border-gray-100 last:border-b-0">
-              <button onclick="toggleSubAccordion('res-hybrid-single')" class="w-full flex items-center justify-between px-6 py-3 bg-gray-50 hover:bg-gray-100 transition text-left">
+              <button onclick="toggleSubAccordion('res-hybrid-single')" class="w-full flex items-center justify-between px-4 py-2.5 sm:px-6 sm:py-3 bg-gray-50 hover:bg-gray-100 transition text-left">
                 <h4 class="text-lg font-medium text-gray-800">Single Phase Low Voltage</h4>
                 <svg class="w-5 h-5 text-gray-500 transform transition-transform rotate-180" id="res-hybrid-single-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path d="M6 9l6 6 6-6" />
                 </svg>
               </button>
-              <div id="res-hybrid-single-content" class="px-6 pb-6">
+
+              <div id="res-hybrid-single-content" class="px-4 pb-4 sm:px-6 sm:pb-6">
                 <p class="text-sm text-gray-600 mb-6">Single-phase inverters designed for residential applications with low voltage systems.</p>
-                <div class="grid md:grid-cols-3 gap-6">
+                <div class="grid md:grid-cols-3 gap-4 sm:gap-6">
                   <!-- HI-3~6K-SL -->
-                  <a href="{% url 'main:residential_HI_3_6k_SL' %}" class="group block rounded-3xl border border-gray-200 bg-white p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
+                  <a href="{% url 'main:residential_HI_3_6k_SL' %}" class="group block rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
                     <div class="mb-6 flex h-72 scale-125 items-center justify-center py-4">
-                      <img src="{% static 'images/Residential_HI3-6k-SL.png' %}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110" />
+                      <img src="{% static 'images/Residential_HI3-6k-SL.png' %}" class="h-full w-full object-contain xs:object-cover transition-transform duration-300 xs:group-hover:scale-110" />
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900">HI-3~6K-SL</h3>
                     <p class="mt-2 text-sm text-gray-600">1 Phase · Low Voltage</p>
@@ -110,9 +112,9 @@
                   </a>
 
                   <!-- HI-8K-SL -->
-                  <a href="{% url 'main:residential_HI_8k_SL' %}" class="group rounded-3xl border border-gray-200 bg-white p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
+                  <a href="{% url 'main:residential_HI_8k_SL' %}" class="group rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
                     <div class="mb-6 flex h-72 scale-125 items-center justify-center py-4">
-                      <img src="{% static 'images/3_phase__Low_Voltage_Hybrid_Inverter_2.png' %}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110" />
+                      <img src="{% static 'images/3_phase__Low_Voltage_Hybrid_Inverter_2.png' %}" class="h-full w-full object-contain xs:object-cover transition-transform duration-300 xs:group-hover:scale-110" />
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900">HI-8K-SL</h3>
                     <p class="mt-2 text-sm text-gray-600">1 Phase · Low Voltage</p>
@@ -122,9 +124,9 @@
                   </a>
 
                   <!-- HI-12K-SL -->
-                  <a href="{% url 'main:residential_HI_12k_SL' %}" class="group rounded-3xl border border-gray-200 bg-white p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
+                  <a href="{% url 'main:residential_HI_12k_SL' %}" class="group rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
                     <div class="mb-6 flex h-72 scale-125 items-center justify-center py-4">
-                      <img src="{% static 'images/3_phase__Low_Voltage_Hybrid_Inverter_2.png' %}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110" />
+                      <img src="{% static 'images/3_phase__Low_Voltage_Hybrid_Inverter_2.png' %}" class="h-full w-full object-contain xs:object-cover transition-transform duration-300 xs:group-hover:scale-110" />
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900">HI-12K-SL</h3>
                     <p class="mt-2 text-sm text-gray-600">1 Phase · Low Voltage</p>
@@ -138,20 +140,20 @@
 
             <!-- Sub-accordion: Three Phase Low Voltage -->
             <div class="border-b border-gray-100 last:border-b-0">
-              <button onclick="toggleSubAccordion('res-hybrid-three')" class="w-full flex items-center justify-between px-6 py-3 bg-gray-50 hover:bg-gray-100 transition text-left">
+              <button onclick="toggleSubAccordion('res-hybrid-three')" class="w-full flex items-center justify-between px-4 py-2.5 sm:px-6 sm:py-3 bg-gray-50 hover:bg-gray-100 transition text-left">
                 <h4 class="text-lg font-medium text-gray-800">Three Phase Low Voltage</h4>
                 <svg class="w-5 h-5 text-gray-500 transform transition-transform rotate-180" id="res-hybrid-three-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path d="M6 9l6 6 6-6" />
                 </svg>
               </button>
 
-              <div id="res-hybrid-three-content" class="px-6 pb-6">
+              <div id="res-hybrid-three-content" class="px-4 pb-4 sm:px-6 sm:pb-6">
                 <p class="text-sm text-gray-600 mb-6">Three-phase inverters for larger residential systems requiring balanced power distribution.</p>
-                <div class="grid md:grid-cols-3 gap-6">
+                <div class="grid md:grid-cols-3 gap-4 sm:gap-6">
                   <!-- HI-12K-TH -->
-                  <a href="{% url 'main:residential_HI_12k_TL' %}" class="group rounded-3xl border border-gray-200 bg-white p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
+                  <a href="{% url 'main:residential_HI_12k_TL' %}" class="group rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
                     <div class="mb-6 flex h-72 scale-125 items-center justify-center py-4">
-                      <img src="{% static 'images/HI_TL.png' %}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110" />
+                      <img src="{% static 'images/inverter1.png' %}" class="h-full w-full object-contain xs:object-cover transition-transform duration-300 group-hover:scale-110" />
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900">HI-12K-TL</h3>
                     <p class="mt-2 text-sm text-gray-600">3 Phase · Low Voltage</p>
@@ -161,9 +163,9 @@
                   </a>
 
                   <!-- HI-15K-TL -->
-                  <a href="{% url 'main:residential_HI_15k_TL' %}" class="group rounded-3xl border border-gray-200 bg-white p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
+                  <a href="{% url 'main:residential_HI_15k_TL' %}" class="group rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
                     <div class="mb-6 flex h-72 scale-125 items-center justify-center py-4">
-                      <img src="{% static 'images/HI_TL.png' %}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110" />
+                      <img src="{% static 'images/inverter1.png' %}" class="h-full w-full object-contain xs:object-cover transition-transform duration-300 group-hover:scale-110" />
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900">HI-15K-TL</h3>
                     <p class="mt-2 text-sm text-gray-600">3 Phase · Low Voltage</p>
@@ -173,9 +175,9 @@
                   </a>
 
                   <!-- HI-20K-TL -->
-                  <a href="{% url 'main:residential_HI_20k_TL' %}" class="group rounded-3xl border border-gray-200 bg-white p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
+                  <a href="{% url 'main:residential_HI_20k_TL' %}" class="group rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
                     <div class="mb-6 flex h-72 scale-125 items-center justify-center py-4">
-                      <img src="{% static 'images/HI_TL.png' %}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110" />
+                      <img src="{% static 'images/inverter1.png' %}" class="h-full w-full object-contain xs:object-cover transition-transform duration-300 group-hover:scale-110" />
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900">HI-20K-TL</h3>
                     <p class="mt-2 text-sm text-gray-600">3 Phase · Low Voltage</p>
@@ -191,29 +193,30 @@
 
         <!-- Residential HI (Off-Grid) Accordion -->
         <div class="border border-gray-200 rounded-xl overflow-hidden">
-          <button onclick="toggleMainAccordion('res-offgrid')" class="w-full flex items-center justify-between px-6 py-4 bg-white hover:bg-gray-50 transition text-left border-b border-gray-100">
+          <button onclick="toggleMainAccordion('res-offgrid')" class="w-full flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 bg-white hover:bg-gray-50 transition text-left border-b border-gray-100">
             <h3 class="text-xl font-semibold text-gray-900">Residential Hybrid Inverter (Off-Grid)</h3>
             <svg class="w-6 h-6 text-gray-500 transform transition-transform rotate-180" id="res-offgrid-main-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path d="M6 9l6 6 6-6" />
             </svg>
           </button>
+
           <div id="res-offgrid-main-content">
             <!-- Sub-accordion: Single Phase Low Voltage -->
             <div class="border-b border-gray-100 last:border-b-0">
-              <button onclick="toggleSubAccordion('res-offgrid-single')" class="w-full flex items-center justify-between px-6 py-3 bg-gray-50 hover:bg-gray-100 transition text-left">
+              <button onclick="toggleSubAccordion('res-offgrid-single')" class="w-full flex items-center justify-between px-4 py-2.5 sm:px-6 sm:py-3 bg-gray-50 hover:bg-gray-100 transition text-left">
                 <h4 class="text-lg font-medium text-gray-800">Single Phase Low Voltage</h4>
                 <svg class="w-5 h-5 text-gray-500 transform transition-transform rotate-180" id="res-offgrid-single-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path d="M6 9l6 6 6-6" />
                 </svg>
               </button>
-              <div id="res-offgrid-single-content" class="px-6 pb-6">
+              <div id="res-offgrid-single-content" class="px-4 pb-4 sm:px-6 sm:pb-6">
                 <p class="text-sm text-gray-600 mb-6">Off-grid single-phase inverters for standalone residential power systems.</p>
-                <div class="grid md:grid-cols-3 gap-6">
+                <div class="grid md:grid-cols-3 gap-4 sm:gap-6">
 
                   <!-- HI-4K-24V -->
-                  <a href="{% url "main:residential_HI_4k_SL" %}" class="group rounded-3xl border border-gray-200 bg-white p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
+                  <a href="{% url "main:residential_HI_4k_SL" %}" class="group rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
                     <div class="mb-6 flex h-55 items-center justify-center">
-                      <img src="{% static 'images/Emem_4Kv.png' %}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110" />
+                      <img src="{% static 'images/Emem_4Kv.png' %}" class="h-full w-full object-contain xs:object-cover transition-transform duration-300 group-hover:scale-110" />
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900">HI-4K-SL</h3>
                     <p class="mt-2 text-sm text-gray-600">1 Phase · Low Voltage</p>
@@ -223,9 +226,9 @@
                   </a>
 
                   <!-- HI~6K-24V -->
-                  <a href="{% url "main:residential_HI_6k_SL" %}"  class="group rounded-3xl border border-gray-200 bg-white p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
+                  <a href="{% url "main:residential_HI_6k_SL" %}"  class="group rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
                     <div class="mb-6 flex h-55 items-center justify-center">
-                      <img src="{% static 'images/Emem_6Kv_battery.png' %}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110" />
+                      <img src="{% static 'images/Emem_6Kv_battery.png' %}" class="h-full w-full object-contain xs:object-cover transition-transform duration-300 group-hover:scale-110" />
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900">HI-6K-SL</h3>
                     <p class="mt-2 text-sm text-gray-600">1 Phase · Low Voltage</p>
@@ -235,9 +238,9 @@
                   </a>
 
                   <!-- HI~8K-24V -->
-                  <a href="{% url "main:residential_HI_8k_SL_OG" %}"  class="group rounded-3xl border border-gray-200 bg-white p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
+                  <a href="{% url "main:residential_HI_8k_SL_OG" %}"  class="group rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
                     <div class="mb-6 flex h-55 w-auto items-center justify-center p-5">
-                      <img src="{% static 'images/Emem-8k-SL.png' %}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110" />
+                      <img src="{% static 'images/Emem-8k-SL.png' %}" class="h-full w-full object-contain xs:object-cover transition-transform duration-300 group-hover:scale-110" />
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900">HI-8K-SL</h3>
                     <p class="mt-2 text-sm text-gray-600">1 Phase · Low Voltage</p>
@@ -247,9 +250,9 @@
                   </a>
 
                   <!-- HI~10K-SL -->
-                  <a href="{% url "main:residential_HI_10k_SL" %}"  class="group rounded-3xl border border-gray-200 bg-white p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
+                  <a href="{% url "main:residential_HI_10k_SL" %}"  class="group rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
                     <div class="mb-6 flex h-55 w-auto items-center justify-center p-5">
-                      <img src="{% static 'images/Emem10Kv-SL.png' %}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110" />
+                      <img src="{% static 'images/Emem10Kv-SL.png' %}" class="h-full w-full object-contain xs:object-cover transition-transform duration-300 group-hover:scale-110" />
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900">HI-10K-SL</h3>
                     <p class="mt-2 text-sm text-gray-600">1 Phase · Low Voltage</p>
@@ -265,28 +268,30 @@
 
         <!-- Commercial / Industrial Accordion -->
         <div class="border border-gray-200 rounded-xl overflow-hidden">
-          <button onclick="toggleMainAccordion('commercial')" class="w-full flex items-center justify-between px-6 py-4 bg-white hover:bg-gray-50 transition text-left border-b border-gray-100">
+          <button onclick="toggleMainAccordion('commercial')" class="w-full flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 bg-white hover:bg-gray-50 transition text-left border-b border-gray-100">
             <h3 class="text-xl font-semibold text-gray-900">Commercial / Industrial Inverter</h3>
             <svg class="w-6 h-6 text-gray-500 transform transition-transform rotate-180" id="commercial-main-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path d="M6 9l6 6 6-6" />
             </svg>
           </button>
+
           <div id="commercial-main-content">
             <!-- Sub-accordion: 3 Phase High Voltage -->
             <div class="border-b border-gray-100 last:border-b-0">
-              <button onclick="toggleSubAccordion('commercial-three')" class="w-full flex items-center justify-between px-6 py-3 bg-gray-50 hover:bg-gray-100 transition text-left">
+              <button onclick="toggleSubAccordion('commercial-three')" class="w-full flex items-center justify-between px-4 py-2.5 sm:px-6 sm:py-3 bg-gray-50 hover:bg-gray-100 transition text-left">
                 <h4 class="text-lg font-medium text-gray-800">Three Phase High Voltage</h4>
                 <svg class="w-5 h-5 text-gray-500 transform transition-transform rotate-180" id="commercial-three-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path d="M6 9l6 6 6-6" />
                 </svg>
               </button>
-              <div id="commercial-three-content" class="px-6 pb-6">
+
+              <div id="commercial-three-content" class="px-4 pb-4 sm:px-6 sm:pb-6">
                 <p class="text-sm text-gray-600 mb-6">High-voltage three-phase inverters engineered for commercial and industrial applications.</p>
-                <div class="grid md:grid-cols-3 gap-6">
+                <div class="grid md:grid-cols-3 gap-4 sm:gap-6">
                   <!-- HI-10~15K-SL -->
-                  <a href="{% url 'main:commercial_HI_15_25k_TH' %}" class="group rounded-3xl border border-gray-200 bg-white p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
+                  <a href="{% url 'main:commercial_HI_15_25k_TH' %}" class="group rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
                     <div class="mb-6 flex h-72 scale-125 items-center justify-center py-4">
-                      <img src="{% static 'images/inverter1.png' %}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110" />
+                      <img src="{% static 'images/inverter1.png' %}" class="h-full w-full object-contain xs:object-cover transition-transform duration-300 group-hover:scale-110" />
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900">HI-15~25K-TH</h3>
                     <p class="mt-2 text-sm text-gray-600">3 Phase · High Voltage</p>
@@ -296,9 +301,9 @@
                   </a>
 
                   <!-- HI-10~15K-SL -->
-                  <a href="{% url 'main:commercial_HI_29_60k_TH' %}" class="group rounded-3xl border border-gray-200 bg-white p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
+                  <a href="{% url 'main:commercial_HI_29_60k_TH' %}" class="group rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
                     <div class="mb-6 flex h-72 scale-125 items-center justify-center py-4">
-                      <img src="{% static 'images/Commercial_HI29-60K-TH.png' %}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110" />
+                      <img src="{% static 'images/Commercial_HI29-60K-TH.png' %}" class="h-full w-full object-contain xs:object-cover transition-transform duration-300 group-hover:scale-110" />
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900">HI-29~60K-TH</h3>
                     <p class="mt-2 text-sm text-gray-600">3 Phase · High Voltage</p>
@@ -308,7 +313,7 @@
                   </a>
 
                   <!-- HI-10~15K-SL -->
-                  <a href="{% url 'main:commercial_HI_80_125k_TH' %}" class="group rounded-3xl border border-gray-200 bg-white p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
+                  <a href="{% url 'main:commercial_HI_80_125k_TH' %}" class="group rounded-3xl border border-gray-200 bg-white p-4 sm:p-6 shadow-md transition hover:-translate-y-2 hover:shadow-xl">
                     <div class="mb-6 flex h-72 scale-150 items-center justify-center py-4">
                       <img src="{% static 'images/inverter3.png' %}" class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110" />
                     </div>
@@ -328,8 +333,8 @@
   </section>
 
   <!-- HOW IT WORKS -->
-  <section class="py-16 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-6 grid gap-12 lg:grid-cols-[0.95fr_0.9fr] items-center">
+  <section class="py-8 sm:py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 grid gap-6 sm:gap-12 lg:grid-cols-[0.95fr_0.9fr] items-center">
       <div>
         <div class="max-w-3xl mb-6">
           <h2 class="text-4xl font-bold text-gray-900 font-brand">How Our Inverter Systems Work</h2>
@@ -384,8 +389,8 @@
   </section>
 
   <!-- APPLICATIONS -->
-  <section class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-6">
+  <section class="py-8 sm:py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
       <div class="max-w-3xl mb-16">
         <h2 class="text-4xl font-bold text-gray-900 font-brand">Where Our Inverters Excel</h2>
         <div class="w-16 h-1 bg-primary-900 mt-4"></div>
@@ -412,8 +417,8 @@
   </section>
 
   <!-- COMPONENTS -->
-  <section class="py-16 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-6">
+  <section class="py-8 sm:py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
       <div class="max-w-3xl mb-16">
         <h2 class="text-4xl font-bold text-gray-900 font-brand">Core Components of Our Inverters</h2>
         <div class="w-16 h-1 bg-primary-900 mt-4"></div>
@@ -455,8 +460,8 @@
   </section>
 
   <!-- HOW TO CHOOSE -->
-  <section class="bg-white py-24">
-    <div class="max-w-7xl mx-auto px-6">
+  <section class="bg-white py-12 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 md:px-6">
       <div class="max-w-3xl mb-16">
         <h2 class="text-4xl font-bold text-gray-900 leading-tight font-brand">How to Choose the Right Inverter</h2>
         <div class="w-16 h-1 bg-primary-900 mt-4"></div>
@@ -543,11 +548,12 @@
   </section>
 
   <!-- CTA -->
-  <section id="contact" class="relative overflow-hidden py-20 bg-[#0c1a0f] text-white">
+  <section id="contact" class="relative overflow-hidden py-12 md:py-20 bg-[#0c1a0f] text-white">
     <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_15%,_rgba(16,185,129,0.18)_0%,_transparent_35%)]"></div>
     <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,_rgba(255,255,255,0.08)_0%,_transparent_60%)]"></div>
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
-      <div class="relative grid gap-10 lg:grid-cols-[1.2fr_0.8fr] items-center">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="relative grid gap-6 sm:gap-10 lg:grid-cols-[1.2fr_0.8fr] items-center">
         <div class="space-y-6">
           <p class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.24em] text-white/90">Power your system</p>
           <h2 class="text-4xl font-bold tracking-tight sm:text-5xl">Ready to Power Your Inverter Project?</h2>
@@ -557,19 +563,19 @@
             <a href="{% url "main:contact" %}" class="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-8 py-3 text-sm font-semibold text-white transition hover:bg-white/20">Request a Quote</a>
           </div>
         </div>
-        <div class="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl">
+        <div class="overflow-hidden rounded-[2rem] md:bg-white/5 p-4 sm:p-8 md:shadow-2xl backdrop-blur-xl">
           <div class="space-y-4">
             <div class="text-sm uppercase tracking-[0.24em] text-slate-300">What you get</div>
             <div class="grid gap-4">
-              <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+              <div class="rounded-3xl border border-white/10 bg-white/5 p-3 sm:p-5">
                 <h3 class="font-semibold text-white">Expert product guidance</h3>
                 <p class="mt-2 text-sm text-slate-300">Match the right inverter to your project and budget.</p>
               </div>
-              <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+              <div class="rounded-3xl border border-white/10 bg-white/5 p-3 sm:p-5">
                 <h3 class="font-semibold text-white">Reliable high-power systems</h3>
                 <p class="mt-2 text-sm text-slate-300">Designed for commercial and industrial energy flow.</p>
               </div>
-              <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+              <div class="rounded-3xl border border-white/10 bg-white/5 p-3 sm:p-5">
                 <h3 class="font-semibold text-white">Fast backup readiness</h3>
                 <p class="mt-2 text-sm text-slate-300">Reduce downtime with seamless inverter switching.</p>
               </div>

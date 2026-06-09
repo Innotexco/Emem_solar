@@ -53,7 +53,7 @@
   }
   
   .nav-logo-img {
-    width: 36px;
+    width: 3em;
     height: 36px;
     border-radius: 0;
     overflow: hidden;
@@ -708,7 +708,7 @@
     <!-- Logo -->
     <a href="{% url 'main:home' %}" class="nav-logo">
       <div class="nav-logo-img">
-        <img src="{% static 'images/Emem4.png' %}" alt="Emem Energy" />
+        <img src="{% static 'images/Emem41.png' %}" alt="Emem Energy" />
       </div>
       <div class="nav-logo-text">
         <div class="nav-logo-name">Emem Energy</div>
@@ -886,7 +886,7 @@
   <div class="mobile-header">
     <a href="{% url 'main:home' %}" class="nav-logo" onclick="closeMobile()">
       <div class="nav-logo-img">
-        <img src="{% static 'images/Emem4.png' %}" alt="Emem Energy" />
+        <img src="{% static 'images/Emem41.png' %}" alt="Emem Energy" />
       </div>
       <div class="nav-logo-text">
         <div class="nav-logo-name">Emem Energy</div>
@@ -918,13 +918,13 @@
       </svg>Home
     </a>
     <div>
-      <div onclick="toggleMobileProducts()" class="mobile-nav-item flex justify-between items-center px-2 py-3 text-sm text-gray-700 cursor-pointer">
-        <div class="flex items-center gap-2">
+      <div  class="mobile-nav-item flex justify-between items-center px-2 py-3 text-sm text-gray-700 cursor-pointer">
+        <div class="flex items-center gap-2" onclick="toggleMobileProducts()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
           </svg>Products
         </div>
-        <button onclick="toggleMobileProducts()" id="arrow">▼</button>
+        <button onclick="toggleMobileProducts()" id="arrowIcon">▼</button>
       </div>
 
       <div id="mobileProducts" class="hidden pl-4 space-y-1">
