@@ -17,6 +17,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
+from django.views.decorators.http import require_http_methods
 
 
 logger = logging.getLogger(__name__)
@@ -104,87 +105,62 @@ def register_user(request):
     
     return render(request, 'account/register.html')
 
-
-
 @login_required
+@require_http_methods(["GET", "POST"])
 def upload_verification_images(request):
-    profile = request.user.profile
-    
-    # Check if verification is required
-    if not profile.requires_verification():
-        messages.info(request, 'Verification not required for your account type.')
-        return redirect('main:products')
-    
-    # Check if already verified
-    if profile.verification_status == 'verified':
-        messages.info(request, 'Your account is already verified.')
-        return redirect('main:products')
-    
-    # Determine image type based on chosen category
-    if profile.chosen_category == 'Retail':
-        image_type = 'installation'
-        image_label = 'Previous Installation'
-        image_description = 'Upload up to 5 images of your previous installation work'
-    else:  # Whole Sale
-        image_type = 'warehouse'
-        image_label = 'Warehouse/Outlet'
-        image_description = 'Upload up to 5 images of your warehouse or outlet'
-    
-    existing_images = profile.verification_images.filter(image_type=image_type)
-    
+    profile = get_object_or_404(Profile, user=request.user)
+   
     if request.method == 'POST':
         images = request.FILES.getlist('verification_images')
-        captions = request.POST.getlist('captions')
-        
-        # Validation
+       
         if not images:
-            messages.error(request, 'Please upload at least one image.')
+            messages.error(request, 'Please upload at least one verification image.')
             return redirect('account:upload_verification_images')
-        
+       
         if len(images) > 5:
-            messages.error(request, 'You can only upload up to 5 images.')
+            messages.error(request, 'You can upload a maximum of 5 images.')
             return redirect('account:upload_verification_images')
-        
-        # Check total images including existing
-        total_images = existing_images.count() + len(images)
-        if total_images > 5:
-            messages.error(request, f'You can only have up to 5 images. You already have {existing_images.count()}.')
-            return redirect('account:upload_verification_images')
-        
-        try:
-            with transaction.atomic():
-                # Save images
-                for i, image in enumerate(images):
-                    caption = captions[i] if i < len(captions) else ''
-                    VerificationImage.objects.create(
-                        profile=profile,
-                        image=image,
-                        image_type=image_type,
-                        caption=caption
-                    )
-                
-                # Update profile status
-                profile.verification_status = 'pending'
-                profile.save()
-                
-                messages.success(
-                    request, 
-                    'Images uploaded successfully! Your account is under review. You will be notified once verified.'
-                )
-                return redirect('account:verification_pending')
-                
-        except Exception as e:
-            logger.error(f"Image upload error: {str(e)}")
-            messages.error(request, f'Upload failed: {str(e)}')
-    
+       
+        allowed_types = ['image/jpeg', 'image/png', 'image/webp']
+        max_size = 5 * 1024 * 1024  # 5MB
+       
+        for image in images:
+            if image.content_type not in allowed_types:
+                messages.error(request, f'Invalid file type: {image.name}. Only JPEG, PNG, WebP allowed.')
+                return redirect('account:upload_verification_images')
+           
+            if image.size > max_size:
+                messages.error(request, f'File too large: {image.name}. Maximum 5MB per file.')
+                return redirect('account:upload_verification_images')
+       
+        profile.verification_images.all().delete()
+       
+        for image in images:
+            VerificationImage.objects.create(
+                profile=profile,
+                image=image
+            )
+       
+        intended_category = request.session.get('intended_category', profile.chosen_category)
+       
+        profile.verification_status = 'pending'
+        profile.chosen_category = intended_category
+        profile.category = 'End User' 
+        profile.save()
+       
+        if 'intended_category' in request.session:
+            del request.session['intended_category']
+       
+        messages.success(
+            request,
+            'Verification images uploaded successfully. Your request is being reviewed.'
+        )
+        return redirect('account:profile')
+   
     context = {
         'profile': profile,
-        'image_type': image_type,
-        'image_label': image_label,
-        'image_description': image_description,
-        'existing_images': existing_images,
-        'max_images': 5,
-        'remaining_slots': 5 - existing_images.count()
+        'has_images': profile.verification_images.exists(),
+        'status': profile.verification_status,
     }
     return render(request, 'account/upload_verification_images.html', context)
 
@@ -330,39 +306,74 @@ def verify_profile(request, profile_id):
 @login_required
 def update_profile(request):
     profile = get_object_or_404(Profile, user=request.user)
-    
+   
     if request.method == 'POST':
-        phone = request.POST.get('phone')
-        category = request.POST.get('category')
-        
-        # Check if category is changing to one that requires verification
-        old_chosen_category = profile.chosen_category or profile.category
-        category_changed = old_chosen_category != category
-        
-        if category_changed and category in ['Retail', 'Whole Sale']:
-            # Reset verification status
-            profile.verification_status = 'pending'
-            profile.chosen_category = category
-            profile.category = 'End User'  # Back to End User until verified
-            profile.verification_images.all().delete()  # Remove old images
-        elif category_changed:
-            # Changing to End User
-            profile.category = category
-            profile.chosen_category = category
+        phone = request.POST.get('phone', '').strip()
+        new_category = request.POST.get('category', '').strip()
+       
+        # Validate inputs
+        if not phone:
+            messages.error(request, 'Phone number is required.')
+            return redirect('account:profile')
+       
+        if not new_category or new_category not in ['End User', 'Retail', 'Whole Sale']:
+            messages.error(request, 'Invalid category selected.')
+            return redirect('account:profile')
+       
+        current_category = profile.category
+       
+        changing_to_restricted = new_category in ['Retail', 'Whole Sale']
+        changing_from_restricted = current_category in ['Retail', 'Whole Sale']
+       
+       
+        if changing_to_restricted:
+            if not profile.verification_images.exists():
+                messages.error(
+                    request,
+                    f'Please upload verification images before changing to {new_category}.'
+                )
+                request.session['intended_category'] = new_category
+                return redirect('account:upload_verification_images')
+           
+            
+            if profile.verification_status == 'rejected':
+                messages.error(
+                    request,
+                    'Your verification was rejected. Please upload new documents.'
+                )
+                return redirect('account:upload_verification_images')
+           
+            profile.phone = phone
+            profile.chosen_category = new_category
+            profile.verification_status = 'pending'  
+            profile.category = 'End User' 
+            profile.save()
+           
+            messages.warning(
+                request,
+                f'Category change requested. Your {new_category} status is pending verification.'
+            )
+            return redirect('account:profile')
+       
+        if new_category == 'End User':
+            profile.phone = phone
+            profile.category = new_category
+            profile.chosen_category = new_category
             profile.verification_status = 'not_required'
-        
-        # Update phone
+            profile.save()
+           
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('account:profile')
+       
         profile.phone = phone
         profile.save()
-        
-        if category_changed and category in ['Retail', 'Whole Sale']:
-            messages.info(request, 'Category changed. Please upload verification images.')
-            return redirect('account:upload_verification_images')
-        
-        messages.success(request, 'Your profile has been updated successfully!')
+        messages.success(request, 'Profile updated successfully!')
         return redirect('account:profile')
-    
-    context = {'profile': profile}
+   
+    context = {
+        'profile': profile,
+        'user': request.user,
+    }
     return render(request, 'account/update_profile.html', context)
 
 
@@ -493,24 +504,7 @@ def login_user(request):
 
     return render(request, 'account/login.html')
 
-# @login_required
-# def update_profile(request):
-#     profile = get_object_or_404(Profile, user=request.user)
 
-#     if request.method == 'POST':
-#         phone = request.POST.get('phone')
-#         category = request.POST.get('category')
-
-#         # update fields
-#         profile.phone = phone
-#         profile.category = category
-#         profile.save()
-
-#         messages.success(request, 'Your profile has been updated successfully!')
-#         return redirect('account:update_profile')  # reload page
-
-#     context = {'profile': profile}
-#     return render(request, 'account/update_profile.html', context)
 
 @login_required
 def logout_user(request):
