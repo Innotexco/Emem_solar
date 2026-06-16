@@ -109,60 +109,88 @@ def register_user(request):
 @require_http_methods(["GET", "POST"])
 def upload_verification_images(request):
     profile = get_object_or_404(Profile, user=request.user)
-   
+    existing_images = profile.verification_images.all().order_by('uploaded_at')
+    MAX_IMAGES = 5
+    remaining_slots = MAX_IMAGES - existing_images.count()
+
     if request.method == 'POST':
         images = request.FILES.getlist('verification_images')
-       
+        captions = request.POST.getlist('captions')
+
         if not images:
             messages.error(request, 'Please upload at least one verification image.')
             return redirect('account:upload_verification_images')
-       
-        if len(images) > 5:
-            messages.error(request, 'You can upload a maximum of 5 images.')
+
+        if len(images) > remaining_slots:
+            messages.error(request, f'You can upload at most {remaining_slots} more image(s).')
             return redirect('account:upload_verification_images')
-       
-        allowed_types = ['image/jpeg', 'image/png', 'image/webp']
-        max_size = 5 * 1024 * 1024  # 5MB
-       
+
+        allowed_types = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp']
+        max_size = 5 * 1024 * 1024  # 5 MB
+
         for image in images:
             if image.content_type not in allowed_types:
                 messages.error(request, f'Invalid file type: {image.name}. Only JPEG, PNG, WebP allowed.')
                 return redirect('account:upload_verification_images')
-           
             if image.size > max_size:
-                messages.error(request, f'File too large: {image.name}. Maximum 5MB per file.')
+                messages.error(request, f'File too large: {image.name}. Maximum 5 MB per file.')
                 return redirect('account:upload_verification_images')
-       
-        profile.verification_images.all().delete()
-       
-        for image in images:
+
+        for i, image in enumerate(images):
+            caption = captions[i] if i < len(captions) else ''
             VerificationImage.objects.create(
                 profile=profile,
-                image=image
+                image=image,
+                caption=caption,
             )
-       
+
         intended_category = request.session.get('intended_category', profile.chosen_category)
-       
         profile.verification_status = 'pending'
         profile.chosen_category = intended_category
-        profile.category = 'End User' 
+        profile.category = 'End User'
         profile.save()
-       
+
         if 'intended_category' in request.session:
             del request.session['intended_category']
-       
-        messages.success(
-            request,
-            'Verification images uploaded successfully. Your request is being reviewed.'
+
+        messages.success(request, 'Verification images uploaded successfully. Your request is being reviewed.')
+        return redirect('account:verification_pending')
+
+    if profile.category == 'Retail':
+        image_description = (
+            'Upload clear photos of your installation — shelving, display units, '
+            'or any setup that shows how products are presented in your store.'
         )
-        return redirect('account:profile')
-   
+    else:
+        image_description = (
+            'Upload clear photos of your warehouse or storage facility — '
+            'racking, floor layout, or stock areas.'
+        )
+
     context = {
         'profile': profile,
-        'has_images': profile.verification_images.exists(),
+        'existing_images': existing_images,
+        'remaining_slots': remaining_slots,
+        'image_description': image_description,
+        # kept for any legacy template checks
+        'has_images': existing_images.exists(),
         'status': profile.verification_status,
     }
     return render(request, 'account/upload_verification_images.html', context)
+
+
+@login_required
+@require_http_methods(["POST"])
+def delete_verification_image(request, image_id):
+    """Per-image delete — referenced by the template's per-row delete forms."""
+    image = get_object_or_404(
+        VerificationImage,
+        id=image_id,
+        profile__user=request.user,
+    )
+    image.delete()
+    messages.success(request, 'Image deleted.')
+    return redirect('account:upload_verification_images')
 
 
 
