@@ -20,6 +20,13 @@ DEBUG = True
 ALLOWED_HOSTS = ['69.10.53.253', 'ememenergy.com', 'www.ememenergy.com']
 #ALLOWED_HOSTS = ['*'] # 4 local testing only, change in production #python -m waitress --host=0.0.0.0 --port=8000 yourproject.wsgi:application
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://ememenergy.com',
+    'https://www.ememenergy.com',
+    'http://69.10.53.253',
+    'https://69.10.53.253',
+]
+
 
 # Application definition
 
@@ -94,7 +101,6 @@ WSGI_APPLICATION = 'Emem_solar.wsgi.application'
 #     },
     
 # }
-from decouple import config
 
 DATABASES = {
     'default': {

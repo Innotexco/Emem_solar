@@ -219,6 +219,18 @@
     .form-message.success { background: rgba(10,102,64,0.05); border-color: var(--green); color: var(--green); }
     .form-message.error   { background: var(--danger-lt); border-color: var(--danger); color: var(--danger); }
 
+    /* Off-screen honeypot — do not use display:none (bots skip that). */
+    .hp-field {
+        position: absolute !important;
+        left: -10000px !important;
+        top: auto !important;
+        width: 1px !important;
+        height: 1px !important;
+        overflow: hidden !important;
+        opacity: 0;
+        pointer-events: none;
+    }
+
     /* ── SIDEBAR ──────────────────────────────── */
     .contact-sidebar { display: flex; flex-direction: column; gap: 2px; position: sticky; top: 24px; }
 
@@ -668,44 +680,50 @@
         <h2 class="section-title">How Can We<br>Help You?</h2>
         <p class="section-desc">Fill out the form and we'll get back to you as soon as possible.</p>
 
-        <div id="form-message" class="form-message"></div>
+        <div id="form-message" class="form-message{% if messages %} {% for message in messages %}{{ message.tags }}{% endfor %}{% endif %}"{% if messages %} style="display:block;"{% endif %}>{% if messages %}{% for message in messages %}{{ message }}{% endfor %}{% endif %}</div>
 
-        <form id="contact-form" method="POST">
+        <form id="contact-form" method="POST" action="{% url 'main:contact' %}" autocomplete="on">
             {% csrf_token %}
+            <input type="hidden" name="form_loaded" value="{{ form_loaded }}">
+
+            <div class="hp-field" aria-hidden="true">
+                <label for="company_url">Company website</label>
+                <input type="text" id="company_url" name="company_url" value="" tabindex="-1" autocomplete="off">
+            </div>
 
             <div class="field-row">
                 <div class="field">
                     <div class="field-label">Full Name <span class="field-required">*</span></div>
-                    <input type="text" id="full_name" name="full_name" placeholder="John Doe" required class="field-input">
+                    <input type="text" id="full_name" name="full_name" placeholder="John Doe" required class="field-input" value="{{ full_name|default:'' }}">
                 </div>
                 <div class="field">
                     <div class="field-label">Phone Number <span class="field-required">*</span></div>
-                    <input type="tel" id="phone" name="phone" placeholder="+2348001234567" required class="field-input">
+                    <input type="tel" id="phone" name="phone" placeholder="+2348001234567" required class="field-input" value="{{ phone|default:'' }}">
                 </div>
             </div>
 
             <div class="field">
                 <div class="field-label">Email Address <span class="field-required">*</span></div>
-                <input type="email" id="email" name="email" placeholder="you@example.com" required class="field-input">
+                <input type="email" id="email" name="email" placeholder="you@example.com" required class="field-input" value="{{ email|default:'' }}">
             </div>
 
             <div class="field">
                 <div class="field-label">Subject <span class="field-required">*</span></div>
                 <select id="subject" name="subject" required class="field-select">
                     <option value="">— Select a subject —</option>
-                    <option value="residential_quote">Request a Quote — Residential</option>
-                    <option value="commercial_quote">Request a Quote — Commercial</option>
-                    <option value="technical_support">Technical Support</option>
-                    <option value="find_distributor">Find a Distributor</option>
-                    <option value="product_inquiry">Product Inquiry</option>
-                    <option value="warranty">Warranty Information</option>
-                    <option value="other">Other</option>
+                    <option value="residential_quote"{% if subject == 'residential_quote' %} selected{% endif %}>Request a Quote — Residential</option>
+                    <option value="commercial_quote"{% if subject == 'commercial_quote' %} selected{% endif %}>Request a Quote — Commercial</option>
+                    <option value="technical_support"{% if subject == 'technical_support' %} selected{% endif %}>Technical Support</option>
+                    <option value="find_distributor"{% if subject == 'find_distributor' %} selected{% endif %}>Find a Distributor</option>
+                    <option value="product_inquiry"{% if subject == 'product_inquiry' %} selected{% endif %}>Product Inquiry</option>
+                    <option value="warranty"{% if subject == 'warranty' %} selected{% endif %}>Warranty Information</option>
+                    <option value="other"{% if subject == 'other' %} selected{% endif %}>Other</option>
                 </select>
             </div>
 
             <div class="field" style="margin-bottom:32px;">
                 <div class="field-label">Message <span class="field-required">*</span></div>
-                <textarea id="message" name="message" rows="6" placeholder="Tell us more about your energy storage needs…" required class="field-textarea"></textarea>
+                <textarea id="message" name="message" rows="6" placeholder="Tell us more about your energy storage needs…" required class="field-textarea">{{ user_message|default:'' }}</textarea>
             </div>
 
             <button type="submit" id="submit-button" class="btn-submit">
@@ -845,6 +863,11 @@
     const submitBtn = document.getElementById('submit-button');
     const formMessage = document.getElementById('form-message');
 
+    function setFormToken(token) {
+        const input = form.querySelector('[name="form_loaded"]');
+        if (input && token) input.value = token;
+    }
+
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
@@ -857,20 +880,38 @@
         submitBtn.innerHTML = `Sending… <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
 
         const formData = new FormData(form);
+        const csrfToken = (typeof getCookie === 'function' && getCookie('csrftoken'))
+            || (form.querySelector('[name=csrfmiddlewaretoken]') || {}).value
+            || '';
 
         try {
             const response = await fetch(form.action || window.location.href, {
                 method: 'POST',
                 body: formData,
+                credentials: 'same-origin',
                 headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': csrfToken
                 }
             });
 
-            const html = await response.text();
+            if (response.status === 403) {
+                showMsg('Security check failed. Please refresh the page and try again.', 'error');
+                return;
+            }
 
-            // Simple check - if Django redirected or showed success message
-            if (response.ok && (html.includes('success') || response.redirected)) {
+            const contentType = response.headers.get('content-type') || '';
+            if (contentType.includes('application/json')) {
+                const data = await response.json();
+                setFormToken(data.form_loaded);
+                if (data.ok) {
+                    showMsg(data.message || "Message sent — we'll be in touch within 24 hours.", 'success');
+                    form.reset();
+                    setFormToken(data.form_loaded);
+                } else {
+                    showMsg(data.message || 'Something went wrong. Please try again.', 'error');
+                }
+            } else if (response.ok) {
                 showMsg("Message sent — we'll be in touch within 24 hours.", 'success');
                 form.reset();
             } else {

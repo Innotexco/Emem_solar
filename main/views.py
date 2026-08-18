@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import requests
 import json
@@ -16,6 +15,13 @@ from decimal import Decimal, ROUND_HALF_UP
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.mail import EmailMessage, send_mail
 from django.template.loader import render_to_string
+from .form_protection import (
+    TIME_FIELD,
+    ALLOW,
+    REJECT,
+    check_form_guard,
+    issue_time_token,
+)
 
 # Create your views here.
 def home(request):
@@ -105,26 +111,68 @@ def lithium_battery_17_5kwh(request):
 def solarPanels_products(request):
     return render(request, 'main/products/panels.html')
 
-# def contact(request):
-#     return render(request, 'main/contact.html')
+
+def _is_ajax(request):
+    return request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+
+def _contact_context(**extra):
+    ctx = {TIME_FIELD: issue_time_token()}
+    ctx.update(extra)
+    return ctx
+
+
+def _contact_response(request, *, ok, message, status=200, extra=None):
+    extra = extra or {}
+    if _is_ajax(request):
+        payload = {'ok': ok, 'message': message, TIME_FIELD: issue_time_token()}
+        payload.update(extra)
+        return JsonResponse(payload, status=status)
+
+    if message:
+        if ok:
+            messages.success(request, message)
+        else:
+            messages.error(request, message)
+
+    if ok:
+        return redirect('main:contact')
+    return render(request, 'main/contact.html', _contact_context(**extra))
+
 
 def contact(request):
     if request.method == 'POST':
+        decision, guard_message = check_form_guard(request.POST)
+        if decision != ALLOW:
+            # Silent drop looks like success so bots do not retry.
+            if decision == REJECT:
+                return _contact_response(request, ok=False, message=guard_message)
+            return _contact_response(
+                request,
+                ok=True,
+                message='Your message has been sent.',
+            )
+
         full_name = request.POST.get('full_name', '').strip()
         email     = request.POST.get('email', '').strip()
         phone     = request.POST.get('phone', '').strip()
         subject   = request.POST.get('subject', '').strip()
         message   = request.POST.get('message', '').strip()
+        field_values = {
+            'full_name': full_name,
+            'email': email,
+            'phone': phone,
+            'subject': subject,
+            'user_message': message,
+        }
 
         if not all([full_name, email, phone, subject, message]):
-            messages.error(request, 'Please fill in all required fields.')
-            return render(request, 'main/contact.html', {
-                'full_name': full_name,
-                'email': email,
-                'phone': phone,
-                'subject': subject,
-                'user_message': message,
-            })
+            return _contact_response(
+                request,
+                ok=False,
+                message='Please fill in all required fields.',
+                extra=field_values,
+            )
 
         # =========================
         # 1. EMAIL TO ADMIN
@@ -145,11 +193,17 @@ def contact(request):
                 to=['info@ememenergy.com'],
                 reply_to=[email],
             )
-            email_msg.content_subtype = 'html'  
+            email_msg.content_subtype = 'html'
             email_msg.send(fail_silently=False)
 
         except Exception as e:
-            messages.error(request, f'Admin email error: {e}')
+            print(f'Admin email error: {e}')
+            return _contact_response(
+                request,
+                ok=False,
+                message='Unable to send your message right now. Please try again or email info@ememenergy.com.',
+                extra=field_values,
+            )
 
         # =========================
         # 2. AUTO REPLY
@@ -166,16 +220,16 @@ def contact(request):
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 to=[email],
             )
-            auto_reply.content_subtype = 'html'  
+            auto_reply.content_subtype = 'html'
             auto_reply.send()
 
         except Exception as e:
-            messages.error(request, f'Auto-reply error: {e}')
+            # Admin already has the enquiry; do not fail the visitor.
+            print(f'Auto-reply error: {e}')
 
-        messages.success(request, 'Your message has been sent.')
-        return redirect('main:contact')
+        return _contact_response(request, ok=True, message='Your message has been sent.')
 
-    return render(request, 'main/contact.html')
+    return render(request, 'main/contact.html', _contact_context())
 
 
 def get_pickup_stations(request):
@@ -838,84 +892,6 @@ def create_sales_invoice_from_order(request, order, customer):
             invoice_response = response.json()
             order.invoice_id = invoice_response.get('invoiceID')
             order.save()
-            return True
-        else:
-            print(f'Invoice API Error: {response.text}')
-            return False
-    
-    except Exception as e:
-        print(f'Error creating invoice: {str(e)}')
-        return False
-    """Create sales invoice via API after successful payment"""
-    
-    try:
-        # Get order items
-        order_items = OrderItem.objects.filter(order=order)
-        
-        # Calculate totals
-        sub_total = float(order.total_amount)
-        vat = sub_total * 0.075  # 7.5% VAT
-        shipping_cost = 0  # Add your shipping cost logic here
-        total = sub_total + vat + shipping_cost
-        
-        # Prepare items for API
-        items_data = []
-        for item in order_items:
-            items_data.append({
-                'itemcode': item.item_id,
-                'item_name': item.item_name,
-                'item_description': '',
-                'qty': item.quantity,
-                'unit': str(item.price),
-                'discount': '0.00',
-                'amount': str(item.price * item.quantity),
-                'purchaseP': str(item.price * 0.8)  # Estimate purchase price
-            })
-        
-        # Prepare invoice data
-        invoice_date = datetime.now().date()
-        due_date = invoice_date + timedelta(days=30)
-        
-        invoice_data = {
-            'cusID': order.customer_id if order.customer_id else 1,  # Default customer ID
-            'accountType': 'Customer',
-            'customer_name': user.get_full_name() or user.username,
-            'invoice_date': invoice_date.strftime('%Y-%m-%d'),
-            'due_date': due_date.strftime('%Y-%m-%d'),
-            'invoiceID': f'INV-{order.id}-{datetime.now().strftime("%Y%m%d%H%M%S")}',
-            'order_id': str(order.id),
-            'Gdescription': f'Solar battery purchase - Order #{order.id}',
-            'invoice_state': False,  # Supplied
-            'credit_sales': False,  # Paid via Paystack
-            'payment_method': 'Transfer',  # Paystack = Bank Transfer
-            'shipping_method': 'Home Delivery' if order.delivery_method == 'home' else 'Pickup',
-            'shipping_address': order.shipping_address or '',
-            'shipping_cost': str(shipping_cost),
-            'vat': str(vat),
-            'sub_total': str(sub_total),
-            'total': str(total),
-            'items': items_data
-        }
-        
-        # Call Sales Invoice API
-        api_url = 'https://console.afrikbook.com/api/create/'
-        
-        response = requests.post(
-            api_url,
-            json=invoice_data,
-            headers={
-                'Content-Type': 'application/json',
-                # Add authentication if needed
-            }
-        )
-        
-        if response.status_code == 201:
-            invoice_response = response.json()
-            
-            # Save invoice ID to order
-            order.invoice_id = invoice_response.get('invoiceID')
-            order.save()
-            
             return True
         else:
             print(f'Invoice API Error: {response.text}')
