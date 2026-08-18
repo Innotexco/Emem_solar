@@ -16,11 +16,12 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.core.mail import EmailMessage, send_mail
 from django.template.loader import render_to_string
 from .form_protection import (
-    TIME_FIELD,
     ALLOW,
     REJECT,
+    challenge_payload,
     check_form_guard,
-    issue_time_token,
+    check_message_content,
+    client_ip,
 )
 
 # Create your views here.
@@ -117,7 +118,7 @@ def _is_ajax(request):
 
 
 def _contact_context(**extra):
-    ctx = {TIME_FIELD: issue_time_token()}
+    ctx = challenge_payload()
     ctx.update(extra)
     return ctx
 
@@ -125,7 +126,8 @@ def _contact_context(**extra):
 def _contact_response(request, *, ok, message, status=200, extra=None):
     extra = extra or {}
     if _is_ajax(request):
-        payload = {'ok': ok, 'message': message, TIME_FIELD: issue_time_token()}
+        payload = {'ok': ok, 'message': message}
+        payload.update(challenge_payload())
         payload.update(extra)
         return JsonResponse(payload, status=status)
 
@@ -142,7 +144,7 @@ def _contact_response(request, *, ok, message, status=200, extra=None):
 
 def contact(request):
     if request.method == 'POST':
-        decision, guard_message = check_form_guard(request.POST)
+        decision, guard_message = check_form_guard(request.POST, request=request)
         if decision != ALLOW:
             # Silent drop looks like success so bots do not retry.
             if decision == REJECT:
@@ -174,6 +176,23 @@ def contact(request):
                 extra=field_values,
             )
 
+        content_decision, content_message = check_message_content(
+            full_name, email, phone, subject, message,
+        )
+        if content_decision != ALLOW:
+            if content_decision == REJECT:
+                return _contact_response(
+                    request,
+                    ok=False,
+                    message=content_message,
+                    extra=field_values,
+                )
+            return _contact_response(
+                request,
+                ok=True,
+                message='Your message has been sent.',
+            )
+
         # =========================
         # 1. EMAIL TO ADMIN
         # =========================
@@ -184,6 +203,7 @@ def contact(request):
                 'phone': phone,
                 'subject': subject,
                 'user_message': message,
+                'client_ip': client_ip(request),
             })
 
             email_msg = EmailMessage(

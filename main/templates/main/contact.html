@@ -685,6 +685,8 @@
         <form id="contact-form" method="POST" action="{% url 'main:contact' %}" autocomplete="on">
             {% csrf_token %}
             <input type="hidden" name="form_loaded" value="{{ form_loaded }}">
+            <input type="hidden" name="form_math_token" value="{{ math_token }}">
+            <input type="hidden" name="form_js" id="form_js" value="">
 
             <div class="hp-field" aria-hidden="true">
                 <label for="company_url">Company website</label>
@@ -721,9 +723,17 @@
                 </select>
             </div>
 
-            <div class="field" style="margin-bottom:32px;">
+            <div class="field" style="margin-bottom:24px;">
                 <div class="field-label">Message <span class="field-required">*</span></div>
                 <textarea id="message" name="message" rows="6" placeholder="Tell us more about your energy storage needs…" required class="field-textarea">{{ user_message|default:'' }}</textarea>
+            </div>
+
+            <div class="field" style="margin-bottom:32px;">
+                <div class="field-label">Quick check <span class="field-required">*</span></div>
+                <div class="field-label" style="font-weight:400; letter-spacing:0; text-transform:none; margin-bottom:8px; color:var(--muted);">
+                    What is <span id="math-question">{{ math_question }}</span>?
+                </div>
+                <input type="text" id="form_math" name="form_math" inputmode="numeric" autocomplete="off" required class="field-input" placeholder="Your answer">
             </div>
 
             <button type="submit" id="submit-button" class="btn-submit">
@@ -868,6 +878,31 @@
         if (input && token) input.value = token;
     }
 
+    function markHuman() {
+        const proof = document.getElementById('form_js');
+        if (proof) proof.value = '1';
+    }
+
+    ['full_name', 'email', 'phone', 'message', 'subject', 'form_math'].forEach(function(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('input', markHuman);
+        el.addEventListener('change', markHuman);
+    });
+
+    function refreshChallenge(data) {
+        if (!data) return;
+        setFormToken(data.form_loaded);
+        const mathToken = form.querySelector('[name="form_math_token"]');
+        if (mathToken && data.math_token) mathToken.value = data.math_token;
+        if (data.math_question) {
+            const q = document.getElementById('math-question');
+            if (q) q.textContent = data.math_question;
+            const answer = document.getElementById('form_math');
+            if (answer) answer.value = '';
+        }
+    }
+
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
@@ -903,11 +938,11 @@
             const contentType = response.headers.get('content-type') || '';
             if (contentType.includes('application/json')) {
                 const data = await response.json();
-                setFormToken(data.form_loaded);
+                refreshChallenge(data);
                 if (data.ok) {
                     showMsg(data.message || "Message sent — we'll be in touch within 24 hours.", 'success');
                     form.reset();
-                    setFormToken(data.form_loaded);
+                    refreshChallenge(data);
                 } else {
                     showMsg(data.message || 'Something went wrong. Please try again.', 'error');
                 }
